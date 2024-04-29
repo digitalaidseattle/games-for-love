@@ -1,8 +1,8 @@
 import { Box, Container, Grid, List, ListItem, ListItemButton, ListItemText, Paper } from '@mui/material';
-import { ReactNode, useEffect, useState } from 'react';
-import { FullscreenControl, GeolocateControl, Marker, NavigationControl, ScaleControl } from 'react-map-gl';
-import Map from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { ReactNode, useEffect, useState } from 'react';
+import { FullscreenControl, Marker, NavigationControl, ScaleControl } from 'react-map-gl';
+import Map from 'react-map-gl/maplibre';
 
 import './App.css';
 import { DASPopup } from './components/DASPopup';
