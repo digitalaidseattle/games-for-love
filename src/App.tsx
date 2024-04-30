@@ -1,4 +1,4 @@
-import { Box, Container, Grid, List, ListItem, ListItemButton, ListItemText, Paper } from '@mui/material';
+import { Box, Container, Grid, List, ListItem, ListItemButton, ListItemText, Paper, Stack } from '@mui/material';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { ReactNode, useEffect, useState } from 'react';
 import { FullscreenControl, Marker, NavigationControl, ScaleControl } from 'react-map-gl';
@@ -13,7 +13,7 @@ import { mappingService } from './mapping/memberService';
 import { PopupInfo } from './mapping/popuInfo';
 import { TeamMember } from './mapping/teamMember';
 
-const MAP_HEIGHT = '90vh';
+const MAP_HEIGHT = '100vh';
 
 // Seattle
 const DEFAULT_VIEW = {
@@ -87,8 +87,8 @@ function App() {
   }
 
   return (
-    <Container sx={{ width: '100vh', height: '100vh' }}>
-      <Grid container width={'100%'}>
+    <Container sx={{ width: '100vw', height: '100vh' }}>
+      <Grid container>
         <Grid item xs={12} lg={3}>
           <Paper style={{ maxHeight: MAP_HEIGHT, overflow: 'auto' }}>
             <List >
@@ -105,7 +105,7 @@ function App() {
           </Paper>
         </Grid>
         <Grid item xs={12} lg={9}>
-          <Box height={MAP_HEIGHT}>
+          <Box width={'75vw'} height={MAP_HEIGHT}>
             <Map
               {...viewState}
               onMove={evt => setViewState(evt.viewState)}
