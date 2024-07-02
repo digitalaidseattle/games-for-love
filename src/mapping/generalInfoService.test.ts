@@ -45,8 +45,3 @@ describe("generalInfoService tests",()=>{
         ]);
     })
 })
-
-//toHaveBeenCalledWith 
-//필드값을 가져오는 것
-//mocking 
-//결과 어디서 봄?

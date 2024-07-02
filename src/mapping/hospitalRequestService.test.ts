@@ -35,8 +35,6 @@ describe('HospitalRequestService tests', () => {
 
     const result = await hospitalRequestService.getHospitalRequest();
 
-    console.log("리졸트 어떠케 나오냐?", result);
-
     expect(getTableRecordsSpy).toHaveBeenCalled();
 
     expect(result).toEqual([

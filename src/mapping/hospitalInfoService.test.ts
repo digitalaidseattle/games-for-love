@@ -51,8 +51,3 @@ describe("HospitalInfoService tests",()=>{
         ]);
     })
 })
-
-//toHaveBeenCalledWith 
-//필드값을 가져오는 것
-//mocking 
-

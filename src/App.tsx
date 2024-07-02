@@ -1,7 +1,7 @@
-import { Box, Container, Grid, List, ListItem, ListItemButton, ListItemText, Paper, Stack } from '@mui/material';
+import { Box, Container, Grid, Paper } from '@mui/material';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { ReactNode, useEffect, useState } from 'react';
-import { FullscreenControl, Marker, NavigationControl, ScaleControl } from 'react-map-gl';
+import {useEffect, useState } from 'react';
+import { FullscreenControl,  NavigationControl, ScaleControl } from 'react-map-gl';
 import Map from 'react-map-gl/maplibre';
 
 import './App.css';
