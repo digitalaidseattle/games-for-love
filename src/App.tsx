@@ -36,13 +36,6 @@ function App() {
   // const [locations, setLocations] = useState<Location[]>([]);
 
   useEffect(() => {
-    hospitalInfoService.getHospitalInfo().then((res) => console.log(res));
-    generalInfoService.getGeneralInfo().then((res) => console.log(res));
-    hospitalRequestService.getHospitalRequest().then((res) => console.log(res));
-    hospitalFundedService.getHospitalFunded().then((res) => console.log(res));
-  }, []);
-
-  useEffect(() => {
     Promise
       .all([
         // mappingService.getPeople(),
