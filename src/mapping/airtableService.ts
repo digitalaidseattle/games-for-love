@@ -8,7 +8,7 @@ class AirtableService {
         maxRecords?: number,
         filterByFormula?: string
     ): Promise<Records<FieldSet>> {
-        const base: Airtable.Base = airtableClient.base(import.meta.env.VITE_AIRTABLE_BASE_ID_DAS);
+        const base: Airtable.Base = airtableClient.base(import.meta.env.VITE_AIRTABLE_BASE_ID_GFL);
         const table = base(tableId);
         try {
             const records = await table
