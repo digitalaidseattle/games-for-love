@@ -1,6 +1,5 @@
-import { airtableService } from './airtableService';
-import { HospitalRequest } from './hospitalRequest';
-
+import { airtableService } from '../../mapping/airtableService';
+import { HospitalRequest } from '../../models/hospitalRequest';
 
 class HospitalRequestService {
 

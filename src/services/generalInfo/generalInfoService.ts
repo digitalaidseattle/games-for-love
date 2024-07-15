@@ -1,5 +1,5 @@
-import { airtableService } from './airtableService';
-import { GeneralInfo } from './generalInfo';
+import { airtableService } from '../../mapping/airtableService';
+import { GeneralInfo } from '../../models/generalInfo';
 
 
 class GeneralInfoService {

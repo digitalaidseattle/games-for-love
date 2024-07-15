@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { airtableService } from './airtableService';
+import { airtableService } from '../../mapping/airtableService';
 import { hospitalRequestService } from './hospitalRequestService';
 
 describe('HospitalRequestService tests', () => {
