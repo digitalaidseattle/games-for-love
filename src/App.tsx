@@ -1,14 +1,10 @@
 import { Box, Container, Grid, Paper } from '@mui/material';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { FullscreenControl, Marker, NavigationControl, ScaleControl } from 'react-map-gl';
 import {useEffect, useState } from 'react';
-import Map from 'react-map-gl/maplibre';
-
+import {GFLMap} from './components/GFLMap';
 import './App.css';
-import { GFLPopup } from './components/GFLPopup';
 import { PopupInfo } from './models/popupInfo';
 import { HospitalInfo } from './models/hospitalInfo';
-
 import { generalInfoService } from './services/generalInfo/generalInfoService';
 import { hospitalInfoService } from './services/hospitalInfo/hospitalInfoService';
 import { hospitalRequestService } from './services/hospitalRequest/hospitalRequestService';
@@ -48,31 +44,7 @@ function App() {
         </Grid>
         <Grid item xs={12} lg={9}>
           <Box width={'75vw'} height={MAP_HEIGHT}>
-            <Map
-              {...viewState}
-              onMove={evt => setViewState(evt.viewState)}
-              mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${import.meta.env.VITE_MAPTILER_API_KEY}`}
-            >
-              <FullscreenControl position="top-left" />
-              <NavigationControl position="top-left" />
-              <ScaleControl />
-              {hospitals.map(hospital => (
-                <Marker
-                  key={hospital.name}
-                  longitude={hospital.longitude}
-                  latitude={hospital.latitude}
-                  onClick={() => setPopupInfo({
-                    hospitalInfo: hospital
-                  })}
-                />
-              ))}
-              {popupInfo && (
-                <GFLPopup
-                  popupInfo={popupInfo}
-                  onClose={() => setPopupInfo(null)}
-                />
-              )}
-            </Map>
+            <GFLMap hospitals={hospitals} viewState={viewState} setViewState={setViewState} setPopupInfo={setPopupInfo} popupInfo={popupInfo}/>
           </Box>
         </Grid>
       </Grid>

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.16.1",
     "@mui/material": "^5.15.15",
     "airtable": "^0.12.2",
     "mapbox-gl": "^3.3.0",
