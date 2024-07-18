@@ -4,6 +4,10 @@ import Map from 'react-map-gl/maplibre';
 import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
 
+import React, { useEffect, useState } from "react";
+import thumbnailData from "../../test/thumbnailData.json";
+import { HospitalData } from "../models/hospitalData"
+
 interface MapProps {
     hospitals : HospitalInfo[]
     viewState : {
@@ -16,7 +20,15 @@ interface MapProps {
     popupInfo : PopupInfo | null
 }
 
-export const GFLMap : React.FC<MapProps> = ({hospitals, viewState, setViewState, setPopupInfo, popupInfo})=>{
+
+export const GFLMap : React.FC<MapProps> = ({viewState, setViewState, setPopupInfo, popupInfo})=>{
+
+  const [hospitals, setHospitals] = useState<HospitalData[]>([]);
+
+  useEffect(() => {
+    setHospitals(thumbnailData);
+  }, []);
+
   return (
     <Map
     {...viewState}
@@ -28,13 +40,32 @@ export const GFLMap : React.FC<MapProps> = ({hospitals, viewState, setViewState,
     <ScaleControl />
     {hospitals.map(hospital => (
       <Marker
-        key={hospital.name}
-        longitude={hospital.longitude}
-        latitude={hospital.latitude}
-        onClick={() => setPopupInfo({
-          hospitalInfo: hospital
-        })}
-      />
+      key={hospital["ID"]}
+      longitude={hospital["Longitude"]}
+      latitude={hospital["Latitude"]}
+      onClick={() =>
+        setPopupInfo({
+          hospitalInfo: {
+            id: hospital["ID"],
+            name: hospital["Hospital Name"],
+            status: hospital["Status"],
+            type: hospital["Type of Organization"],
+            description: hospital["Organization Notes / Description"],
+            year: hospital["Kids Served / Year"],
+            country: hospital["Country"],
+            state: hospital["State"],
+            zip: hospital["ZIP"],
+            city: hospital["City"],
+            address: hospital["Address"],
+            longitude: hospital["Longitude"],
+            latitude: hospital["Latitude"],
+            hospitalPicture1: hospital["Hospital Picture 1"].map(pic => pic.url),
+            hospitalPicture2: [],
+            hospitalPicture3: []
+          }
+        })
+      }
+    />
     ))}
     {popupInfo && (
       <div style={{display:'flex', justifyContent:'center'}}>

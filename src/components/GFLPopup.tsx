@@ -5,6 +5,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { PopupInfo } from "../models/popupInfo";
+import thumbnailData from "../../test/thumbnailData.json";
 
 interface GFLPopupProps {
   popupInfo: PopupInfo | null;
@@ -17,7 +18,15 @@ export const GFLPopup: React.FC<GFLPopupProps> = ({
 }) => {
   if (!popupInfo) return null;
 
-  const images: string[] = popupInfo.hospitalInfo.hospitalPicture1;
+    // for debugging
+    console.log("popupInfo.hospitalInfo.id:", popupInfo.hospitalInfo.id);
+    console.log("thumbnailData:", thumbnailData);
+
+  // const images: string[] = popupInfo.hospitalInfo.hospitalPicture1; //airtable data
+  const hospitalData = thumbnailData.find(hospital => hospital.ID === popupInfo.hospitalInfo.id); // JSON data for test
+  if (!hospitalData) return null;
+
+  const images: string[] = hospitalData["Hospital Picture 1"].map(picture => picture.url);
 
   return (
     <Box
@@ -124,6 +133,7 @@ export const GFLPopup: React.FC<GFLPopupProps> = ({
         >
           <Stack spacing={2}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
+              {/* who is gonna be 'Avatar'? */}
               <Avatar
                 src="/path/to/profile1.jpg"
                 sx={{ width: 24, height: 24, mr: 1 }}
@@ -135,8 +145,10 @@ export const GFLPopup: React.FC<GFLPopupProps> = ({
               <Avatar sx={{ width: 24, height: 24 }}>+</Avatar>
             </Box>
             <Typography variant="body2">
+              {/* which data is 'Donations received'? */}
               Donations received: <strong>150k</strong>
             </Typography>
+            {/* which data is 'kids impacted'? */}
             <Typography variant="body2">400+ kids impacted</Typography>
           </Stack>
           <Button variant="contained" color="primary" onClick={onClose}>
@@ -172,8 +184,8 @@ const arrowButtonStyles: React.CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   width: '30px',
-  height: '30px', 
-  outline: 'none', 
+  height: '30px',
+  outline: 'none',
 };
 
 const arrowPrevStyles = {
