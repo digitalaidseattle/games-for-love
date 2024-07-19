@@ -69,4 +69,4 @@ class HospitalInfoService {
 
 // const hospitalInfoService = new HospitalInfoService();
 const hospitalInfoService = new MockHospitalInfoService();
-export { hospitalInfoService };
+export { hospitalInfoService, HospitalInfoService };
