@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { airtableService } from './airtableService'
+import { airtableService } from '../../mapping/airtableService'
 import { hospitalInfoService } from "./hospitalInfoService";
 
 describe("HospitalInfoService tests",()=>{
@@ -46,7 +46,7 @@ describe("HospitalInfoService tests",()=>{
                 hospitalPicture1: "pic1.com",
                 hospitalPicture2: "pic2.com",
                 hospitalPicture3: "pic3.com",
-                id: 1 // Assuming there's no ID field in the mock record
+                id: 1 
             }
         ]);
     })

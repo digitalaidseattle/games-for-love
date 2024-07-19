@@ -1,4 +1,5 @@
 export type HospitalInfo = {
+    id: number;
     name: string;
     status: string;
     type: string;
@@ -11,7 +12,7 @@ export type HospitalInfo = {
     address: string;
     longitude: number;
     latitude: number;
-    hospitalPicture1: string;
-    hospitalPicture2: string;
-    hospitalPicture3: string;
+    hospitalPicture1: string[];
+    hospitalPicture2: string[];
+    hospitalPicture3: string[];
 }

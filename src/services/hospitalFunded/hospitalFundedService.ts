@@ -1,5 +1,5 @@
-import { airtableService } from './airtableService';
-import { HospitalFunded } from './hospitalFunded';
+import { airtableService } from '../../mapping/airtableService';
+import { HospitalFunded } from '../../models/hospitalFunded';
 
 
 class HospitalFundedService {

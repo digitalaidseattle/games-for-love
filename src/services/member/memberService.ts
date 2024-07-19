@@ -7,10 +7,9 @@
  *
  */
 
-import { airtableService } from './airtableService';
-import { Location } from './location';
-import { TeamMember } from './teamMember';
-
+import { airtableService } from "../../mapping/airtableService";
+import { Location } from "../../models/location";
+import { TeamMember } from "../../models/teamMember";
 
 const LOCATIONS: Location[] = [
     { name: "Bellevue, WA United States", "latitude": 47.6101, "longitude": -122.2015 },

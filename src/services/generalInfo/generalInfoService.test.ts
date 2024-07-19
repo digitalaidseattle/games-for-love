@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { airtableService } from './airtableService'
+import { airtableService } from '../../mapping/airtableService'
 import { generalInfoService } from "./generalInfoService";
 
 describe("generalInfoService tests",()=>{
