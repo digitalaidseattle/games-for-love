@@ -1,11 +1,11 @@
-import { Stack, Typography, Button, Box, Avatar } from "@mui/material";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { PopupInfo } from "../models/popupInfo";
-import thumbnailData from "../../test/thumbnailData.json";
 
 interface GFLPopupProps {
   popupInfo: PopupInfo | null;
@@ -16,20 +16,17 @@ export const GFLPopup: React.FC<GFLPopupProps> = ({
   popupInfo = null,
   onClose,
 }) => {
-  if (!popupInfo) return null;
 
-    // for debugging
-    console.log("popupInfo.hospitalInfo.id:", popupInfo.hospitalInfo.id);
-    console.log("thumbnailData:", thumbnailData);
+  const [images, setImages] = useState<string[]>([]);
+  useEffect(() => {
+    if (popupInfo) {
+      setImages(popupInfo.hospitalInfo.hospitalPicture1);
+    };
+  }, [popupInfo])
 
-  // const images: string[] = popupInfo.hospitalInfo.hospitalPicture1; //airtable data
-  const hospitalData = thumbnailData.find(hospital => hospital.ID === popupInfo.hospitalInfo.id); // JSON data for test
-  if (!hospitalData) return null;
-
-  const images: string[] = hospitalData["Hospital Picture 1"].map(picture => picture.url);
 
   return (
-    <Box
+    popupInfo && <Box
       sx={{
         position: "fixed",
         bottom: 10,
@@ -42,7 +39,7 @@ export const GFLPopup: React.FC<GFLPopupProps> = ({
         mb: 2,
       }}
     >
-      <Box sx={{ width: "100%", display: "flex", flexDirection: "row",}}>
+      <Box sx={{ width: "100%", display: "flex", flexDirection: "row", }}>
         <Box
           sx={{
             width: "40%",
@@ -52,7 +49,7 @@ export const GFLPopup: React.FC<GFLPopupProps> = ({
             flexDirection: "column",
           }}
         >
-          {images && images.length > 0 && (
+          {images.length > 0 && (
             <Carousel
               showThumbs={false}
               showIndicators={false}

@@ -1,6 +1,36 @@
 import { airtableService } from '../../mapping/airtableService';
 import { HospitalInfo } from '../../models/hospitalInfo';
 
+import thumbnailData from "../../../test/thumbnailData.json";
+
+const extractUrls = (attachments: any) => {
+    return attachments && attachments.length > 0 ? attachments.map((att: any) => att.url) : [];
+};
+
+class MockHospitalInfoService {
+    async getHospitalInfo(): Promise<HospitalInfo[]> {
+        return thumbnailData.map(data => {
+            return {
+                id: data["ID"],
+                name: data["Hospital Name"],
+                status: data["Status"],
+                type: data["Type of Organization"],
+                description: data["Organization Notes / Description"],
+                year: data["Kids Served / Year"],
+                country: data["Country"],
+                state: data["State"],
+                zip: data["ZIP"],
+                city: data["City"],
+                address: data["Address"],
+                longitude: data["Longitude"],
+                latitude: data["Latitude"],
+                hospitalPicture1: extractUrls(data["Hospital Picture 1"][0]),
+                hospitalPicture2: extractUrls(data["Hospital Picture 1"][1]),
+                hospitalPicture3: extractUrls(data["Hospital Picture 1"][2]),
+            } as HospitalInfo
+        });
+    }
+}
 
 class HospitalInfoService {
 
@@ -9,14 +39,11 @@ class HospitalInfoService {
         const MAX_RECORDS = 100;
 
         return airtableService.getTableRecords(TABLE, MAX_RECORDS)
-        .then((records) => {
-            console.log(records[0])
-            return records;
-        })
+            .then((records) => {
+                console.log(records[0])
+                return records;
+            })
             .then(records => records.map(r => {
-                const extractUrls = (attachments:any) => {
-                    return attachments && attachments.length > 0 ? attachments.map((att:any) => att.url) : [];
-                };
 
                 return {
                     name: `${r.fields["Hospital Name"]}`,
@@ -40,5 +67,6 @@ class HospitalInfoService {
     }
 }
 
-const hospitalInfoService = new HospitalInfoService();
-export { hospitalInfoService };
+// const hospitalInfoService = new HospitalInfoService();
+const hospitalInfoService = new MockHospitalInfoService();
+export { hospitalInfoService, HospitalInfoService };
