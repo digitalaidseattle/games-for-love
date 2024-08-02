@@ -1,83 +1,91 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Popup } from "react-map-gl";
-import { HospitalInfo } from "../mapping/hospitalInfo";
+import { PopupInfo } from "../models/popupInfo";
 import {
   Card,
   CardContent,
   CardMedia,
-  CardActionArea,
   Typography,
   Avatar,
   Box,
-  Button,
+  Button
 } from "@mui/material";
 
-type Props = {
-  info: HospitalInfo;
+interface HospitalPopupProps {
+  popupInfo: PopupInfo | null;
   onClose: () => void;
-};
+}
 
-export const HospitalPopup: React.FC<Props> = ({ info, onClose }) => {
+export const HospitalPopup: React.FC<HospitalPopupProps> = ({
+  popupInfo = null,
+  onClose,
+}) => {
+  const [images, setImages] = useState<string[]>([]);
+  useEffect(() => {
+    if (popupInfo) {
+      setImages(popupInfo.hospitalInfo.hospitalPicture1);
+    };
+  }, [popupInfo])
+
   return (
-    <Popup
-      longitude={info.longitude}
-      latitude={info.latitude}
-      closeButton={true}
-      closeOnClick={false}
-      onClose={onClose}
-      anchor="top"
-    >
-      <Card
-        sx={{
-          maxWidth: "342",
-          border: "none",
-          marginTop: "10px",
-          boxShadow: "0px 14px 80px rgba(34, 35, 58, 0.2)",
-        }}
+    popupInfo && (
+      <Popup
+        longitude={popupInfo.hospitalInfo.longitude}
+        latitude={popupInfo.hospitalInfo.latitude}
+        closeButton={true}
+        closeOnClick={false}
+        onClose={onClose}
+        anchor="top"
       >
-        <CardActionArea>
+        <Card
+          sx={{
+            maxWidth: "342px",
+            border: "none",
+            marginTop: "10px",
+            boxShadow: "0px 14px 80px rgba(34, 35, 58, 0.2)",
+          }}
+        >
           <CardMedia
             component="img"
             height="140"
-            image={info.hospitalPicture1}
-            alt="hospital building"
+            image={images[0]}
+            alt={popupInfo.hospitalInfo.name}
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {info.name}
+              {popupInfo.hospitalInfo.name}
             </Typography>
-
             <Typography variant="body2" color="text.secondary">
-              <span style={{ color: "black" }}>25k </span>
-              raised of 100k -
+              <span style={{ color: "black" }}>
+                25K{" "}
+              </span>
+              raised of 100k -{" "}
               <span style={{ color: "#92c65e", fontStyle: "italic" }}>
-                {" "}
-                {info.status}
+                {popupInfo.hospitalInfo.status}
               </span>
             </Typography>
-
-            <Typography variant="body2">{info.year}+ kids impacted</Typography>
-
+            <Typography variant="body2">
+              {popupInfo.hospitalInfo.year}+ kids impacted
+            </Typography>
             <Typography variant="body2">
               <Box component="span" display="flex" alignItems="center">
                 Matched by
                 <Avatar
-                  alt="organizations"
-                  src={info.hospitalPicture2}
+                  alt="organization"
+                  src="/path/to/profile1.jpg"
                   sx={{ width: 20, height: 20, marginLeft: 1 }}
                 />
                 <Avatar
-                  alt="organizations"
-                  src={info.hospitalPicture3}
+                  alt="organization"
+                  src="/path/to/profile2.jpg"
                   sx={{ width: 20, height: 20, marginLeft: 1 }}
                 />
                 +
               </Box>
             </Typography>
-
             <Button
               variant="contained"
-              href="#donate"
+              href="#"
               sx={{
                 backgroundColor: "black",
                 marginTop: "20px",
@@ -92,13 +100,15 @@ export const HospitalPopup: React.FC<Props> = ({ info, onClose }) => {
             >
               Donate
             </Button>
-
             <Typography variant="body2" textAlign={"center"}>
               15 days left to donate!
             </Typography>
           </CardContent>
-        </CardActionArea>
-      </Card>
-    </Popup>
+        </Card>
+      </Popup>
+    )
   );
 };
+
+
+

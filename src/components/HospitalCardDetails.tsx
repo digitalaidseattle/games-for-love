@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -9,13 +10,19 @@ import {
 } from "@mui/material";
 
 import { Pin } from "../components/Pin";
-import { HospitalInfo } from "../mapping/hospitalInfo";
+import { HospitalInfo } from "../models/hospitalInfo";
 
-type Props = {
-  hospital: HospitalInfo;
-};
+interface HospitalDetailsProps {
+  hospital: HospitalInfo | null;
+}
 
-export const HospitalCardDetails: React.FC<Props> = ({ hospital }) => {
+export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({ hospital }) => {
+  const [images, setImages] = useState<string[]>([]);
+  useEffect(() => {
+    if (hospital) {
+      setImages(hospital.hospitalPicture1);
+    }
+  }, [hospital]);
   return (
     <>
       <Card
@@ -29,18 +36,18 @@ export const HospitalCardDetails: React.FC<Props> = ({ hospital }) => {
         <CardMedia
           component="img"
           sx={{ width: 120, height: 120, borderRadius: 2 }}
-          image={hospital.hospitalPicture1}
+          image={images[0]}
           alt="Hospital Image"
         />
         <CardContent
           sx={{ flex: 1, padding: "0 16px", borderRight: "1px solid #d9d9d9" }}
         >
           <Typography variant="subtitle2" color="textSecondary">
-            <Pin /> {hospital.city}, {hospital.state}
+            <Pin /> {hospital?.city}, {hospital?.state}
           </Typography>
 
           <Typography variant="h6" component="div">
-            {hospital.name}
+            {hospital?.name}
           </Typography>
 
           <Typography
@@ -48,7 +55,7 @@ export const HospitalCardDetails: React.FC<Props> = ({ hospital }) => {
             color="textSecondary"
             sx={{ fontStyle: "italic" }}
           >
-            {hospital.description}
+            {hospital?.description}
           </Typography>
 
           <Typography
@@ -69,7 +76,7 @@ export const HospitalCardDetails: React.FC<Props> = ({ hospital }) => {
               color="success.main"
               sx={{ fontStyle: "italic", color: "#92c65e" }}
             >
-              {hospital.status}
+              {hospital?.status}
             </Typography>
           </Typography>
 
@@ -83,12 +90,12 @@ export const HospitalCardDetails: React.FC<Props> = ({ hospital }) => {
             </Typography>
             <Avatar
               alt="Organization Logo"
-              src={hospital.hospitalPicture2}
+              src="/path/to/profile1.jpg"
               sx={{ width: 20, height: 20, marginLeft: 1 }}
             />
             <Avatar
               alt="Organization Logo"
-              src={hospital.hospitalPicture3}
+              src="/path/to/profile2.jpg"
               sx={{ width: 20, height: 20, marginLeft: 1 }}
             />
             +

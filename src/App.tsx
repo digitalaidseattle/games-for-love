@@ -1,23 +1,17 @@
 import { Box, Container, Grid } from "@mui/material";
-
 import "maplibre-gl/dist/maplibre-gl.css";
-import { ReactNode, useEffect, useState } from "react";
-import {
-  FullscreenControl,
-  Marker,
-  NavigationControl,
-  ScaleControl,
-} from "react-map-gl";
-
-import Map from "react-map-gl/maplibre";
-
-import { RedPin } from "./components/RedPin";
-import { HospitalCardDetails } from "./components/HospitalCardDetails";
-import { HospitalPopup } from "./components/HospitalPopup";
+import { useEffect, useState } from "react";
+import { GFLMap } from "./components/GFLMap";
 import { SearchAndSort } from "./components/SearchAndSort";
-import { staticHospitals } from "./data/testData";
-import { HospitalInfo } from "./mapping/hospitalInfo";
+import { HospitalCardDetails } from "./components/HospitalCardDetails";
 import "./App.css";
+
+import { PopupInfo } from "./models/popupInfo";
+import { HospitalInfo } from "./models/hospitalInfo";
+import { generalInfoService } from "./services/generalInfo/generalInfoService";
+import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
+import { hospitalRequestService } from "./services/hospitalRequest/hospitalRequestService";
+import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
 
 const MAP_HEIGHT = "100vh";
 
@@ -25,30 +19,25 @@ const MAP_HEIGHT = "100vh";
 const DEFAULT_VIEW = {
   longitude: -122.4,
   latitude: 47.6061,
-  zoom: 7,
+  zoom: 10,
 };
 
 function App() {
   const [viewState, setViewState] = useState(DEFAULT_VIEW);
-  const [hospitals, setHospitals] = useState(staticHospitals);
-  const [popupInfo, setPopupInfo] = useState<HospitalInfo | null>(null);
-  const [pins, setPins] = useState<ReactNode[]>([]);
+  const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
+  const [hospitals, setHospitals] = useState<HospitalInfo[]>([]);
 
   useEffect(() => {
-    setPins(
-      hospitals.map((hospital, index) => (
-        <Marker
-          key={`marker-${index}`}
-          longitude={hospital.longitude}
-          latitude={hospital.latitude}
-          onClick={() => {
-            setPopupInfo(hospital);
-          }}
-        >
-          <RedPin />
-        </Marker>
-      ))
-    );
+    hospitalInfoService.getHospitalInfo().then((res: HospitalInfo[]) => {
+      const closedHospitals = res.filter(
+        (hospital) => hospital.status === "Closed"
+      );
+      console.log("Closed Hospitals:", closedHospitals);
+      setHospitals(closedHospitals);
+    });
+    generalInfoService.getGeneralInfo().then((res) => console.log(res));
+    hospitalRequestService.getHospitalRequest().then((res) => console.log(res));
+    hospitalFundedService.getHospitalFunded().then((res) => console.log(res));
   }, []);
 
   return (
@@ -63,25 +52,14 @@ function App() {
           </Box>
         </Grid>
         <Grid item xs={12} lg={4}>
-          <Box width={"58vw"} height={MAP_HEIGHT}>
-            <Map
-              {...viewState}
-              onMove={(evt) => setViewState(evt.viewState)}
-              mapStyle={`https://api.maptiler.com/maps/streets/style.json?key=${
-                import.meta.env.VITE_MAPTILER_API_KEY
-              }`}
-            >
-              <FullscreenControl position="top-left" />
-              <NavigationControl position="top-left" />
-              <ScaleControl />
-              {pins}
-              {popupInfo && (
-                <HospitalPopup
-                  info={popupInfo}
-                  onClose={() => setPopupInfo(null)}
-                />
-              )}
-            </Map>
+          <Box width={"75vw"} height={MAP_HEIGHT}>
+            <GFLMap
+              hospitals={hospitals}
+              viewState={viewState}
+              setViewState={setViewState}
+              setPopupInfo={setPopupInfo}
+              popupInfo={popupInfo}
+            />
           </Box>
         </Grid>
       </Grid>
