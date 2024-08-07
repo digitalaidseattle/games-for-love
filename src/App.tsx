@@ -1,22 +1,25 @@
-import { Box, Container, Grid, Paper } from '@mui/material';
-import 'maplibre-gl/dist/maplibre-gl.css';
-import {useEffect, useState } from 'react';
-import {GFLMap} from './components/GFLMap';
-import './App.css';
-import { PopupInfo } from './models/popupInfo';
-import { HospitalInfo } from './models/hospitalInfo';
-import { generalInfoService } from './services/generalInfo/generalInfoService';
-import { hospitalInfoService } from './services/hospitalInfo/hospitalInfoService';
-import { hospitalRequestService } from './services/hospitalRequest/hospitalRequestService';
-import { hospitalFundedService } from './services/hospitalFunded/hospitalFundedService';
+import { Box, Container, Grid } from "@mui/material";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { useEffect, useState } from "react";
+import { GFLMap } from "./components/GFLMap";
+import { SearchAndSort } from "./components/SearchAndSort";
+import { HospitalCardDetails } from "./components/HospitalCardDetails";
+import "./App.css";
 
-const MAP_HEIGHT = '100vh';
+import { PopupInfo } from "./models/popupInfo";
+import { HospitalInfo } from "./models/hospitalInfo";
+import { generalInfoService } from "./services/generalInfo/generalInfoService";
+import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
+import { hospitalRequestService } from "./services/hospitalRequest/hospitalRequestService";
+import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
+
+const MAP_HEIGHT = "100vh";
 
 // Seattle
 const DEFAULT_VIEW = {
   longitude: -122.4,
   latitude: 47.6061,
-  zoom: 10
+  zoom: 10,
 };
 
 function App() {
@@ -26,7 +29,9 @@ function App() {
 
   useEffect(() => {
     hospitalInfoService.getHospitalInfo().then((res: HospitalInfo[]) => {
-      const closedHospitals = res.filter(hospital => hospital.status === 'Closed');
+      const closedHospitals = res.filter(
+        (hospital) => hospital.status === "Closed"
+      );
       console.log("Closed Hospitals:", closedHospitals);
       setHospitals(closedHospitals);
     });
@@ -36,15 +41,25 @@ function App() {
   }, []);
 
   return (
-    <Container sx={{ width: '100vw', height: '100vh' }}>
+    <Container sx={{ width: "100vw", height: "100vh" }}>
       <Grid container>
-        <Grid item xs={12} lg={3}>
-          <Paper style={{ maxHeight: MAP_HEIGHT, overflow: 'auto' }}>
-          </Paper>
+        <Grid item xs={12} lg={8}>
+          <Box>
+            <SearchAndSort />
+            {hospitals.map((hospital) => (
+              <HospitalCardDetails hospital={hospital} />
+            ))}
+          </Box>
         </Grid>
-        <Grid item xs={12} lg={9}>
-          <Box width={'75vw'} height={MAP_HEIGHT}>
-            <GFLMap hospitals={hospitals} viewState={viewState} setViewState={setViewState} setPopupInfo={setPopupInfo} popupInfo={popupInfo}/>
+        <Grid item xs={12} lg={4}>
+          <Box width={"75vw"} height={MAP_HEIGHT}>
+            <GFLMap
+              hospitals={hospitals}
+              viewState={viewState}
+              setViewState={setViewState}
+              setPopupInfo={setPopupInfo}
+              popupInfo={popupInfo}
+            />
           </Box>
         </Grid>
       </Grid>
