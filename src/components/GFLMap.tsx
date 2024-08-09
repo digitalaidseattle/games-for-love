@@ -10,8 +10,7 @@ import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
 
 import React from "react";
-// import { HospitalPopup } from "./HospitalPopup";
-// import { RedPin } from "./RedPin";
+import { Box } from "@mui/material";
 
 interface MapProps {
   hospitals: HospitalInfo[];
@@ -57,9 +56,9 @@ export const GFLMap: React.FC<MapProps> = ({
         />
       ))}
       {popupInfo && (
-        <div style={{ display: "flex" }}>
+        <Box sx={{ display: "flex" }}>
           <GFLPopup popupInfo={popupInfo} onClose={() => setPopupInfo(null)} />
-        </div>
+        </Box>
       )}
     </Map>
   );

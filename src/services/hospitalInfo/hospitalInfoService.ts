@@ -4,9 +4,7 @@ import { HospitalInfo } from "../../models/hospitalInfo";
 import thumbnailData from "../../../test/thumbnailData.json";
 
 const extractUrls = (attachments: any) => {
-  return attachments && attachments.length > 0
-    ? attachments.map((att: any) => att.url)
-    : [];
+  return attachments ? attachments.map((att: any) => att.url) : [];
 };
 
 class MockHospitalInfoService {
@@ -42,7 +40,6 @@ class HospitalInfoService {
     return airtableService
       .getTableRecords(TABLE, MAX_RECORDS)
       .then((records) => {
-        console.log(records[0]);
         return records;
       })
       .then((records) =>

@@ -27,6 +27,15 @@ const CustomCancelIconButton = styled(IconButton)({
   },
 });
 
+const CustomAvatar = styled(Avatar)({
+  width: 13,
+  height: 13,
+  marginLeft: 1,
+  marginRight: 1,
+  fontSize: 12,
+  textTransform: "none",
+});
+
 interface HospitalCardProps {
   popupInfo: PopupInfo | null;
   images: string[];
@@ -102,30 +111,8 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
         <Typography sx={{ fontSize: "10px" }}>
           <Box component="span" display="flex" alignItems="center">
             Matched by
-            <Avatar
-              // alt="organization"
-              src="/path/to/profile1.jpg"
-              sx={{
-                width: 13,
-                height: 13,
-                marginLeft: 1,
-                fontSize: 12,
-                textTransform: "none",
-              }}
-            />
-            <Avatar
-              // alt="organization"
-              src="/path/to/profile2.jpg"
-              sx={{
-                width: 13,
-                height: 13,
-                marginLeft: 1,
-                marginRight: 1,
-                fontSize: 12,
-                textTransform: "none",
-              }}
-            />
-            +
+            <CustomAvatar src="/path/to/profile1.jpg" />
+            <CustomAvatar src="/path/to/profile2.jpg" />+
           </Box>
         </Typography>
         <Box
@@ -146,6 +133,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
               height: "26px",
               borderRadius: "10px",
               textTransform: "none",
+              fontSize: "10px",
               "&:hover": {
                 backgroundColor: "transparent",
                 color: "#000",
@@ -164,6 +152,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
               height: "26px",
               borderRadius: "10px",
               textTransform: "none",
+              fontSize: "10px",
               "&:hover": {
                 backgroundColor: "transparent",
                 color: "#000",
