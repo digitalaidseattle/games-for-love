@@ -7,11 +7,10 @@ import {
 import Map from "react-map-gl/maplibre";
 import { HospitalInfo } from "../models/hospitalInfo";
 import { PopupInfo } from "../models/popupInfo";
-//import { GFLPopup } from "./GFLPopup";
+import { GFLPopup } from "./GFLPopup";
 
 import React from "react";
-import { HospitalPopup } from "./HospitalPopup";
-import { RedPin } from "./RedPin";
+import { Box } from "@mui/material";
 
 interface MapProps {
   hospitals: HospitalInfo[];
@@ -45,6 +44,7 @@ export const GFLMap: React.FC<MapProps> = ({
       <ScaleControl />
       {hospitals.map((hospital) => (
         <Marker
+          color={hospital.status === "Closed" ? "#DB5757" : "#92C65E"}
           key={hospital.id}
           longitude={hospital.longitude}
           latitude={hospital.latitude}
@@ -53,15 +53,12 @@ export const GFLMap: React.FC<MapProps> = ({
               hospitalInfo: hospital,
             })
           }
-        >
-          <RedPin />
-        </Marker>
+        />
       ))}
       {popupInfo && (
-        <HospitalPopup
-          popupInfo={popupInfo}
-          onClose={() => setPopupInfo(null)}
-        />
+        <Box sx={{ display: "flex" }}>
+          <GFLPopup popupInfo={popupInfo} onClose={() => setPopupInfo(null)} />
+        </Box>
       )}
     </Map>
   );

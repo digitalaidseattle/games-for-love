@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { GFLMap } from "./components/GFLMap";
 import { SearchAndSort } from "./components/SearchAndSort";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
-import "./App.css";
 
 import { PopupInfo } from "./models/popupInfo";
 import { HospitalInfo } from "./models/hospitalInfo";
@@ -12,6 +11,7 @@ import { generalInfoService } from "./services/generalInfo/generalInfoService";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "./services/hospitalRequest/hospitalRequestService";
 import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
+import "./App.css";
 
 const MAP_HEIGHT = "100vh";
 
@@ -29,11 +29,7 @@ function App() {
 
   useEffect(() => {
     hospitalInfoService.getHospitalInfo().then((res: HospitalInfo[]) => {
-      const closedHospitals = res.filter(
-        (hospital) => hospital.status === "Closed"
-      );
-      console.log("Closed Hospitals:", closedHospitals);
-      setHospitals(closedHospitals);
+      setHospitals(res);
     });
     generalInfoService.getGeneralInfo().then((res) => console.log(res));
     hospitalRequestService.getHospitalRequest().then((res) => console.log(res));
