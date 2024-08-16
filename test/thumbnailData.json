@@ -1,0 +1,330 @@
+[
+  {
+    "Hospital Name": "Virginia Mason Medical Center",
+    "Status": "Closed",
+    "Organization Notes / Description": "Description C",
+    "State": "WA",
+    "Country": "USA",
+    "City": "Seattle",
+    "Latitude": 47.6092,
+    "Longitude": -122.3252,
+    "ZIP": "98101",
+    "Address": "1100 9th Ave",
+    "Hospital Picture 1": [
+      {
+        "id": "attI5KQXiJsOBIYIH",
+        "width": 4608,
+        "height": 3072,
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Virginia_Mason_Hospital.jpg",
+        "filename": "Virginia_Mason_Hospital.jpg",
+        "size": 1696807,
+        "type": "image/jpeg",
+        "thumbnails": {
+          "small": {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Virginia_Mason_Hospital.jpg",
+            "width": 54,
+            "height": 36
+          },
+          "large": {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Virginia_Mason_Hospital.jpg",
+            "width": 768,
+            "height": 512
+          },
+          "full": {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Virginia_Mason_Hospital.jpg",
+            "width": 3000,
+            "height": 2000
+          }
+        }
+      },
+      {
+        "id": "attx1auDge6xS7Yuo",
+        "width": 275,
+        "height": 183,
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Virginia_Mason_Hospital.jpg",
+        "filename": "images",
+        "size": 10150,
+        "type": "image/jpeg",
+        "thumbnails": {
+          "small": {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Virginia_Mason_Hospital.jpg",
+            "width": 54,
+            "height": 36
+          },
+          "large": {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Virginia_Mason_Hospital.jpg",
+            "width": 275,
+            "height": 183
+          },
+          "full": {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Virginia_Mason_Hospital.jpg",
+            "width": 275,
+            "height": 183
+          }
+        }
+      },
+      {
+        "id": "attGnJmF94g2mZpbM",
+        "width": 1400,
+        "height": 934,
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/39/Virginia_Mason_Hospital.jpg",
+        "filename": "VM_pavilion_bed_big.jpg",
+        "size": 552181,
+        "type": "image/jpeg",
+        "thumbnails": {
+          "small": {
+            "url": "",
+            "width": 54,
+            "height": 36
+          },
+          "large": {
+            "url": "",
+            "width": 767,
+            "height": 512
+          },
+          "full": {
+            "url": "",
+            "width": 1400,
+            "height": 934
+          }
+        }
+      }
+    ],
+    "ID": 3,
+    "Type of Organization": "TypeC",
+    "Kids Served / Year": 300
+  },
+  {
+    "Hospital Name": "Harborview Medical Center",
+    "Status": "Closed",
+    "Organization Notes / Description": "Description A",
+    "State": "WA",
+    "Country": "USA",
+    "City": "Seattle",
+    "Latitude": 47.6032,
+    "Longitude": -122.3238,
+    "ZIP": "98104",
+    "Address": "325 9th Ave Main Hospital",
+    "Hospital Picture 1": [
+      {
+        "id": "attbC0DA5iDgip9eN",
+        "width": 290,
+        "height": 174,
+        "url": "https://www.uwmedicine.org/sites/stevie/files/styles/clinic_page_768_384/public/Emergency-Department-at-Harborview.jpg?itok=y6zKoT1L",
+        "filename": "images",
+        "size": 10233,
+        "type": "image/jpeg",
+        "thumbnails": {
+          "small": {
+            "url": "https://www.uwmedicine.org/sites/stevie/files/styles/clinic_page_768_384/public/Emergency-Department-at-Harborview.jpg?itok=y6zKoT1L",
+            "width": 60,
+            "height": 36
+          },
+          "large": {
+            "url": "https://www.uwmedicine.org/sites/stevie/files/styles/clinic_page_768_384/public/Emergency-Department-at-Harborview.jpg?itok=y6zKoT1L",
+            "width": 290,
+            "height": 174
+          },
+          "full": {
+            "url": "https://www.uwmedicine.org/sites/stevie/files/styles/clinic_page_768_384/public/Emergency-Department-at-Harborview.jpg?itok=y6zKoT1L",
+            "width": 290,
+            "height": 174
+          }
+        }
+      },
+      {
+        "id": "attQHiSeczAh5lbY4",
+        "width": 768,
+        "height": 384,
+        "url": "https://www.uwmedicine.org/sites/stevie/files/styles/clinic_page_768_384/public/Emergency-Department-at-Harborview.jpg?itok=y6zKoT1L",
+        "filename": "Emergency-Department-at-Harborview.jpg",
+        "size": 53971,
+        "type": "image/jpeg",
+        "thumbnails": {
+          "small": {
+            "url": "",
+            "width": 72,
+            "height": 36
+          },
+          "large": {
+            "url": "",
+            "width": 768,
+            "height": 384
+          },
+          "full": {
+            "url": "",
+            "width": 768,
+            "height": 384
+          }
+        }
+      },
+      {
+        "id": "attb3vZuEk99glKrh",
+        "width": 1279,
+        "height": 903,
+        "url": "https://www.uwmedicine.org/sites/stevie/files/styles/clinic_page_768_384/public/Emergency-Department-at-Harborview.jpg?itok=y6zKoT1L",
+        "filename": "unnamed.jpg",
+        "size": 376566,
+        "type": "image/jpeg",
+        "thumbnails": {
+          "small": {
+            "url": "https://www.uwmedicine.org/sites/stevie/files/styles/clinic_page_768_384/public/Emergency-Department-at-Harborview.jpg?itok=y6zKoT1L",
+            "width": 51,
+            "height": 36
+          },
+          "large": {
+            "url": "https://www.uwmedicine.org/sites/stevie/files/styles/clinic_page_768_384/public/Emergency-Department-at-Harborview.jpg?itok=y6zKoT1L",
+            "width": 725,
+            "height": 512
+          },
+          "full": {
+            "url": "https://www.uwmedicine.org/sites/stevie/files/styles/clinic_page_768_384/public/Emergency-Department-at-Harborview.jpg?itok=y6zKoT1L",
+            "width": 1279,
+            "height": 903
+          }
+        }
+      }
+    ],
+    "ID": 1,
+    "Type of Organization": "TypeA",
+    "Kids Served / Year": 100
+  },
+  {
+    "Hospital Name": "Swedish Medical Center - First Hill",
+    "Status": "Closed",
+    "Organization Notes / Description": "Description B",
+    "State": "WA",
+    "Country": "USA",
+    "City": "Seattle",
+    "Latitude": 47.6094,
+    "Longitude": -122.3201,
+    "ZIP": "98122",
+    "Address": "747 Broadway",
+    "Hospital Picture 1": [
+      {
+        "id": "attSNPHNTJdA7QS3T",
+        "width": 2040,
+        "height": 1360,
+        "url": "https://copehealthscholars.org/wp-content/uploads/2016/01/Seattle_First-Hill-e1472679547562.jpg",
+        "filename": "01252020_swedish_123040.jpg",
+        "size": 517963,
+        "type": "image/jpeg",
+        "thumbnails": {
+          "small": {
+            "url": "",
+            "width": 54,
+            "height": 36
+          },
+          "large": {
+            "url": "",
+            "width": 768,
+            "height": 512
+          },
+          "full": {
+            "url": "",
+            "width": 2040,
+            "height": 1360
+          }
+        }
+      },
+      {
+        "id": "att7dv8nY9mcbJZVv",
+        "width": 275,
+        "height": 183,
+        "url": "https://copehealthscholars.org/wp-content/uploads/2016/01/Seattle_First-Hill-e1472679547562.jpg",
+        "filename": "images",
+        "size": 7828,
+        "type": "image/jpeg",
+        "thumbnails": {
+          "small": {
+            "url": "",
+            "width": 54,
+            "height": 36
+          },
+          "large": {
+            "url": "",
+            "width": 275,
+            "height": 183
+          },
+          "full": {
+            "url": "",
+            "width": 275,
+            "height": 183
+          }
+        }
+      },
+      {
+        "id": "attCFEKWSpm6dksgQ",
+        "width": 800,
+        "height": 533,
+        "url": "https://copehealthscholars.org/wp-content/uploads/2016/01/Seattle_First-Hill-e1472679547562.jpg",
+        "filename": "cherry_hill_01.jpg",
+        "size": 319556,
+        "type": "image/jpeg",
+        "thumbnails": {
+          "small": {
+            "url": "",
+            "width": 54,
+            "height": 36
+          },
+          "large": {
+            "url": "",
+            "width": 768,
+            "height": 512
+          },
+          "full": {
+            "url": "",
+            "width": 800,
+            "height": 533
+          }
+        }
+      }
+    ],
+    "ID": 2,
+    "Type of Organization": "TypeB",
+    "Kids Served / Year": 200
+  },
+  {
+    "Hospital Name": "Swedish Primary Care",
+    "Status": "Actively funding",
+    "Organization Notes / Description": "Description D",
+    "State": "WA",
+    "Country": "USA",
+    "City": "Seattle",
+    "Latitude": 47.6359,
+    "Longitude": -122.3563,
+    "ZIP": "98109",
+    "Address": "101 W Olympic Pl",
+    "Hospital Picture 1": [
+      {
+        "id": "attQHiSeczAh5lbY4",
+        "width": 800,
+        "height": 533,
+        "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy27cEACbb51rMa-ZD2V-I5_t_JHW583IqqQ&s",
+        "filename": "Swedish_Queen_Anne.jpg",
+        "size": 123456,
+        "type": "image/jpeg",
+        "thumbnails": {
+          "small": {
+            "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy27cEACbb51rMa-ZD2V-I5_t_JHW583IqqQ&s",
+            "width": 54,
+            "height": 36
+          },
+          "large": {
+            "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy27cEACbb51rMa-ZD2V-I5_t_JHW583IqqQ&s",
+            "width": 768,
+            "height": 512
+          },
+          "full": {
+            "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy27cEACbb51rMa-ZD2V-I5_t_JHW583IqqQ&s",
+            "width": 800,
+            "height": 533
+          }
+        }
+      }
+    ],
+    "ID": 4,
+    "Type of Organization": "TypeD",
+    "Kids Served / Year": 400
+  }
+]
