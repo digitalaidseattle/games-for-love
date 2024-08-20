@@ -67,6 +67,14 @@ class HospitalInfoService {
   }
 }
 
+function isHospitalOpen(hospitalInfo: HospitalInfo | undefined) {
+  if (hospitalInfo === undefined) {
+    throw new Error("hospitalInfo is undefined");
+  } else {
+    return hospitalInfo.status !== "Closed";
+  }
+}
+
 // const hospitalInfoService = new HospitalInfoService();
 const hospitalInfoService = new MockHospitalInfoService();
-export { hospitalInfoService, HospitalInfoService };
+export { hospitalInfoService, HospitalInfoService, isHospitalOpen };

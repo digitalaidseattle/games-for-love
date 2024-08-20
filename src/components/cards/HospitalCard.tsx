@@ -15,6 +15,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { styled } from "@mui/material/styles";
 
+import { isHospitalOpen } from "../../services/hospitalInfo/hospitalInfoService";
+
 const CustomCancelIconButton = styled(IconButton)({
   opacity: 0.9,
   border: "none",
@@ -47,7 +49,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
   images,
   onClose,
 }) => {
-  const isOpen = popupInfo?.hospitalInfo?.status !== "Closed";
+  const isOpen = isHospitalOpen(popupInfo?.hospitalInfo);
   const markerColor = isOpen ? "#92C65E" : "#DB5757";
   const buttonWidth = isOpen ? "112px" : "300px";
 
