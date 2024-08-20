@@ -14,7 +14,6 @@ import "./HospitalCard.style.css";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { styled } from "@mui/material/styles";
-import { HospitalPopup } from "../HospitalPopup";
 
 const CustomCancelIconButton = styled(IconButton)({
   opacity: 0.9,
