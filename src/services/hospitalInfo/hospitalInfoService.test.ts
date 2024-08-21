@@ -19,9 +19,7 @@ describe("HospitalInfoService tests", () => {
           Address: "Type 2",
           Longitude: 1,
           Latitude: 1,
-          "Hospital Picture 1": "pic1.com",
-          "Hospital Picture 2": "pic2.com",
-          "Hospital Picture 3": "pic3.com",
+          "Hospital Picture 1": [{ url: "pic1.com" }],
           ID: 1,
         },
       },
@@ -45,11 +43,57 @@ describe("HospitalInfoService tests", () => {
         address: "Type 2",
         longitude: 1,
         latitude: 1,
-        hospitalPicture1: "pic1.com",
-        hospitalPicture2: "pic2.com",
-        hospitalPicture3: "pic3.com",
+        hospitalPicture1: ["pic1.com"],
         id: 1,
       },
     ]);
+  });
+  it("should return true if hospital status is Open", () => {
+    const mockHospitalInfo = {
+      id: 1,
+      name: "May Hospital",
+      status: "Open",
+      type: "A Organization",
+      description: "A Organization",
+      year: 2024,
+      country: "US",
+      state: "WA",
+      zip: "ZIP12345",
+      city: "Seattle",
+      address: "Type 2",
+      longitude: 1,
+      latitude: 1,
+      hospitalPicture1: ["pic1.com"],
+    };
+    const result = hospitalInfoService.isHospitalOpen(mockHospitalInfo);
+    expect(result).toBeTruthy();
+  });
+
+  it("should return true if hospital status is Closed", () => {
+    const mockHospitalInfo = {
+      id: 1,
+      name: "May Hospital",
+      status: "Closed",
+      type: "A Organization",
+      description: "A Organization",
+      year: 2024,
+      country: "US",
+      state: "WA",
+      zip: "ZIP12345",
+      city: "Seattle",
+      address: "Type 2",
+      longitude: 1,
+      latitude: 1,
+      hospitalPicture1: ["pic1.com"],
+    };
+    const result = hospitalInfoService.isHospitalOpen(mockHospitalInfo);
+    expect(result).toBeFalsy();
+  });
+
+  it("should throw error if hospital status is undefined", () => {
+    const mockHospitalInfo = undefined;
+    expect(() => {
+      hospitalInfoService.isHospitalOpen(mockHospitalInfo);
+    }).toThrow("hospitalInfo is undefined");
   });
 });
