@@ -64,6 +64,6 @@ class MockHospitalInfoService extends HospitalInfoService {
   }
 }
 
-const hospitalInfoService = new HospitalInfoService();
-// const hospitalInfoService = new MockHospitalInfoService();
+// const hospitalInfoService = new HospitalInfoService();
+const hospitalInfoService = new MockHospitalInfoService();
 export { hospitalInfoService, HospitalInfoService };
