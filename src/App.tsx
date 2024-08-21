@@ -1,19 +1,24 @@
-import { Box, Container, Grid } from "@mui/material";
+/**
+ *  App.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
+import { Box, Grid } from "@mui/material";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useState } from "react";
 import { GFLMap } from "./components/GFLMap";
-import { SearchAndSort } from "./components/SearchAndSort";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
+import { SearchAndSort } from "./components/SearchAndSort";
 
-import { PopupInfo } from "./models/popupInfo";
+import "./App.css";
 import { HospitalInfo } from "./models/hospitalInfo";
+import { PopupInfo } from "./models/popupInfo";
 import { generalInfoService } from "./services/generalInfo/generalInfoService";
+import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "./services/hospitalRequest/hospitalRequestService";
-import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
-import "./App.css";
 
-const MAP_HEIGHT = "100vh";
 
 // Seattle
 const DEFAULT_VIEW = {
@@ -26,6 +31,7 @@ function App() {
   const [viewState, setViewState] = useState(DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [hospitals, setHospitals] = useState<HospitalInfo[]>([]);
+  const [windowHeight, setWindowHeight] = useState<number>(400);
 
   useEffect(() => {
     hospitalInfoService.getHospitalInfo().then((res: HospitalInfo[]) => {
@@ -34,32 +40,40 @@ function App() {
     generalInfoService.getGeneralInfo().then((res) => console.log(res));
     hospitalRequestService.getHospitalRequest().then((res) => console.log(res));
     hospitalFundedService.getHospitalFunded().then((res) => console.log(res));
+    setWindowHeight(window.innerHeight);
+
+    function handleResize() {
+      setWindowHeight(window.innerHeight);
+    }
+    window.addEventListener('resize', handleResize)
   }, []);
 
   return (
-    <Container sx={{ width: "100vw", height: "100vh" }}>
-      <Grid container>
-        <Grid item xs={12} lg={8}>
-          <Box>
+    <Grid container>
+      <Grid item xs={12} lg={5}>
+        <Box sx={{ height: windowHeight, overflowY: 'auto' }}>
+          <Box padding={1} >
             <SearchAndSort />
-            {hospitals.map((hospital) => (
-              <HospitalCardDetails hospital={hospital} />
+          </Box>
+          <Box padding={1} >
+            {hospitals.map((hospital, idx: number) => (
+              <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
             ))}
           </Box>
-        </Grid>
-        <Grid item xs={12} lg={4}>
-          <Box width={"75vw"} height={MAP_HEIGHT}>
-            <GFLMap
-              hospitals={hospitals}
-              viewState={viewState}
-              setViewState={setViewState}
-              setPopupInfo={setPopupInfo}
-              popupInfo={popupInfo}
-            />
-          </Box>
-        </Grid>
+        </Box>
       </Grid>
-    </Container>
+      <Grid item xs={12} lg={7}>
+        <Box height={windowHeight}>
+          <GFLMap
+            hospitals={hospitals}
+            viewState={viewState}
+            setViewState={setViewState}
+            setPopupInfo={setPopupInfo}
+            popupInfo={popupInfo}
+          />
+        </Box>
+      </Grid>
+    </Grid>
   );
 }
 

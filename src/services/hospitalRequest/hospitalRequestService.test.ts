@@ -1,9 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
-import { airtableService } from '../../mapping/airtableService';
-import { hospitalRequestService } from './hospitalRequestService';
+import { describe, expect, it, vi } from "vitest";
+import { airtableService } from "../../mapping/airtableService";
+import { hospitalRequestService } from "./hospitalRequestService";
 
-describe('HospitalRequestService tests', () => {
-  it('getHospitalRequest', async () => {
+describe("HospitalRequestService tests", () => {
+  it("getHospitalRequest", async () => {
     const mockRecords = [
       {
         fields: {
@@ -30,8 +30,9 @@ describe('HospitalRequestService tests', () => {
         },
       },
     ];
-
-    const getTableRecordsSpy = vi.spyOn(airtableService, 'getTableRecords').mockResolvedValue(mockRecords as any);
+    const getTableRecordsSpy = vi
+      .spyOn(airtableService, "getTableRecords")
+      .mockResolvedValue(mockRecords as any);
 
     const result = await hospitalRequestService.getHospitalRequest();
 
@@ -39,26 +40,26 @@ describe('HospitalRequestService tests', () => {
 
     expect(result).toEqual([
       {
-        oppReqId: 'REQ12345',
-        name: 'May\'s Hospital',
-        requestNarrative: 'Request for new equipment',
+        oppReqId: "REQ12345",
+        name: "May's Hospital",
+        requestNarrative: "Request for new equipment",
         equipReq: 10,
         requested: 5000,
         kids3Y: 300,
         play3Y: 200,
         collected: 4000,
         funders: 5,
-        requestPicture1: 'pic1.jpg',
-        requestPicture2: 'pic2.jpg',
-        requestPicture3: 'pic3.jpg',
-        requestPicture4: 'pic4.jpg',
-        requestPicture5: 'pic5.jpg',
-        corpPartner1Name: 'Partner 1',
-        corpPartner1Logo: 'logo1.png',
-        corpPartner1Type: 'Type 1',
-        corpPartner2Name: 'Partner 2',
-        corpPartner2Logo: 'logo2.png',
-        corpPartner2Type: 'Type 2',
+        requestPicture1: "pic1.jpg",
+        requestPicture2: "pic2.jpg",
+        requestPicture3: "pic3.jpg",
+        requestPicture4: "pic4.jpg",
+        requestPicture5: "pic5.jpg",
+        corpPartner1Name: "Partner 1",
+        corpPartner1Logo: "logo1.png",
+        corpPartner1Type: "Type 1",
+        corpPartner2Name: "Partner 2",
+        corpPartner2Logo: "logo2.png",
+        corpPartner2Type: "Type 2",
       },
     ]);
   });
