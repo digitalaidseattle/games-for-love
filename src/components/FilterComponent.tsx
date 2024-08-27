@@ -15,7 +15,7 @@ import {
   Typography,
   Grid,
   Card,
-  CardContent
+  CardContent,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -24,7 +24,7 @@ interface FilterComponentProps {
 }
 
 export const FilterComponent: React.FC<FilterComponentProps> = ({
-  onClose
+  onClose,
 }) => {
   const [location, setLocation] = useState<string>("");
   const [fundingStatus, setFundingStatus] = useState({
@@ -67,7 +67,13 @@ export const FilterComponent: React.FC<FilterComponentProps> = ({
                   variant="outlined"
                   placeholder="City, state, or zip code"
                   onChange={(e) => setLocation(e.target.value)}
-                  sx={{ mt: 2 }}
+                  sx={{
+                    mt: 2,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "#ededed",
+                      borderRadius: "20px"
+                    },
+                  }}
                   value={location}
                 />
               </Box>
