@@ -27,11 +27,13 @@ const DEFAULT_VIEW = {
   zoom: 10,
 };
 
+
 function App() {
   const [viewState, setViewState] = useState(DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [hospitals, setHospitals] = useState<HospitalInfo[]>([]);
   const [windowHeight, setWindowHeight] = useState<number>(400);
+  
 
   useEffect(() => {
     hospitalInfoService.getHospitalInfo().then((res: HospitalInfo[]) => {
@@ -47,6 +49,7 @@ function App() {
     }
     window.addEventListener('resize', handleResize)
   }, []);
+
 
   return (
     <Grid container>
