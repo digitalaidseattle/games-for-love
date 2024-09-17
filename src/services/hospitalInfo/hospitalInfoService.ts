@@ -2,7 +2,7 @@ import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
 
 import thumbnailData from "../../../test/thumbnailData.json";
-import { Filter } from "../../types/filter";
+import { FilterType } from "../../types/fillterType";
 
 const extractUrls = (attachments: any) => {
   return attachments ? attachments.map((att: any) => att.url) : [];
@@ -43,7 +43,7 @@ class HospitalInfoService {
   }
 }
 class MockHospitalInfoService extends HospitalInfoService {
-  async getHospitalInfo(filter?: Filter): Promise<HospitalInfo[]> {
+  async getHospitalInfo(filter?: FilterType): Promise<HospitalInfo[]> {
     const hospitals = thumbnailData.map((data) => {
       return {
         id: data["ID"],
