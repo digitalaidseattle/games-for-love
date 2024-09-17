@@ -8,7 +8,7 @@ describe("HospitalInfoService tests", () => {
       {
         fields: {
           "Hospital Name": "May Hospital",
-          Status: "Open",
+          Status: "active",
           "Type of Organization": "A Organization",
           "Organization Notes / Description": "A Organization",
           "Kids Served / Year": 2024,
@@ -32,7 +32,7 @@ describe("HospitalInfoService tests", () => {
     expect(result).toEqual([
       {
         name: "May Hospital",
-        status: "Open",
+        status: "active",
         type: "A Organization",
         description: "A Organization",
         year: 2024,
@@ -48,11 +48,11 @@ describe("HospitalInfoService tests", () => {
       },
     ]);
   });
-  it("should return true if hospital status is Open", () => {
+  it("should return true if hospital status is active", () => {
     const mockHospitalInfo = {
       id: 1,
       name: "May Hospital",
-      status: "Open",
+      status: "active",
       type: "A Organization",
       description: "A Organization",
       year: 2024,
@@ -69,11 +69,11 @@ describe("HospitalInfoService tests", () => {
     expect(result).toBeTruthy();
   });
 
-  it("should return true if hospital status is Closed", () => {
+  it("should return true if hospital status is past", () => {
     const mockHospitalInfo = {
       id: 1,
       name: "May Hospital",
-      status: "Closed",
+      status: "past",
       type: "A Organization",
       description: "A Organization",
       year: 2024,

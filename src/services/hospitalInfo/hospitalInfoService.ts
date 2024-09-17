@@ -2,6 +2,7 @@ import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
 
 import thumbnailData from "../../../test/thumbnailData.json";
+import { Filter } from "../../types/filter";
 
 const extractUrls = (attachments: any) => {
   return attachments ? attachments.map((att: any) => att.url) : [];
@@ -12,7 +13,7 @@ class HospitalInfoService {
     if (hospitalInfo === undefined) {
       throw new Error("hospitalInfo is undefined");
     } else {
-      return hospitalInfo.status !== "Closed";
+      return hospitalInfo.status !== "past";
     }
   };
   async getHospitalInfo(): Promise<HospitalInfo[]> {
@@ -42,8 +43,8 @@ class HospitalInfoService {
   }
 }
 class MockHospitalInfoService extends HospitalInfoService {
-  async getHospitalInfo(): Promise<HospitalInfo[]> {
-    return thumbnailData.map((data) => {
+  async getHospitalInfo(filter?: Filter): Promise<HospitalInfo[]> {
+    const hospitals = thumbnailData.map((data) => {
       return {
         id: data["ID"],
         name: data["Hospital Name"],
@@ -61,6 +62,18 @@ class MockHospitalInfoService extends HospitalInfoService {
         hospitalPicture1: extractUrls(data["Hospital Picture 1"]),
       } as HospitalInfo;
     });
+    if (filter) {
+      const filtered_hospitals = hospitals.filter(
+        (hospital) =>
+          (filter.location.includes(hospital.state.toLowerCase()) ||
+            filter.location.includes(hospital.city.toLowerCase()) ||
+            filter.location.includes(hospital.zip.toLowerCase())) &&
+          filter.status.includes(hospital.status.toLowerCase())
+      );
+      return filtered_hospitals;
+    } else {
+      return hospitals;
+    }
   }
 }
 

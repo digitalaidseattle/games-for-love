@@ -44,7 +44,7 @@ export const GFLMap: React.FC<MapProps> = ({
       <ScaleControl />
       {hospitals.map((hospital) => (
         <Marker
-          color={hospital.status === "Closed" ? "#DB5757" : "#92C65E"}
+          color={hospital.status === "past" ? "#DB5757" : "#92C65E"}
           key={hospital.id}
           longitude={hospital.longitude}
           latitude={hospital.latitude}
