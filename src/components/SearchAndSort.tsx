@@ -10,6 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
+<<<<<<< HEAD
 import Filter from "../components/Filter";
 import { FilterType } from "../types/fillterType";
 
@@ -20,6 +21,11 @@ interface SearchAndSortProps {
 export const SearchAndSort: React.FC<SearchAndSortProps> = ({
   getHospitalInfo,
 }) => {
+=======
+import { FilterComponent } from "./FilterComponent";
+
+export const SearchAndSort = () => {
+>>>>>>> 12355d481d7926915055d18a8150cac79b1196f0
   const [showFilters, setShowFilters] = useState(false);
 
   const handleOpenFilters = () => {
@@ -104,10 +110,15 @@ export const SearchAndSort: React.FC<SearchAndSortProps> = ({
         </Button>
       </Box>
       {showFilters && (
+<<<<<<< HEAD
         <Filter
           open={showFilters}
           handleClose={handleCloseFilters}
           applyFilters={getHospitalInfo}
+=======
+        <FilterComponent
+          onClose={handleCloseFilters}
+>>>>>>> 12355d481d7926915055d18a8150cac79b1196f0
         />
       )}
     </Box>
