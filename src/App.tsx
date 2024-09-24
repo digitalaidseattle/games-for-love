@@ -14,10 +14,7 @@ import { SearchAndSort } from "./components/SearchAndSort";
 import "./App.css";
 import { HospitalInfo } from "./models/hospitalInfo";
 import { PopupInfo } from "./models/popupInfo";
-import { generalInfoService } from "./services/generalInfo/generalInfoService";
-import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
-import { hospitalRequestService } from "./services/hospitalRequest/hospitalRequestService";
 import { FilterType } from "./types/fillterType";
 
 // Seattle
@@ -27,13 +24,11 @@ const DEFAULT_VIEW = {
   zoom: 10,
 };
 
-
 function App() {
   const [viewState, setViewState] = useState(DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [hospitals, setHospitals] = useState<HospitalInfo[]>([]);
   const [windowHeight, setWindowHeight] = useState<number>(400);
-  
 
   const getHospitalInfo = (filter?: FilterType) => {
     hospitalInfoService
@@ -48,9 +43,6 @@ function App() {
 
   useEffect(() => {
     getHospitalInfo();
-    generalInfoService.getGeneralInfo().then((res) => console.log(res));
-    hospitalRequestService.getHospitalRequest().then((res) => console.log(res));
-    hospitalFundedService.getHospitalFunded().then((res) => console.log(res));
     setWindowHeight(window.innerHeight);
 
     function handleResize() {
@@ -58,7 +50,6 @@ function App() {
     }
     window.addEventListener("resize", handleResize);
   }, []);
-
 
   return (
     <Grid container>
@@ -68,14 +59,15 @@ function App() {
             <SearchAndSort getHospitalInfo={getHospitalInfo} />
           </Box>
           <Box padding={1}>
-            {hospitals.map((hospital, idx: number) => (
-              <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
-            ))}
+            {hospitals.length > 0 &&
+              hospitals.map((hospital, idx: number) => (
+                <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
+              ))}
           </Box>
         </Box>
       </Grid>
       <Grid item xs={12} lg={7}>
-        <Box height={windowHeight}>
+        <Box height={windowHeight} data-testid="gfl-map-box">
           <GFLMap
             hospitals={hospitals}
             viewState={viewState}

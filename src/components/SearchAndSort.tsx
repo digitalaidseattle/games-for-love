@@ -31,7 +31,7 @@ export const SearchAndSort: React.FC<SearchAndSortProps> = ({
   };
 
   return (
-    <Box>
+    <Box data-testid="search-and-sort-box">
       <Box
         sx={{
           display: "flex",
