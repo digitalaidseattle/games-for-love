@@ -8,9 +8,9 @@ import Map from "react-map-gl/maplibre";
 import { HospitalInfo } from "../models/hospitalInfo";
 import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
-
-import React from "react";
+import React, { useRef } from "react";
 import { Box } from "@mui/material";
+import { Room } from "@mui/icons-material";
 
 interface MapProps {
   hospitals: HospitalInfo[];
@@ -22,18 +22,22 @@ interface MapProps {
   setViewState: (v: any) => void;
   setPopupInfo: (p: PopupInfo | null) => void;
   popupInfo: PopupInfo | null;
+  animationObject: any;
 }
-
 export const GFLMap: React.FC<MapProps> = ({
   hospitals,
   viewState,
   setViewState,
   setPopupInfo,
   popupInfo,
+  animationObject,
 }) => {
+  const markerRef = useRef<any>(null);
+
   return (
     <Map
       {...viewState}
+      ref={markerRef}
       onMove={(evt) => setViewState(evt.viewState)}
       mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${
         import.meta.env.VITE_MAPTILER_API_KEY
@@ -42,19 +46,51 @@ export const GFLMap: React.FC<MapProps> = ({
       <FullscreenControl position="top-left" />
       <NavigationControl position="top-left" />
       <ScaleControl />
-      {hospitals.map((hospital) => (
-        <Marker
-          color={hospital.status === "Closed" ? "#DB5757" : "#92C65E"}
-          key={hospital.id}
-          longitude={hospital.longitude}
-          latitude={hospital.latitude}
-          onClick={() =>
-            setPopupInfo({
-              hospitalInfo: hospital,
-            })
-          }
-        />
-      ))}
+      {hospitals.map((hospital) => {
+        const isAnimated = animationObject[hospital?.id]?.animate;
+        return (
+          <Marker
+            key={hospital.id}
+            longitude={hospital.longitude}
+            latitude={hospital.latitude}
+            onClick={() =>
+              setPopupInfo({
+                hospitalInfo: hospital,
+              })
+            }
+            anchor="bottom"
+            style={{
+              cursor: "pointer",
+            }}
+          >
+            <div
+              style={{
+                position: "relative",
+                transition: "transform 0.3s ease",
+                transform: isAnimated ? "scale(1.5)" : "scale(1)",
+              }}
+            >
+              <Room
+                sx={{
+                  color: isAnimated
+                    ? "#FFFF00"
+                    : hospital.status === "Closed"
+                    ? "#DB5757"
+                    : "#92C65E",
+                  strokeWidth: 1,
+                  stroke: "black",
+                  fontSize: "3rem",
+                  "& .MuiSvgIcon-root": {
+                    outline: "1px solid red",
+                    outlineOffset: "2px",
+                  },
+                }}
+              />
+            </div>
+          </Marker>
+        );
+      })}
+
       {popupInfo && (
         <Box sx={{ display: "flex" }}>
           <GFLPopup popupInfo={popupInfo} onClose={() => setPopupInfo(null)} />
