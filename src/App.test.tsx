@@ -1,3 +1,4 @@
+import "@testing-library/jest-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 import { render, screen, waitFor, act } from "@testing-library/react";
