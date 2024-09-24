@@ -8,6 +8,13 @@
 class SiteService {
     prodUrls = JSON.parse(import.meta.env.VITE_APP_URLS);
 
+    // Seattle
+    DEFAULT_VIEW = {
+        longitude: -122.4,
+        latitude: 47.6061,
+        zoom: 10,
+    };
+
 
     isPreview(): boolean {
         return !this.prodUrls.includes(window.location.origin)

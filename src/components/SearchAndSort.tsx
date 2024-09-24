@@ -1,19 +1,22 @@
-import { useState } from "react";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import ImportExportIcon from "@mui/icons-material/ImportExport";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
-  TextField,
-  IconButton,
   Button,
+  IconButton,
   InputAdornment,
+  TextField,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import ImportExportIcon from "@mui/icons-material/ImportExport";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import { useContext, useState } from "react";
 
-import { FilterComponent } from "./FilterComponent";
+import Filter from "../components/Filter";
+import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
+import { HospitalsContext } from "./HospitalsContext";
 
-export const SearchAndSort = () => {
+export const SearchAndSort: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
+  const { originals, setHospitals } = useContext(HospitalsContext);
 
   const handleOpenFilters = () => {
     setShowFilters(true);
@@ -21,6 +24,11 @@ export const SearchAndSort = () => {
 
   const handleCloseFilters = () => {
     setShowFilters(false);
+  };
+
+  const changeSearch = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    // searching through originals
+    setHospitals(hospitalInfoService.filterHospitals(originals, evt.target.value))
   };
 
   return (
@@ -35,6 +43,7 @@ export const SearchAndSort = () => {
       >
         <TextField
           placeholder="Search"
+          onChange={changeSearch}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -65,6 +74,7 @@ export const SearchAndSort = () => {
               height: "40px",
             },
           }}
+
         />
         <IconButton
           onClick={handleOpenFilters}
@@ -97,8 +107,9 @@ export const SearchAndSort = () => {
         </Button>
       </Box>
       {showFilters && (
-        <FilterComponent
-          onClose={handleCloseFilters}
+        <Filter
+          open={showFilters}
+          handleClose={handleCloseFilters}
         />
       )}
     </Box>

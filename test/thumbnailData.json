@@ -1,7 +1,7 @@
 [
   {
     "Hospital Name": "Virginia Mason Medical Center",
-    "Status": "Closed",
+    "Status": "past",
     "Organization Notes / Description": "Description C",
     "State": "WA",
     "Country": "USA",
@@ -96,7 +96,7 @@
   },
   {
     "Hospital Name": "Harborview Medical Center",
-    "Status": "Closed",
+    "Status": "past",
     "Organization Notes / Description": "Description A",
     "State": "WA",
     "Country": "USA",
@@ -191,7 +191,7 @@
   },
   {
     "Hospital Name": "Swedish Medical Center - First Hill",
-    "Status": "Closed",
+    "Status": "past",
     "Organization Notes / Description": "Description B",
     "State": "WA",
     "Country": "USA",
@@ -286,7 +286,7 @@
   },
   {
     "Hospital Name": "Swedish Primary Care",
-    "Status": "Actively funding",
+    "Status": "active",
     "Organization Notes / Description": "Description D",
     "State": "WA",
     "Country": "USA",

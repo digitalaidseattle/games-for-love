@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { PreviewBanner } from './components/PreviewBanner.tsx'
+import { HospitalsContextProvider } from './components/HospitalsContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <PreviewBanner />
-    <App />
+    <HospitalsContextProvider>
+      <App />
+    </HospitalsContextProvider>
   </React.StrictMode>,
 )

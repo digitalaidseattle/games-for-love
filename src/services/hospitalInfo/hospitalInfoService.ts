@@ -2,19 +2,26 @@ import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
 
 import thumbnailData from "../../../test/thumbnailData.json";
+import { FilterType } from "../../types/fillterType";
 
 const extractUrls = (attachments: any) => {
   return attachments ? attachments.map((att: any) => att.url) : [];
 };
 
 class HospitalInfoService {
+
+  filterHospitals = (hospitals: HospitalInfo[], test: string) => {
+    return hospitals.filter((h: HospitalInfo) => h.name.toLowerCase().indexOf(test.toLowerCase()) > -1)
+  };
+
   isHospitalOpen = (hospitalInfo: HospitalInfo | undefined) => {
     if (hospitalInfo === undefined) {
       throw new Error("hospitalInfo is undefined");
     } else {
-      return hospitalInfo.status !== "Closed";
+      return hospitalInfo.status !== "past";
     }
   };
+
   async getHospitalInfo(): Promise<HospitalInfo[]> {
     const TABLE = import.meta.env.VITE_AIRTABLE_TABLE_HOSPITAL_REFERENCE;
     const MAX_RECORDS = 100;
@@ -41,9 +48,10 @@ class HospitalInfoService {
     );
   }
 }
+
 class MockHospitalInfoService extends HospitalInfoService {
-  async getHospitalInfo(): Promise<HospitalInfo[]> {
-    return thumbnailData.map((data) => {
+  async getHospitalInfo(filter?: FilterType): Promise<HospitalInfo[]> {
+    const hospitals = thumbnailData.map((data) => {
       return {
         id: data["ID"],
         name: data["Hospital Name"],
@@ -61,6 +69,18 @@ class MockHospitalInfoService extends HospitalInfoService {
         hospitalPicture1: extractUrls(data["Hospital Picture 1"]),
       } as HospitalInfo;
     });
+    if (filter) {
+      const filtered_hospitals = hospitals.filter(
+        (hospital) =>
+          (filter.location.includes(hospital.state.toLowerCase()) ||
+            filter.location.includes(hospital.city.toLowerCase()) ||
+            filter.location.includes(hospital.zip.toLowerCase())) &&
+          filter.status.includes(hospital.status.toLowerCase())
+      );
+      return filtered_hospitals;
+    } else {
+      return hospitals;
+    }
   }
 }
 
