@@ -9,6 +9,11 @@ const extractUrls = (attachments: any) => {
 };
 
 class HospitalInfoService {
+
+  filterHospitals = (hospitals: HospitalInfo[], test: string) => {
+    return hospitals.filter((h: HospitalInfo) => h.name.toLowerCase().indexOf(test.toLowerCase()) > -1)
+  };
+
   isHospitalOpen = (hospitalInfo: HospitalInfo | undefined) => {
     if (hospitalInfo === undefined) {
       throw new Error("hospitalInfo is undefined");
@@ -16,6 +21,7 @@ class HospitalInfoService {
       return hospitalInfo.status !== "past";
     }
   };
+
   async getHospitalInfo(): Promise<HospitalInfo[]> {
     const TABLE = import.meta.env.VITE_AIRTABLE_TABLE_HOSPITAL_REFERENCE;
     const MAX_RECORDS = 100;
@@ -42,6 +48,7 @@ class HospitalInfoService {
     );
   }
 }
+
 class MockHospitalInfoService extends HospitalInfoService {
   async getHospitalInfo(filter?: FilterType): Promise<HospitalInfo[]> {
     const hospitals = thumbnailData.map((data) => {

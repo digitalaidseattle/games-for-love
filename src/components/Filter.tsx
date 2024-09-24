@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +21,8 @@ import { FilterType } from "../types/fillterType";
 import { styled } from "@mui/material/styles";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { InputAdornment } from "@mui/material";
+import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
+import { HospitalsContext } from "./HospitalsContext";
 
 const BootstrapDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -35,10 +37,9 @@ const BootstrapDialog = styled(Dialog)(() => ({
 interface FilterProps {
   open: boolean;
   handleClose: () => void;
-  applyFilters: (filterValues: FilterType) => void;
 }
 
-const Filter: React.FC<FilterProps> = ({ open, handleClose, applyFilters }) => {
+const Filter: React.FC<FilterProps> = ({ open, handleClose }) => {
   const [locationValue, setLocationValue] = useState<string>("");
   const [locationChips, setLocationChips] = useState<string[]>([]);
   const [status, setStatus] = useState({
@@ -51,6 +52,7 @@ const Filter: React.FC<FilterProps> = ({ open, handleClose, applyFilters }) => {
     status: [],
   });
   const [checkedStatus, setCheckedStatus] = useState<string[]>([]);
+  const { setOriginals } = useContext(HospitalsContext);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && locationValue.trim() !== "") {
@@ -78,7 +80,9 @@ const Filter: React.FC<FilterProps> = ({ open, handleClose, applyFilters }) => {
   };
 
   const handleApplyFilters = () => {
-    applyFilters(filterValues);
+    hospitalInfoService
+      .getHospitalInfo(filterValues)
+      .then(res => setOriginals(res))
     handleClose();
   };
 
