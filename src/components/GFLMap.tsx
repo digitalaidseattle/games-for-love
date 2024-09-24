@@ -77,7 +77,7 @@ export const GFLMap: React.FC<MapProps> = ({
                     : hospital.status === "Closed"
                     ? "#DB5757"
                     : "#92C65E",
-                  strokeWidth: 1,
+                  strokeWidth: "0.2px",
                   stroke: "black",
                   fontSize: "3rem",
                   "& .MuiSvgIcon-root": {
