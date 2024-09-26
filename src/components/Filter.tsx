@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -17,10 +17,11 @@ import {
   Button,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { FilterType } from "../types/fillterType";
 import { styled } from "@mui/material/styles";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { InputAdornment } from "@mui/material";
+import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
+import { HospitalsContext } from "../context/HospitalsContext";
 
 const BootstrapDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -35,21 +36,22 @@ const BootstrapDialog = styled(Dialog)(() => ({
 interface FilterProps {
   open: boolean;
   handleClose: () => void;
-  applyFilters: (filterValues: FilterType) => void;
 }
 
-const Filter: React.FC<FilterProps> = ({ open, handleClose, applyFilters }) => {
+const Filter: React.FC<FilterProps> = ({ open, handleClose }) => {
+  const { setOriginals, setOriginalFilters, filters } =
+    useContext(HospitalsContext);
   const [locationValue, setLocationValue] = useState<string>("");
-  const [locationChips, setLocationChips] = useState<string[]>([]);
+  const [locationChips, setLocationChips] = useState<string[]>(
+    filters.location
+  );
+
   const [status, setStatus] = useState({
     active: false,
     past: false,
     all: false,
   });
-  const [filterValues, setFilterValues] = useState<FilterType>({
-    location: [],
-    status: [],
-  });
+
   const [checkedStatus, setCheckedStatus] = useState<string[]>([]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -78,7 +80,13 @@ const Filter: React.FC<FilterProps> = ({ open, handleClose, applyFilters }) => {
   };
 
   const handleApplyFilters = () => {
-    applyFilters(filterValues);
+    if (filters.location.length === 0 && filters.status.length === 0) {
+      hospitalInfoService.getHospitalInfo().then((res) => setOriginals(res));
+    } else {
+      hospitalInfoService
+        .getHospitalInfo(filters)
+        .then((res) => setOriginals(res));
+    }
     handleClose();
   };
 
@@ -90,12 +98,19 @@ const Filter: React.FC<FilterProps> = ({ open, handleClose, applyFilters }) => {
   }, [status]);
 
   useEffect(() => {
-    setFilterValues((prevValues) => ({
-      ...prevValues,
+    setOriginalFilters({
       location: locationChips.map((chip) => chip.toLowerCase()),
       status: checkedStatus.map((status) => status.toLowerCase()),
-    }));
+    });
   }, [locationChips, checkedStatus]);
+
+  useEffect(() => {
+    setStatus({
+      active: filters.status.includes("active"),
+      past: filters.status.includes("past"),
+      all: filters.status.includes("active") && filters.status.includes("past"),
+    });
+  }, []);
 
   return (
     <BootstrapDialog

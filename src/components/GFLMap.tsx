@@ -5,32 +5,18 @@ import {
   ScaleControl,
 } from "react-map-gl";
 import Map from "react-map-gl/maplibre";
-import { HospitalInfo } from "../models/hospitalInfo";
 import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
 
-import React from "react";
+import { useContext, useState } from "react";
 import { Box } from "@mui/material";
+import { siteService } from "../services/siteUtils";
+import { HospitalsContext } from "../context/HospitalsContext";
 
-interface MapProps {
-  hospitals: HospitalInfo[];
-  viewState: {
-    longitude: number;
-    latitude: number;
-    zoom: number;
-  };
-  setViewState: (v: any) => void;
-  setPopupInfo: (p: PopupInfo | null) => void;
-  popupInfo: PopupInfo | null;
-}
-
-export const GFLMap: React.FC<MapProps> = ({
-  hospitals,
-  viewState,
-  setViewState,
-  setPopupInfo,
-  popupInfo,
-}) => {
+export const GFLMap = () => {
+  const { hospitals } = useContext(HospitalsContext);
+  const [viewState, setViewState] = useState(siteService.DEFAULT_VIEW);
+  const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   return (
     <Map
       {...viewState}
