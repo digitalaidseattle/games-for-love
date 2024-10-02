@@ -13,23 +13,13 @@ import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
 import { HospitalInfo } from "./models/hospitalInfo";
-import { PopupInfo } from "./models/popupInfo";
 import { generalInfoService } from "./services/generalInfo/generalInfoService";
 import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "./services/hospitalRequest/hospitalRequestService";
 
 
-// Seattle
-const DEFAULT_VIEW = {
-  longitude: -122.4,
-  latitude: 47.6061,
-  zoom: 10,
-};
-
 function App() {
-  const [viewState, setViewState] = useState(DEFAULT_VIEW);
-  const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [hospitals, setHospitals] = useState<HospitalInfo[]>([]);
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
@@ -66,13 +56,7 @@ function App() {
       </Grid>
       <Grid item xs={12} lg={7}>
         <Box height={windowHeight}>
-          <GFLMap
-            hospitals={hospitals}
-            viewState={viewState}
-            setViewState={setViewState}
-            setPopupInfo={setPopupInfo}
-            popupInfo={popupInfo}
-          />
+          <GFLMap hospitals={hospitals} />
         </Box>
       </Grid>
     </Grid>

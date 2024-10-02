@@ -22,17 +22,14 @@ const DEFAULT_VIEW = {
 
 interface MapProps {
   hospitals: HospitalInfo[];
-  setPopupInfo: (p: PopupInfo | null) => void;
-  popupInfo: PopupInfo | null;
 }
 export const GFLMap: React.FC<MapProps> = ({
-  hospitals,
-  setPopupInfo,
-  popupInfo
+  hospitals
 }) => {
   const markerRef = useRef<MapRef>();
   const { selectedHospital } = useContext(SelectedHospitalContext);
   const [viewState, setViewState] = useState<any>(DEFAULT_VIEW);
+  const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
 
   useEffect(() => {
     if (selectedHospital) {
