@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -12,24 +12,26 @@ import {
 
 import { Pin } from "../components/Pin";
 import { HospitalInfo } from "../models/hospitalInfo";
+import { SelectedHospitalContext } from "./SelectedHospitalContext";
 
 interface HospitalDetailsProps {
   hospital: HospitalInfo | null;
-  animationObject: any;
-  setAnimationObject: (a: any) => void;
 }
 
 export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
-  hospital,
-  animationObject,
-  setAnimationObject,
+  hospital
 }) => {
   const [images, setImages] = useState<string[]>([]);
+  const { selectedHospital, setSelectedHospital } = useContext(SelectedHospitalContext);
+  const [backgroundColor, setBackgroundColor] = useState<string>();
   useEffect(() => {
     if (hospital) {
       setImages(hospital.hospitalPicture1);
+      setBackgroundColor(selectedHospital ? hospital.id === selectedHospital.id ? '#EEEEEE' : '': '');
     }
-  }, [hospital]);
+  }, [hospital, selectedHospital]);
+
+
   return (
     <>
       <Card
@@ -38,14 +40,9 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
           alignItems: "center",
           margin: "10px 0",
           cursor: "pointer",
+          backgroundColor: backgroundColor
         }}
-        onClick={() =>
-          hospital &&
-          setAnimationObject({
-            ...animationObject,
-            [hospital.id]: { animate: !animationObject[hospital.id].animate },
-          })
-        }
+        onClick={() => setSelectedHospital(hospital!)}
       >
         <CardActionArea
           sx={{

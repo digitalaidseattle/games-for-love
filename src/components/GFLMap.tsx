@@ -8,9 +8,10 @@ import Map from "react-map-gl/maplibre";
 import { HospitalInfo } from "../models/hospitalInfo";
 import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { Box } from "@mui/material";
 import { Room } from "@mui/icons-material";
+import { SelectedHospitalContext } from "./SelectedHospitalContext";
 
 interface MapProps {
   hospitals: HospitalInfo[];
@@ -22,32 +23,34 @@ interface MapProps {
   setViewState: (v: any) => void;
   setPopupInfo: (p: PopupInfo | null) => void;
   popupInfo: PopupInfo | null;
-  animationObject: any;
 }
 export const GFLMap: React.FC<MapProps> = ({
   hospitals,
   viewState,
   setViewState,
   setPopupInfo,
-  popupInfo,
-  animationObject,
+  popupInfo
 }) => {
   const markerRef = useRef<any>(null);
+  const { selectedHospital } = useContext(SelectedHospitalContext);
+
+  const isHosptialSelected = (hospital: HospitalInfo): boolean => {
+    return selectedHospital ? hospital.id === selectedHospital.id : false;
+  }
 
   return (
     <Map
       {...viewState}
       ref={markerRef}
       onMove={(evt) => setViewState(evt.viewState)}
-      mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${
-        import.meta.env.VITE_MAPTILER_API_KEY
-      }`}
+      mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${import.meta.env.VITE_MAPTILER_API_KEY
+        }`}
     >
       <FullscreenControl position="top-left" />
       <NavigationControl position="top-left" />
       <ScaleControl />
       {hospitals.map((hospital) => {
-        const isAnimated = animationObject[hospital?.id]?.animate;
+        const isAnimated = isHosptialSelected(hospital)
         return (
           <Marker
             key={hospital.id}
@@ -75,8 +78,8 @@ export const GFLMap: React.FC<MapProps> = ({
                   color: isAnimated
                     ? "#FFFF00"
                     : hospital.status === "Closed"
-                    ? "#DB5757"
-                    : "#92C65E",
+                      ? "#DB5757"
+                      : "#92C65E",
                   strokeWidth: "0.2px",
                   stroke: "black",
                   fontSize: "3rem",

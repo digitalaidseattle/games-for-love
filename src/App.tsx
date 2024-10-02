@@ -27,19 +27,11 @@ const DEFAULT_VIEW = {
   zoom: 10,
 };
 
-interface AnimationObject {
-  [key: number]: {
-    animate: boolean;
-  };
-}
-
 function App() {
   const [viewState, setViewState] = useState(DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [hospitals, setHospitals] = useState<HospitalInfo[]>([]);
   const [windowHeight, setWindowHeight] = useState<number>(400);
-  const [animationObject, setAnimationObject] = useState<AnimationObject>({});
-  
 
   useEffect(() => {
     hospitalInfoService.getHospitalInfo().then((res: HospitalInfo[]) => {
@@ -57,23 +49,6 @@ function App() {
   }, []);
 
 
-  useEffect(() => {
-    if (hospitals.length > 0) {
-      hospitals.forEach((hospital) => {
-        setAnimationObject((prev) => ({
-          ...prev,
-          [hospital.id]: {
-            animate: animationObject[hospital.id] ? true : false,
-          },
-        }));
-      })
-
-    }
-  }, [hospitals]);
-
-
-  console.log("AnimationObject",animationObject)
-
 
   return (
     <Grid container>
@@ -84,7 +59,7 @@ function App() {
           </Box>
           <Box padding={1} >
             {hospitals.map((hospital, idx: number) => (
-              <HospitalCardDetails key={`h-${idx})`} hospital={hospital} setAnimationObject={setAnimationObject} animationObject={animationObject} />
+              <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
             ))}
           </Box>
         </Box>
@@ -97,7 +72,6 @@ function App() {
             setViewState={setViewState}
             setPopupInfo={setPopupInfo}
             popupInfo={popupInfo}
-            animationObject={animationObject}
           />
         </Box>
       </Grid>
