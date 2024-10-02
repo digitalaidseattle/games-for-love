@@ -1,5 +1,6 @@
 import {
   FullscreenControl,
+  MapRef,
   Marker,
   NavigationControl,
   ScaleControl,
@@ -8,33 +9,39 @@ import Map from "react-map-gl/maplibre";
 import { HospitalInfo } from "../models/hospitalInfo";
 import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { Room } from "@mui/icons-material";
 import { SelectedHospitalContext } from "./SelectedHospitalContext";
 
+const DEFAULT_VIEW = {
+  longitude: -122.4,
+  latitude: 47.6061,
+  zoom: 10,
+};
+
 interface MapProps {
   hospitals: HospitalInfo[];
-  viewState: {
-    longitude: number;
-    latitude: number;
-    zoom: number;
-  };
-  setViewState: (v: any) => void;
   setPopupInfo: (p: PopupInfo | null) => void;
   popupInfo: PopupInfo | null;
 }
 export const GFLMap: React.FC<MapProps> = ({
   hospitals,
-  viewState,
-  setViewState,
   setPopupInfo,
   popupInfo
 }) => {
-  const markerRef = useRef<any>(null);
+  const markerRef = useRef<MapRef>();
   const { selectedHospital } = useContext(SelectedHospitalContext);
+  const [viewState, setViewState] = useState<any>(DEFAULT_VIEW);
+
+  useEffect(() => {
+    if (selectedHospital) {
+      markerRef.current?.flyTo({ center: [selectedHospital.longitude, selectedHospital.latitude], duration: 2000 });
+    }
+  }, [selectedHospital]);
 
   const isHosptialSelected = (hospital: HospitalInfo): boolean => {
+
     return selectedHospital ? hospital.id === selectedHospital.id : false;
   }
 
