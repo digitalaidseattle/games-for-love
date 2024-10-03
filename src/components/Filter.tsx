@@ -15,6 +15,7 @@ import {
   Checkbox,
   DialogActions,
   Button,
+  Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
@@ -88,6 +89,21 @@ const Filter: React.FC<FilterProps> = ({ open, handleClose }) => {
         .then((res) => setOriginals(res));
     }
     handleClose();
+  };
+
+  const handleClearAll = () => {
+    setLocationChips([]), setLocationValue("");
+    setStatus({
+      active: false,
+      past: false,
+      all: false,
+    });
+    setOriginalFilters({
+      location: [],
+      status: [],
+    });
+    hospitalInfoService.getHospitalInfo().then((res) => setOriginals(res));
+    // handleClose();
   };
 
   useEffect(() => {
@@ -284,7 +300,46 @@ const Filter: React.FC<FilterProps> = ({ open, handleClose }) => {
           </FormGroup>
         </FormControl>
       </DialogContent>
-      <DialogActions sx={{ mt: 3, mb: 2 }}>
+      <Divider sx={{ borderBottomWidth: 2.2 }} />
+      <DialogActions
+        sx={{
+          mt: 3,
+          mb: 2,
+          display: "flex",
+          justifyContent: "space-between",
+          gap: 10,
+        }}
+      >
+        <Button
+          fullWidth
+          onClick={handleClearAll}
+          sx={{
+            width: "20%",
+            margin: "0 10px",
+            backgroundColor: "transparent",
+            color: "#000",
+            textTransform: "none",
+            fontWeight: "bold",
+            border: "none",
+            "&:hover": {
+              backgroundColor: "transparent",
+              color: "#000",
+            },
+            "&:focus": {
+              outline: "none",
+            },
+            "&:active": {
+              outline: "none",
+              border: "none",
+            },
+            "&.MuiButton-root": {
+              border: "none",
+            },
+          }}
+        >
+          Clear all
+        </Button>
+
         <Button
           variant="contained"
           fullWidth
