@@ -13,33 +13,15 @@ import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
 import { HospitalInfo } from "./models/hospitalInfo";
-import { PopupInfo } from "./models/popupInfo";
 import { generalInfoService } from "./services/generalInfo/generalInfoService";
 import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "./services/hospitalRequest/hospitalRequestService";
 
 
-// Seattle
-const DEFAULT_VIEW = {
-  longitude: -122.4,
-  latitude: 47.6061,
-  zoom: 10,
-};
-
-interface AnimationObject {
-  [key: number]: {
-    animate: boolean;
-  };
-}
-
 function App() {
-  const [viewState, setViewState] = useState(DEFAULT_VIEW);
-  const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [hospitals, setHospitals] = useState<HospitalInfo[]>([]);
   const [windowHeight, setWindowHeight] = useState<number>(400);
-  const [animationObject, setAnimationObject] = useState<AnimationObject>({});
-  
 
   useEffect(() => {
     hospitalInfoService.getHospitalInfo().then((res: HospitalInfo[]) => {
@@ -57,23 +39,6 @@ function App() {
   }, []);
 
 
-  useEffect(() => {
-    if (hospitals.length > 0) {
-      hospitals.forEach((hospital) => {
-        setAnimationObject((prev) => ({
-          ...prev,
-          [hospital.id]: {
-            animate: animationObject[hospital.id] ? true : false,
-          },
-        }));
-      })
-
-    }
-  }, [hospitals]);
-
-
-  console.log("AnimationObject",animationObject)
-
 
   return (
     <Grid container>
@@ -84,21 +49,14 @@ function App() {
           </Box>
           <Box padding={1} >
             {hospitals.map((hospital, idx: number) => (
-              <HospitalCardDetails key={`h-${idx})`} hospital={hospital} setAnimationObject={setAnimationObject} animationObject={animationObject} />
+              <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
             ))}
           </Box>
         </Box>
       </Grid>
       <Grid item xs={12} lg={7}>
         <Box height={windowHeight}>
-          <GFLMap
-            hospitals={hospitals}
-            viewState={viewState}
-            setViewState={setViewState}
-            setPopupInfo={setPopupInfo}
-            popupInfo={popupInfo}
-            animationObject={animationObject}
-          />
+          <GFLMap hospitals={hospitals} />
         </Box>
       </Grid>
     </Grid>
