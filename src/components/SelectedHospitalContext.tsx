@@ -11,7 +11,7 @@ import { HospitalInfo } from '../models/hospitalInfo';
 
 interface HospitalContextType {
     selectedHospital: HospitalInfo | undefined,
-    setSelectedHospital: (hospitals: HospitalInfo) => void
+    setSelectedHospital: (hospitals: HospitalInfo | undefined) => void
 }
 
 export const SelectedHospitalContext = createContext<HospitalContextType>({

@@ -15,7 +15,7 @@ import { HospitalInfo } from "../models/hospitalInfo";
 import { SelectedHospitalContext } from "./SelectedHospitalContext";
 
 interface HospitalDetailsProps {
-  hospital: HospitalInfo | null;
+  hospital: HospitalInfo;
 }
 
 export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
@@ -24,13 +24,26 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
   const [images, setImages] = useState<string[]>([]);
   const { selectedHospital, setSelectedHospital } = useContext(SelectedHospitalContext);
   const [backgroundColor, setBackgroundColor] = useState<string>();
+
   useEffect(() => {
     if (hospital) {
       setImages(hospital.hospitalPicture1);
-      setBackgroundColor(selectedHospital ? hospital.id === selectedHospital.id ? '#EEEEEE' : '': '');
+      setBackgroundColor(selectedHospital ? hospital.id === selectedHospital.id ? '#F0F5FA' : '' : '');
     }
   }, [hospital, selectedHospital]);
 
+  const changeSelectedHospital = () => {
+    if (selectedHospital) {
+      if (hospital.id === selectedHospital.id) {
+        setSelectedHospital(undefined)
+      }
+      else {
+        setSelectedHospital(hospital)
+      }
+    } else {
+      setSelectedHospital(hospital)
+    }
+  }
 
   return (
     <>
@@ -42,7 +55,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
           cursor: "pointer",
           backgroundColor: backgroundColor
         }}
-        onClick={() => setSelectedHospital(hospital!)}
+        onClick={changeSelectedHospital}
       >
         <CardActionArea
           sx={{
