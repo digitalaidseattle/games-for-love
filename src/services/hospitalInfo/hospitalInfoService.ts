@@ -24,30 +24,45 @@ class HospitalInfoService {
     );
   };
 
-  async getHospitalInfo(): Promise<HospitalInfo[]> {
+  async getHospitalInfo(filter?: FilterType): Promise<HospitalInfo[]> {
     const TABLE = import.meta.env.VITE_AIRTABLE_TABLE_HOSPITAL_REFERENCE;
     const MAX_RECORDS = 100;
 
-    return airtableService.getTableRecords(TABLE, MAX_RECORDS).then((records) =>
-      records.map((r) => {
-        return {
-          name: `${r.fields["Hospital Name"]}`,
-          status: r.fields["Status"],
-          type: r.fields["Type of Organization"],
-          description: r.fields["Organization Notes / Description"],
-          year: r.fields["Kids Served / Year"],
-          country: r.fields["Country"],
-          state: r.fields["State"],
-          zip: r.fields["ZIP"],
-          city: r.fields["City"],
-          address: r.fields["Address"],
-          longitude: r.fields["Longitude"],
-          latitude: r.fields["Latitude"],
-          hospitalPicture1: extractUrls(r.fields["Hospital Picture 1"]),
-          id: r.fields["ID"],
-        } as HospitalInfo;
-      })
-    );
+    const hospitals = airtableService
+      .getTableRecords(TABLE, MAX_RECORDS)
+      .then((records) =>
+        records.map((r) => {
+          return {
+            name: `${r.fields["Hospital Name"]}`,
+            status: r.fields["Status"],
+            type: r.fields["Type of Organization"],
+            description: r.fields["Organization Notes / Description"],
+            year: r.fields["Kids Served / Year"],
+            country: r.fields["Country"],
+            state: r.fields["State"],
+            zip: r.fields["ZIP"],
+            city: r.fields["City"],
+            address: r.fields["Address"],
+            longitude: r.fields["Longitude"],
+            latitude: r.fields["Latitude"],
+            hospitalPicture1: extractUrls(r.fields["Hospital Picture 1"]),
+            id: r.fields["ID"],
+          } as HospitalInfo;
+        })
+      );
+
+    if (filter) {
+      const filtered_hospitals = (await hospitals).filter(
+        (hospital) =>
+          (filter.location.includes(hospital.state.toLowerCase()) ||
+            filter.location.includes(hospital.city.toLowerCase()) ||
+            filter.location.includes(hospital.zip.toLowerCase())) &&
+          filter.status.includes(hospital.status.toLowerCase())
+      );
+      return filtered_hospitals;
+    } else {
+      return hospitals;
+    }
   }
 }
 class MockHospitalInfoService extends HospitalInfoService {
