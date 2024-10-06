@@ -12,11 +12,13 @@ import { useContext, useState } from "react";
 import { Box } from "@mui/material";
 import { siteService } from "../services/siteUtils";
 import { HospitalsContext } from "../context/HospitalsContext";
+import { HospitalStatusEnum } from "../types/\bhospitalStatusEnum";
 
 export const GFLMap = () => {
   const { hospitals } = useContext(HospitalsContext);
   const [viewState, setViewState] = useState(siteService.DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
+
   return (
     <Map
       {...viewState}
@@ -30,7 +32,9 @@ export const GFLMap = () => {
       <ScaleControl />
       {hospitals.map((hospital) => (
         <Marker
-          color={hospital.status === "past" ? "#DB5757" : "#92C65E"}
+          color={
+            hospital.status === HospitalStatusEnum.Past ? "#DB5757" : "#92C65E"
+          }
           key={hospital.id}
           longitude={hospital.longitude}
           latitude={hospital.latitude}
