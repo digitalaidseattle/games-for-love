@@ -23,6 +23,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { InputAdornment } from "@mui/material";
 import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
 import { HospitalsContext } from "../context/HospitalsContext";
+import { FilterContext } from "../context/FilterContext";
 
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -40,8 +41,8 @@ interface FilterDialogProps {
 }
 
 const FilterDialog: React.FC<FilterDialogProps> = ({ open, handleClose }) => {
-  const { setOriginals, setOriginalFilters, filters } =
-    useContext(HospitalsContext);
+  const { setOriginals } = useContext(HospitalsContext);
+  const { setOriginalFilters, filters } = useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
   const [locationChips, setLocationChips] = useState<string[]>(
     filters.location
