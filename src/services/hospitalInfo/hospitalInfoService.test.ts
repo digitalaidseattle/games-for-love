@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { airtableService } from "../../mapping/airtableService";
 import { hospitalInfoService } from "./hospitalInfoService";
+import { HospitalInfo } from "../../models/hospitalInfo";
 
 describe("HospitalInfoService tests", () => {
   it("getHospitalInfo", async () => {
@@ -49,7 +50,7 @@ describe("HospitalInfoService tests", () => {
     ]);
   });
   it("should return true if hospital status is active", () => {
-    const mockHospitalInfo = {
+    const mockHospitalInfo: HospitalInfo = {
       id: 1,
       name: "May Hospital",
       status: "active",
@@ -70,7 +71,7 @@ describe("HospitalInfoService tests", () => {
   });
 
   it("should return true if hospital status is past", () => {
-    const mockHospitalInfo = {
+    const mockHospitalInfo: HospitalInfo = {
       id: 1,
       name: "May Hospital",
       status: "past",
