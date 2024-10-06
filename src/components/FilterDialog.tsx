@@ -24,7 +24,7 @@ import { InputAdornment } from "@mui/material";
 import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
 import { HospitalsContext } from "../context/HospitalsContext";
 
-const BootstrapDialog = styled(Dialog)(() => ({
+const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
     width: "400px",
     height: "480px",
@@ -34,12 +34,12 @@ const BootstrapDialog = styled(Dialog)(() => ({
   },
 }));
 
-interface FilterProps {
+interface FilterDialogProps {
   open: boolean;
   handleClose: () => void;
 }
 
-const Filter: React.FC<FilterProps> = ({ open, handleClose }) => {
+const FilterDialog: React.FC<FilterDialogProps> = ({ open, handleClose }) => {
   const { setOriginals, setOriginalFilters, filters } =
     useContext(HospitalsContext);
   const [locationValue, setLocationValue] = useState<string>("");
@@ -129,7 +129,7 @@ const Filter: React.FC<FilterProps> = ({ open, handleClose }) => {
   }, []);
 
   return (
-    <BootstrapDialog
+    <CustomDialog
       onClose={handleClose}
       open={open}
       aria-labelledby="filter-hospital-dialog"
@@ -369,8 +369,8 @@ const Filter: React.FC<FilterProps> = ({ open, handleClose }) => {
           Apply filters
         </Button>
       </DialogActions>
-    </BootstrapDialog>
+    </CustomDialog>
   );
 };
 
-export default Filter;
+export default FilterDialog;

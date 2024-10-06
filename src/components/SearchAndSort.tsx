@@ -10,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
-import Filter from "../components/Filter";
+import FilterDialog from "./FilterDialog";
 import { HospitalsContext } from "../context/HospitalsContext";
 import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
 
@@ -108,7 +108,7 @@ export const SearchAndSort = () => {
         </Button>
       </Box>
       {showFilters && (
-        <Filter open={showFilters} handleClose={handleCloseFilters} />
+        <FilterDialog open={showFilters} handleClose={handleCloseFilters} />
       )}
     </Box>
   );
