@@ -24,6 +24,7 @@ import { InputAdornment } from "@mui/material";
 import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
 import { HospitalsContext } from "../context/HospitalsContext";
 import { FilterContext } from "../context/FilterContext";
+import { DialogProps } from "../types/dialogProps";
 
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -35,12 +36,7 @@ const CustomDialog = styled(Dialog)(() => ({
   },
 }));
 
-interface FilterDialogProps {
-  open: boolean;
-  handleClose: () => void;
-}
-
-const FilterDialog: React.FC<FilterDialogProps> = ({ open, handleClose }) => {
+const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
   const { setOriginals } = useContext(HospitalsContext);
   const { setOriginalFilters, filters } = useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
