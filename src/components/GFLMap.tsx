@@ -5,32 +5,20 @@ import {
   ScaleControl,
 } from "react-map-gl";
 import Map from "react-map-gl/maplibre";
-import { HospitalInfo } from "../models/hospitalInfo";
 import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
 
-import React from "react";
+import { useContext, useState } from "react";
 import { Box } from "@mui/material";
+import { siteService } from "../services/siteUtils";
+import { HospitalsContext } from "../context/HospitalsContext";
+import { HospitalStatusEnum } from "../types/\bhospitalStatusEnum";
 
-interface MapProps {
-  hospitals: HospitalInfo[];
-  viewState: {
-    longitude: number;
-    latitude: number;
-    zoom: number;
-  };
-  setViewState: (v: any) => void;
-  setPopupInfo: (p: PopupInfo | null) => void;
-  popupInfo: PopupInfo | null;
-}
+export const GFLMap = () => {
+  const { hospitals } = useContext(HospitalsContext);
+  const [viewState, setViewState] = useState(siteService.DEFAULT_VIEW);
+  const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
 
-export const GFLMap: React.FC<MapProps> = ({
-  hospitals,
-  viewState,
-  setViewState,
-  setPopupInfo,
-  popupInfo,
-}) => {
   return (
     <Map
       {...viewState}
@@ -44,7 +32,9 @@ export const GFLMap: React.FC<MapProps> = ({
       <ScaleControl />
       {hospitals.map((hospital) => (
         <Marker
-          color={hospital.status === "Closed" ? "#DB5757" : "#92C65E"}
+          color={
+            hospital.status === HospitalStatusEnum.Past ? "#DB5757" : "#92C65E"
+          }
           key={hospital.id}
           longitude={hospital.longitude}
           latitude={hospital.latitude}

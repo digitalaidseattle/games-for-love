@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import {
   Box,
   TextField,
@@ -10,10 +10,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
-import { FilterComponent } from "./FilterComponent";
+import FilterDialog from "./FilterDialog";
+import { HospitalsContext } from "../context/HospitalsContext";
+import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
+  const { originals, setHospitals } = useContext(HospitalsContext);
 
   const handleOpenFilters = () => {
     setShowFilters(true);
@@ -23,8 +26,15 @@ export const SearchAndSort = () => {
     setShowFilters(false);
   };
 
+  const changeSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    //searching through originals
+    setHospitals(
+      hospitalInfoService.filterHospitals(originals, e.target.value)
+    );
+  };
+
   return (
-    <Box>
+    <Box data-testid="search-and-sort-box">
       <Box
         sx={{
           display: "flex",
@@ -35,6 +45,7 @@ export const SearchAndSort = () => {
       >
         <TextField
           placeholder="Search"
+          onChange={changeSearch}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -97,9 +108,7 @@ export const SearchAndSort = () => {
         </Button>
       </Box>
       {showFilters && (
-        <FilterComponent
-          onClose={handleCloseFilters}
-        />
+        <FilterDialog open={showFilters} handleClose={handleCloseFilters} />
       )}
     </Box>
   );

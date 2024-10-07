@@ -16,7 +16,9 @@ interface HospitalDetailsProps {
   hospital: HospitalInfo | null;
 }
 
-export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({ hospital }) => {
+export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
+  hospital,
+}) => {
   const [images, setImages] = useState<string[]>([]);
   useEffect(() => {
     if (hospital) {
@@ -24,7 +26,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({ hospital }
     }
   }, [hospital]);
   return (
-    <>
+    <div data-testid="hospital-detail-card">
       <Card
         sx={{
           display: "flex",
@@ -129,6 +131,6 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({ hospital }
           </Typography>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 };
