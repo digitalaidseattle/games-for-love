@@ -1,6 +1,5 @@
 import {
   FullscreenControl,
-  MapRef,
   Marker,
   NavigationControl,
   ScaleControl
@@ -18,7 +17,7 @@ import { siteService } from "../services/siteUtils";
 import { SelectedHospitalContext } from "./SelectedHospitalContext";
 
 export const GFLMap = () => {
-  const markerRef = useRef<MapRef>();
+  const markerRef = useRef<any>();
   const { hospitals } = useContext(HospitalsContext);
   const [viewState, setViewState] = useState(siteService.DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
