@@ -1,5 +1,6 @@
 import {
   FullscreenControl,
+  MapRef,
   Marker,
   NavigationControl,
   ScaleControl,
@@ -22,10 +23,10 @@ export const GFLMap = () => {
   return (
     <Map
       {...viewState}
+      ref={markerRef}
       onMove={(evt) => setViewState(evt.viewState)}
-      mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${
-        import.meta.env.VITE_MAPTILER_API_KEY
-      }`}
+      mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${import.meta.env.VITE_MAPTILER_API_KEY
+        }`}
     >
       <FullscreenControl position="top-left" />
       <NavigationControl position="top-left" />

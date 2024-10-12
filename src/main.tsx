@@ -9,7 +9,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <PreviewBanner />
     <Providers>
+      <SelectedHospitalsContextProvider>
       <App />
-    </Providers>
+      </SelectedHospitalsContextProvider>
+      </Providers>
   </React.StrictMode>
 );
