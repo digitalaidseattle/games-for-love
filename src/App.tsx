@@ -1,5 +1,5 @@
 /**
- *  App.ts
+ *  App.tsx
  *
  *  @copyright 2024 Digital Aid Seattle
  *
@@ -16,6 +16,7 @@ import { HospitalsContext } from "./context/HospitalsContext";
 import { HospitalInfo } from "./models/hospitalInfo";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import { FilterType } from "./types/fillterType";
+import { SelectedHospitalsContextProvider } from "./components/SelectedHospitalContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -50,23 +51,25 @@ function App() {
   }, []);
 
   return (
-    <Grid container>
-      <Grid item xs={12} lg={5}>
-        <Box sx={{ height: windowHeight, overflowY: "auto" }}>
-          <Box padding={1}>
-            <SearchAndSort />
+    <SelectedHospitalsContextProvider>
+      <Grid container>
+        <Grid item xs={12} lg={5}>
+          <Box sx={{ height: windowHeight, overflowY: "auto" }}>
+            <Box padding={1}>
+              <SearchAndSort />
+            </Box>
+            <Box padding={1}>
+              <HospitalList />
+            </Box>
           </Box>
-          <Box padding={1}>
-            <HospitalList />
+        </Grid>
+        <Grid item xs={12} lg={7}>
+          <Box height={windowHeight} data-testid="gfl-map-box">
+            <GFLMap />
           </Box>
-        </Box>
+        </Grid>
       </Grid>
-      <Grid item xs={12} lg={7}>
-        <Box height={windowHeight} data-testid="gfl-map-box">
-          <GFLMap />
-        </Box>
-      </Grid>
-    </Grid>
+    </SelectedHospitalsContextProvider>
   );
 }
 
