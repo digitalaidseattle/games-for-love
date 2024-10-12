@@ -3,22 +3,36 @@ import {
   MapRef,
   Marker,
   NavigationControl,
-  ScaleControl,
+  ScaleControl
 } from "react-map-gl";
 import Map from "react-map-gl/maplibre";
 import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
 
-import { useContext, useState } from "react";
+import { Room } from "@mui/icons-material";
 import { Box } from "@mui/material";
-import { siteService } from "../services/siteUtils";
+import { useContext, useEffect, useRef, useState } from "react";
 import { HospitalsContext } from "../context/HospitalsContext";
-import { HospitalStatusEnum } from "../types/\bhospitalStatusEnum";
+import { HospitalInfo } from "../models/hospitalInfo";
+import { siteService } from "../services/siteUtils";
+import { SelectedHospitalContext } from "./SelectedHospitalContext";
 
 export const GFLMap = () => {
+  const markerRef = useRef<MapRef>();
   const { hospitals } = useContext(HospitalsContext);
   const [viewState, setViewState] = useState(siteService.DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
+  const { selectedHospital } = useContext(SelectedHospitalContext);
+
+  useEffect(() => {
+    if (selectedHospital) {
+      markerRef.current?.flyTo({ center: [selectedHospital.longitude, selectedHospital.latitude], duration: 2000 });
+    }
+  }, [selectedHospital]);
+
+  const isHosptialSelected = (hospital: HospitalInfo): boolean => {
+    return selectedHospital ? hospital.id === selectedHospital.id : false;
+  }
 
   return (
     <Map
@@ -31,21 +45,50 @@ export const GFLMap = () => {
       <FullscreenControl position="top-left" />
       <NavigationControl position="top-left" />
       <ScaleControl />
-      {hospitals.map((hospital) => (
-        <Marker
-          color={
-            hospital.status === HospitalStatusEnum.Past ? "#DB5757" : "#92C65E"
-          }
-          key={hospital.id}
-          longitude={hospital.longitude}
-          latitude={hospital.latitude}
-          onClick={() =>
-            setPopupInfo({
-              hospitalInfo: hospital,
-            })
-          }
-        />
-      ))}
+      {hospitals.map((hospital) => {
+        const isAnimated = isHosptialSelected(hospital)
+        return (
+          <Marker
+            key={hospital.id}
+            longitude={hospital.longitude}
+            latitude={hospital.latitude}
+            onClick={() =>
+              setPopupInfo({
+                hospitalInfo: hospital,
+              })
+            }
+            anchor="bottom"
+            style={{
+              cursor: "pointer",
+            }}
+          >
+            <div
+              style={{
+                position: "relative",
+                transition: "transform 0.3s ease",
+                transform: isAnimated ? "scale(1.5)" : "scale(1)",
+              }}
+            >
+              <Room
+                sx={{
+                  color: isAnimated
+                    ? "#FFFF00"
+                    : hospital.status === "past"
+                      ? "#DB5757"
+                      : "#92C65E",
+                  strokeWidth: "0.2px",
+                  stroke: "black",
+                  fontSize: "3rem",
+                  "& .MuiSvgIcon-root": {
+                    outline: "1px solid red",
+                    outlineOffset: "2px",
+                  },
+                }}
+              />
+            </div>
+          </Marker>
+        )
+      })}
       {popupInfo && (
         <Box sx={{ display: "flex" }}>
           <GFLPopup popupInfo={popupInfo} onClose={() => setPopupInfo(null)} />

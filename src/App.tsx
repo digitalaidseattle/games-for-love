@@ -12,12 +12,10 @@ import { HospitalCardDetails } from "./components/HospitalCardDetails";
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
+import { HospitalsContext } from "./context/HospitalsContext";
 import { HospitalInfo } from "./models/hospitalInfo";
-import { generalInfoService } from "./services/generalInfo/generalInfoService";
-import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import { FilterType } from "./types/fillterType";
-import { HospitalsContext } from "./context/HospitalsContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -64,8 +62,6 @@ function App() {
         </Box>
       </Grid>
       <Grid item xs={12} lg={7}>
-        <Box height={windowHeight}>
-          <GFLMap hospitals={hospitals} />
         <Box height={windowHeight} data-testid="gfl-map-box">
           <GFLMap />
         </Box>

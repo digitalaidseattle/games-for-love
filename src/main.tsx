@@ -4,14 +4,15 @@ import App from "./App.tsx";
 import "./index.css";
 import { PreviewBanner } from "./components/PreviewBanner.tsx";
 import Providers from "./providers/Providers.tsx";
+import { SelectedHospitalsContextProvider } from "./components/SelectedHospitalContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <PreviewBanner />
     <Providers>
       <SelectedHospitalsContextProvider>
-      <App />
+        <App />
       </SelectedHospitalsContextProvider>
-      </Providers>
+    </Providers>
   </React.StrictMode>
 );
