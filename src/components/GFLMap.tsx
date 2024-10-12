@@ -17,6 +17,7 @@ import { siteService } from "../services/siteUtils";
 import { SelectedHospitalContext } from "./SelectedHospitalContext";
 
 export const GFLMap = () => {
+  // TODO figure out why useRef<MapRef> does not compile
   const markerRef = useRef<any>();
   const { hospitals } = useContext(HospitalsContext);
   const [viewState, setViewState] = useState(siteService.DEFAULT_VIEW);

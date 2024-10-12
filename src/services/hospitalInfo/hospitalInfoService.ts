@@ -1,7 +1,6 @@
 import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
 
-import thumbnailData from "../../../test/thumbnailData.json";
 import { FilterType } from "../../types/fillterType";
 
 const extractUrls = (attachments: any) => {
@@ -32,6 +31,7 @@ class HospitalInfoService {
       .getTableRecords(TABLE, MAX_RECORDS)
       .then((records) =>
         records.map((r) => {
+          console.log(r.fields)
           return {
             name: `${r.fields["Hospital Name"]}`,
             status: r.fields["Status"],
@@ -43,9 +43,11 @@ class HospitalInfoService {
             zip: r.fields["ZIP"],
             city: r.fields["City"],
             address: r.fields["Address"],
-            longitude: r.fields["Longitude"],
-            latitude: r.fields["Latitude"],
+            longitude: r.fields["Long"],
+            latitude: r.fields["Lat"],
             hospitalPicture1: extractUrls(r.fields["Hospital Picture 1"]),
+            hospitalPicture2: extractUrls(r.fields["Hospital Picture 2"]),
+            hospitalPicture3: extractUrls(r.fields["Hospital Picture 3"]),
             id: r.fields["ID"],
           } as HospitalInfo;
         })
@@ -65,41 +67,43 @@ class HospitalInfoService {
     }
   }
 }
-class MockHospitalInfoService extends HospitalInfoService {
-  async getHospitalInfo(filter?: FilterType): Promise<HospitalInfo[]> {
-    const hospitals = thumbnailData.map((data) => {
-      return {
-        id: data["ID"],
-        name: data["Hospital Name"],
-        status: data["Status"],
-        type: data["Type of Organization"],
-        description: data["Organization Notes / Description"],
-        year: data["Kids Served / Year"],
-        country: data["Country"],
-        state: data["State"],
-        zip: data["ZIP"],
-        city: data["City"],
-        address: data["Address"],
-        longitude: data["Longitude"],
-        latitude: data["Latitude"],
-        hospitalPicture1: extractUrls(data["Hospital Picture 1"]),
-      } as HospitalInfo;
-    });
-    if (filter) {
-      const filtered_hospitals = hospitals.filter(
-        (hospital) =>
-          (filter.location.includes(hospital.state.toLowerCase()) ||
-            filter.location.includes(hospital.city.toLowerCase()) ||
-            filter.location.includes(hospital.zip.toLowerCase())) &&
-          filter.status.includes(hospital.status.toLowerCase())
-      );
-      return filtered_hospitals;
-    } else {
-      return hospitals;
-    }
-  }
-}
 
-// const hospitalInfoService = new HospitalInfoService();
-const hospitalInfoService = new MockHospitalInfoService();
+// import thumbnailData from "../../../test/thumbnailData.json";
+// class MockHospitalInfoService extends HospitalInfoService {
+//   async getHospitalInfo(filter?: FilterType): Promise<HospitalInfo[]> {
+//     const hospitals = thumbnailData.map((data) => {
+//       return {
+//         id: data["ID"],
+//         name: data["Hospital Name"],
+//         status: data["Status"],
+//         type: data["Type of Organization"],
+//         description: data["Organization Notes / Description"],
+//         year: data["Kids Served / Year"],
+//         country: data["Country"],
+//         state: data["State"],
+//         zip: data["ZIP"],
+//         city: data["City"],
+//         address: data["Address"],
+//         longitude: data["Longitude"],
+//         latitude: data["Latitude"],
+//         hospitalPicture1: extractUrls(data["Hospital Picture 1"]),
+//       } as HospitalInfo;
+//     });
+//     if (filter) {
+//       const filtered_hospitals = hospitals.filter(
+//         (hospital) =>
+//           (filter.location.includes(hospital.state.toLowerCase()) ||
+//             filter.location.includes(hospital.city.toLowerCase()) ||
+//             filter.location.includes(hospital.zip.toLowerCase())) &&
+//           filter.status.includes(hospital.status.toLowerCase())
+//       );
+//       return filtered_hospitals;
+//     } else {
+//       return hospitals;
+//     }
+//   }
+// }
+
+const hospitalInfoService = new HospitalInfoService();
+// const hospitalInfoService = new MockHospitalInfoService();
 export { hospitalInfoService, HospitalInfoService };
