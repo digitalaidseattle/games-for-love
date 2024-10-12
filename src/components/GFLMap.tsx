@@ -1,35 +1,28 @@
 import {
   FullscreenControl,
-  MapRef,
   Marker,
   NavigationControl,
-  ScaleControl,
+  ScaleControl
 } from "react-map-gl";
 import Map from "react-map-gl/maplibre";
-import { HospitalInfo } from "../models/hospitalInfo";
 import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Box } from "@mui/material";
+
 import { Room } from "@mui/icons-material";
+import { Box } from "@mui/material";
+import { useContext, useEffect, useRef, useState } from "react";
+import { HospitalsContext } from "../context/HospitalsContext";
+import { HospitalInfo } from "../models/hospitalInfo";
+import { siteService } from "../services/siteUtils";
 import { SelectedHospitalContext } from "./SelectedHospitalContext";
 
-const DEFAULT_VIEW = {
-  longitude: -122.4,
-  latitude: 47.6061,
-  zoom: 10,
-};
-
-interface MapProps {
-  hospitals: HospitalInfo[];
-}
-export const GFLMap: React.FC<MapProps> = ({
-  hospitals
-}) => {
-  const markerRef = useRef<MapRef>();
-  const { selectedHospital } = useContext(SelectedHospitalContext);
-  const [viewState, setViewState] = useState<any>(DEFAULT_VIEW);
+export const GFLMap = () => {
+  // TODO figure out why useRef<MapRef> does not compile
+  const markerRef = useRef<any>();
+  const { hospitals } = useContext(HospitalsContext);
+  const [viewState, setViewState] = useState(siteService.DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
+  const { selectedHospital } = useContext(SelectedHospitalContext);
 
   useEffect(() => {
     if (selectedHospital) {
@@ -38,7 +31,6 @@ export const GFLMap: React.FC<MapProps> = ({
   }, [selectedHospital]);
 
   const isHosptialSelected = (hospital: HospitalInfo): boolean => {
-
     return selectedHospital ? hospital.id === selectedHospital.id : false;
   }
 
@@ -81,7 +73,7 @@ export const GFLMap: React.FC<MapProps> = ({
                 sx={{
                   color: isAnimated
                     ? "#FFFF00"
-                    : hospital.status === "Closed"
+                    : hospital.status === "past"
                       ? "#DB5757"
                       : "#92C65E",
                   strokeWidth: "0.2px",
@@ -95,9 +87,8 @@ export const GFLMap: React.FC<MapProps> = ({
               />
             </div>
           </Marker>
-        );
+        )
       })}
-
       {popupInfo && (
         <Box sx={{ display: "flex" }}>
           <GFLPopup popupInfo={popupInfo} onClose={() => setPopupInfo(null)} />

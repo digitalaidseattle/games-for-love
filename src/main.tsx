@@ -1,15 +1,21 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { PreviewBanner } from './components/PreviewBanner.tsx'
-import { SelectedHospitalsContextProvider } from './components/SelectedHospitalContext.tsx'
+/**
+ *  main.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import { PreviewBanner } from "./components/PreviewBanner.tsx";
+import "./index.css";
+import Providers from "./providers/Providers.tsx";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <PreviewBanner />
-    <SelectedHospitalsContextProvider>
+    <Providers>
       <App />
-    </SelectedHospitalsContextProvider>
-  </React.StrictMode>,
-)
+    </Providers>
+  </React.StrictMode>
+);

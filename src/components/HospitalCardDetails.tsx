@@ -19,7 +19,7 @@ interface HospitalDetailsProps {
 }
 
 export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
-  hospital
+  hospital,
 }) => {
   const [images, setImages] = useState<string[]>([]);
   const { selectedHospital, setSelectedHospital } = useContext(SelectedHospitalContext);
@@ -46,7 +46,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
   }
 
   return (
-    <>
+    <div data-testid="hospital-detail-card">
       <Card
         sx={{
           display: "flex",
@@ -178,6 +178,6 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
           </CardContent>
         </CardActionArea>
       </Card>
-    </>
+    </div>
   );
 };
