@@ -1,65 +1,75 @@
 /**
- *  App.ts
+ *  App.tsx
  *
  *  @copyright 2024 Digital Aid Seattle
  *
  */
 import { Box, Grid } from "@mui/material";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GFLMap } from "./components/GFLMap";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
+import { HospitalsContext } from "./context/HospitalsContext";
 import { HospitalInfo } from "./models/hospitalInfo";
-import { generalInfoService } from "./services/generalInfo/generalInfoService";
-import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
-import { hospitalRequestService } from "./services/hospitalRequest/hospitalRequestService";
+import { FilterType } from "./types/fillterType";
+import { SelectedHospitalsContextProvider } from "./components/SelectedHospitalContext";
 
+const HospitalList = () => {
+  const { hospitals } = useContext(HospitalsContext);
+  return hospitals.map((hospital, idx: number) => (
+    <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
+  ));
+};
 
 function App() {
-  const [hospitals, setHospitals] = useState<HospitalInfo[]>([]);
+  const { setOriginals } = useContext(HospitalsContext);
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
+  const getHospitalInfo = (filter?: FilterType) => {
+    hospitalInfoService
+      .getHospitalInfo(filter)
+      .then((res: HospitalInfo[]) => {
+        setOriginals(res);
+      })
+      .catch((error) => {
+        console.error("An error occurred while fetching data:", error);
+      });
+  };
+
   useEffect(() => {
-    hospitalInfoService.getHospitalInfo().then((res: HospitalInfo[]) => {
-      setHospitals(res);
-    });
-    generalInfoService.getGeneralInfo().then((res) => console.log(res));
-    hospitalRequestService.getHospitalRequest().then((res) => console.log(res));
-    hospitalFundedService.getHospitalFunded().then((res) => console.log(res));
+    getHospitalInfo();
     setWindowHeight(window.innerHeight);
 
     function handleResize() {
       setWindowHeight(window.innerHeight);
     }
-    window.addEventListener('resize', handleResize)
+    window.addEventListener("resize", handleResize);
   }, []);
 
-
-
   return (
-    <Grid container>
-      <Grid item xs={12} lg={5}>
-        <Box sx={{ height: windowHeight, overflowY: 'auto' }}>
-          <Box padding={1} >
-            <SearchAndSort />
+    <SelectedHospitalsContextProvider>
+      <Grid container>
+        <Grid item xs={12} lg={5}>
+          <Box sx={{ height: windowHeight, overflowY: "auto" }}>
+            <Box padding={1}>
+              <SearchAndSort />
+            </Box>
+            <Box padding={1}>
+              <HospitalList />
+            </Box>
           </Box>
-          <Box padding={1} >
-            {hospitals.map((hospital, idx: number) => (
-              <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
-            ))}
+        </Grid>
+        <Grid item xs={12} lg={7}>
+          <Box height={windowHeight} data-testid="gfl-map-box">
+            <GFLMap />
           </Box>
-        </Box>
+        </Grid>
       </Grid>
-      <Grid item xs={12} lg={7}>
-        <Box height={windowHeight}>
-          <GFLMap hospitals={hospitals} />
-        </Box>
-      </Grid>
-    </Grid>
+    </SelectedHospitalsContextProvider>
   );
 }
 
