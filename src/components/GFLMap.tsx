@@ -14,7 +14,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { HospitalsContext } from "../context/HospitalsContext";
 import { HospitalInfo } from "../models/hospitalInfo";
 import { siteService } from "../services/siteUtils";
-import { SelectedHospitalContext } from "./SelectedHospitalContext";
+import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 
 export const GFLMap = () => {
   // TODO figure out why useRef<MapRef> does not compile
