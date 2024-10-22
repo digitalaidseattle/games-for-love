@@ -31,7 +31,6 @@ class HospitalInfoService {
       .getTableRecords(TABLE, MAX_RECORDS)
       .then((records) =>
         records.map((r) => {
-          console.log(r.fields)
           return {
             name: `${r.fields["Hospital Name"]}`,
             status: r.fields["Status"],
@@ -45,9 +44,11 @@ class HospitalInfoService {
             address: r.fields["Address"],
             longitude: r.fields["Long"],
             latitude: r.fields["Lat"],
-            hospitalPicture1: extractUrls(r.fields["Hospital Picture 1"]),
-            hospitalPicture2: extractUrls(r.fields["Hospital Picture 2"]),
-            hospitalPicture3: extractUrls(r.fields["Hospital Picture 3"]),
+            hospitalPictures: [
+              extractUrls(r.fields["Hospital Picture 1"])[0],
+              extractUrls(r.fields["Hospital Picture 2"])[0],
+              extractUrls(r.fields["Hospital Picture 3"])[0]
+            ].filter(u => u !== undefined),
             id: r.fields["ID"],
           } as HospitalInfo;
         })
@@ -86,7 +87,7 @@ class HospitalInfoService {
 //         address: data["Address"],
 //         longitude: data["Longitude"],
 //         latitude: data["Latitude"],
-//         hospitalPicture1: extractUrls(data["Hospital Picture 1"]),
+//         hospitalPictures: extractUrls(data["Hospital Picture 1"]),
 //       } as HospitalInfo;
 //     });
 //     if (filter) {

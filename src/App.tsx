@@ -53,17 +53,17 @@ function App() {
   return (
     <SelectedHospitalsContextProvider>
       <Grid container>
-        <Grid item xs={12} lg={5}>
+        <Grid item xs={12} lg={7}>
           <Box sx={{ height: windowHeight, overflowY: "auto" }}>
             <Box padding={1}>
               <SearchAndSort />
             </Box>
-            <Box padding={1}>
+            <Box padding={1}  data-testid="hospital-list">
               <HospitalList />
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={12} lg={7}>
+        <Grid item xs={12} lg={5}>
           <Box height={windowHeight} data-testid="gfl-map-box">
             <GFLMap />
           </Box>

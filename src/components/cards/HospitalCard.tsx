@@ -41,13 +41,11 @@ const CustomAvatar = styled(Avatar)({
 
 interface HospitalCardProps {
   popupInfo: PopupInfo | null;
-  images: string[];
   onClose: () => void;
 }
 
 export const HospitalCard: React.FC<HospitalCardProps> = ({
   popupInfo,
-  images,
   onClose,
 }) => {
   const isOpen = hospitalInfoService.isHospitalOpen(popupInfo?.hospitalInfo);
@@ -65,7 +63,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
       }}
     >
       <Box className="media-container">
-        {images.length > 0 && (
+        {popupInfo && popupInfo.hospitalInfo.hospitalPictures.length > 0 && (
           <>
             <Chip
               icon={<LocationOnIcon />}
@@ -94,7 +92,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
             <CardMedia
               component="img"
               height="90"
-              image={images[0]}
+              image={popupInfo.hospitalInfo.hospitalPictures[0]}
               alt={popupInfo?.hospitalInfo.name}
               className="card-media"
             />

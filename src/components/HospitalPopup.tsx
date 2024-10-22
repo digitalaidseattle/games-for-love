@@ -23,7 +23,7 @@ export const HospitalPopup: React.FC<HospitalPopupProps> = ({
   const [images, setImages] = useState<string[]>([]);
   useEffect(() => {
     if (popupInfo) {
-      setImages(popupInfo.hospitalInfo.hospitalPicture1);
+      setImages(popupInfo.hospitalInfo.hospitalPictures);
     };
   }, [popupInfo])
 
