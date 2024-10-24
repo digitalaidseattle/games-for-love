@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
+import { HospitalsContextProvider } from "./context/HospitalsContext";
 
 vi.mock("./services/hospitalInfo/hospitalInfoService");
 
@@ -19,12 +20,13 @@ describe("App component", () => {
         city: "seattle",
         state: "wa",
         description: "This is a test hospital",
-        hospitalPicture1: ["/path/to/image.jpg"],
+        hospitalPictures: ["/path/to/image.jpg"],
         status: "active",
       },
     ]);
 
-    render(<App />);
+
+    render(<HospitalsContextProvider><App /></HospitalsContextProvider>);
 
     const searchAndSortElement = screen.getByTestId("search-and-sort-box");
     expect(searchAndSortElement).toBeInTheDocument();
@@ -32,6 +34,12 @@ describe("App component", () => {
     await waitFor(() => {
       const hospitalDetailCard = screen.getByTestId("hospital-detail-card");
       expect(hospitalDetailCard).toBeInTheDocument();
+
+      const hopitalList = screen.getByTestId("hospital-list");
+      expect(hopitalList).toBeInTheDocument();
+
+      const gflMap = screen.getByTestId("gfl-map-box");
+      expect(gflMap).toBeInTheDocument();
     });
   });
 
@@ -53,7 +61,7 @@ describe("App component", () => {
         city: "seattle",
         state: "wa",
         description: "This is a test hospital",
-        hospitalPicture1: ["/path/to/image.jpg"],
+        hospitalPictures: ["/path/to/image.jpg"],
         status: "active",
       },
       {
@@ -62,11 +70,11 @@ describe("App component", () => {
         city: "seattle",
         state: "wa",
         description: "This is a test hospital2",
-        hospitalPicture1: ["/path/to/image2.jpg"],
+        hospitalPictures: ["/path/to/image2.jpg"],
         status: "past",
       },
     ]);
-    render(<App />);
+    render(<HospitalsContextProvider><App /></HospitalsContextProvider>);
     await waitFor(() => {
       const hospitalDetailCards = screen.getAllByTestId("hospital-detail-card");
       expect(hospitalDetailCards.length).toEqual(2);
@@ -82,7 +90,7 @@ describe("App component", () => {
         city: "seattle",
         state: "wa",
         description: "This is a test hospital",
-        hospitalPicture1: ["/path/to/image.jpg"],
+        hospitalPictures: ["/path/to/image.jpg"],
         status: "active",
       },
     ]);

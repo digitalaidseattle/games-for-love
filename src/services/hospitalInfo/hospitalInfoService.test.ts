@@ -18,8 +18,8 @@ describe("HospitalInfoService tests", () => {
           ZIP: "ZIP12345",
           City: "Seattle",
           Address: "Type 2",
-          Longitude: 1,
-          Latitude: 1,
+          Long: 1,
+          Lat: 1,
           "Hospital Picture 1": [{ url: "pic1.com" }],
           ID: 1,
         },
@@ -44,7 +44,7 @@ describe("HospitalInfoService tests", () => {
         address: "Type 2",
         longitude: 1,
         latitude: 1,
-        hospitalPicture1: ["pic1.com"],
+        hospitalPictures: ["pic1.com"],
         id: 1,
       },
     ]);
@@ -64,7 +64,7 @@ describe("HospitalInfoService tests", () => {
       address: "Type 2",
       longitude: 1,
       latitude: 1,
-      hospitalPicture1: ["pic1.com"],
+      hospitalPictures: ["pic1.com"],
     };
     const result = hospitalInfoService.isHospitalOpen(mockHospitalInfo);
     expect(result).toBeTruthy();
@@ -85,7 +85,7 @@ describe("HospitalInfoService tests", () => {
       address: "Type 2",
       longitude: 1,
       latitude: 1,
-      hospitalPicture1: ["pic1.com"],
+      hospitalPictures: ["pic1.com"],
     };
     const result = hospitalInfoService.isHospitalOpen(mockHospitalInfo);
     expect(result).toBeFalsy();
