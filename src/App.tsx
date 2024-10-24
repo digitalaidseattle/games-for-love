@@ -16,7 +16,7 @@ import { HospitalsContext } from "./context/HospitalsContext";
 import { HospitalInfo } from "./models/hospitalInfo";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import { FilterType } from "./types/fillterType";
-import { SelectedHospitalsContextProvider } from "./components/SelectedHospitalContext";
+import { SelectedHospitalsContextProvider } from "./context/SelectedHospitalContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);

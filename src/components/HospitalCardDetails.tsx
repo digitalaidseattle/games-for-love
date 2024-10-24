@@ -6,8 +6,11 @@
  */
 import {
   Avatar,
+  Avatar,
   Box,
+  Button,
   Card,
+  CardActionArea,
   CardActionArea,
   CardContent,
   CardMedia,
@@ -45,6 +48,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
         : '#92C65E');
     }
   }, [hospital, selectedHospital]);
+
 
   const changeSelectedHospital = () => {
     if (selectedHospital) {

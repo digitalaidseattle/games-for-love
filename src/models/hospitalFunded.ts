@@ -1,4 +1,5 @@
 export type HospitalFunded = {
+    hospital: string;
     orderID: string;
     equipmentShipped: boolean;
     fundingCompleted: boolean;
@@ -10,4 +11,12 @@ export type HospitalFunded = {
     fundedPicture3: string;
     fundedPicture4: string;
     fundedPicture5: string;
+    impactPicture1: string;
+    impactPicture2: string; 
+    impactPicture3: string;
+    impactPicture4: string;
+    impactPicture5: string;
+    shortThankYou: string;
+    thankYouNoteTitle: string;
+    impactTitle: string;
 }
