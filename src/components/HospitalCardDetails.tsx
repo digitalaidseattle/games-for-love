@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
 import {
+  Avatar,
   Box,
+  Button,
   Card,
+  CardActionArea,
   CardContent,
   CardMedia,
   Typography,
-  Button,
-  Avatar,
-  CardActionArea,
 } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
 
-import { Pin } from "../components/Pin";
+import { Room } from "@mui/icons-material";
+import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import { HospitalInfo } from "../models/hospitalInfo";
-import { SelectedHospitalContext } from "./SelectedHospitalContext";
 
 interface HospitalDetailsProps {
   hospital: HospitalInfo;
@@ -24,13 +24,22 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
   const [images, setImages] = useState<string[]>([]);
   const { selectedHospital, setSelectedHospital } = useContext(SelectedHospitalContext);
   const [backgroundColor, setBackgroundColor] = useState<string>();
+  const [pinColor, setPinColor] = useState<string>('');
 
   useEffect(() => {
     if (hospital) {
       setImages(hospital.hospitalPicture1);
       setBackgroundColor(selectedHospital ? hospital.id === selectedHospital.id ? '#F0F5FA' : '' : '');
+      setPinColor(selectedHospital
+        ? hospital.id === selectedHospital.id
+          ? hospital.status === "past"
+            ? "#DB5757"
+            : "#92C65E"
+          : '#FFFF00'
+        : '#FFFF00');
     }
   }, [hospital, selectedHospital]);
+
 
   const changeSelectedHospital = () => {
     if (selectedHospital) {
@@ -91,7 +100,19 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
             }}
           >
             <Typography variant="subtitle2" color="textSecondary">
-              <Pin /> {hospital?.city}, {hospital?.state}
+              <Room
+                sx={{
+                  color: pinColor,
+                  strokeWidth: "0.2px",
+                  stroke: "black",
+                  fontSize: "1.5rem",
+                  "& .MuiSvgIcon-root": {
+                    outline: "1px solid red",
+                    outlineOffset: "2px",
+                  },
+                }}
+              />
+              {hospital?.city}, {hospital?.state}
             </Typography>
 
             <Typography variant="h6" component="div">
