@@ -6,11 +6,8 @@
  */
 import {
   Avatar,
-  Avatar,
   Box,
-  Button,
   Card,
-  CardActionArea,
   CardActionArea,
   CardContent,
   CardMedia,
@@ -19,11 +16,11 @@ import {
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
+import { Room } from "@mui/icons-material";
 import { Carousel } from "react-responsive-carousel";
 import { HospitalInfo } from "../models/hospitalInfo";
 import ActionButton from "../styles/ActionButton";
-import { SelectedHospitalContext } from "./SelectedHospitalContext";
-import { Room } from "@mui/icons-material";
+import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 
 interface HospitalDetailsProps {
   hospital: HospitalInfo;
