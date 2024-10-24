@@ -1,3 +1,9 @@
+/**
+ *  HospitalInfoService.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
 
@@ -31,7 +37,6 @@ class HospitalInfoService {
       .getTableRecords(TABLE, MAX_RECORDS)
       .then((records) =>
         records.map((r) => {
-          console.log(r.fields)
           return {
             name: `${r.fields["Hospital Name"]}`,
             status: r.fields["Status"],
