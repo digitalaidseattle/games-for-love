@@ -8,6 +8,8 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
 import FilterDialog from "./FilterDialog";
@@ -16,6 +18,7 @@ import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoServic
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
+  const [isDescending, setIsDescending] = useState(true);
   const { originals, setHospitals } = useContext(HospitalsContext);
 
   const handleOpenFilters = () => {
@@ -31,6 +34,10 @@ export const SearchAndSort = () => {
     setHospitals(
       hospitalInfoService.filterHospitals(originals, e.target.value)
     );
+  };
+
+  const handelOrderButton = () => {
+    setIsDescending(!isDescending);
   };
 
   return (
@@ -92,19 +99,26 @@ export const SearchAndSort = () => {
 
         <Button
           variant="outlined"
-          endIcon={<ImportExportIcon />}
+          endIcon={isDescending ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
+          onClick={handelOrderButton}
           sx={{
             color: "#000",
             textTransform: "capitalize",
-            marginRight: "20px",
+            padding: "0px", // 패딩을 제거하여 내부 여백 제거
+            margin: "0px", // 외부 마진 제거
+            width: "40px", // 너비를 고정
+            height: "40px", // 높이를 고정 (정사각형)
+            display: "flex", // 플렉스 박스로 아이콘 중앙 정렬
+            alignItems: "center", // 세로 중앙 정렬
+            justifyContent: "center", // 가로 중앙 정렬
             borderRadius: "12px",
-            border: "1px solid #d9d9d9",
+            border: "1px solid #d9d9d9", // 외곽선 설정
             "&:hover": {
               border: "1px solid #d9d9d9",
             },
           }}
         >
-          Sort by
+          {isDescending ? "Des" : "Asc"}
         </Button>
       </Box>
       {showFilters && (

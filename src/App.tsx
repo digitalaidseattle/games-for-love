@@ -17,6 +17,13 @@ import { HospitalInfo } from "./models/hospitalInfo";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import { FilterType } from "./types/fillterType";
 import { SelectedHospitalsContextProvider } from "./context/SelectedHospitalContext";
+import { HospitalFundedContext } from "./context/HospitalFundedContext";
+import { HospitalRequestContext } from "./context/HospitalRequestContext";
+
+import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
+import { HospitalFunded } from "./models/hospitalFunded";
+import { hospitalRequestService } from "./services/hospitalRequest/hospitalRequestService";
+import { HospitalRequest } from "./models/hospitalRequest";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -27,6 +34,13 @@ const HospitalList = () => {
 
 function App() {
   const { setOriginals } = useContext(HospitalsContext);
+  const { hospitalFunded, setHospitalFunded } = useContext(
+    HospitalFundedContext
+  );
+  const { HospitalRequest, setHospitalRequest } = useContext(
+    HospitalRequestContext
+  );
+
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
   const getHospitalInfo = (filter?: FilterType) => {
@@ -40,8 +54,35 @@ function App() {
       });
   };
 
+  const getHospitalFunded = () => {
+    hospitalFundedService
+      .getHospitalFunded()
+      .then((res: HospitalFunded[]) => {
+        setHospitalFunded(res);
+      })
+      .catch((error) => {
+        console.error("An error occurred while fetching data:", error);
+      });
+  };
+
+  const getHospitalRequest = () => {
+    hospitalRequestService
+      .getHospitalRequest()
+      .then((res: HospitalRequest[]) => {
+        setHospitalRequest(res);
+      })
+      .catch((error) => {
+        console.error("An error occurred while fetching data:", error);
+      });
+  };
+
+  // console.log("HospitalFunded이렇게생겼다->", hospitalFunded);
+  // console.log("HospitalRequest이렇게생겼다->", HospitalRequest);
+
   useEffect(() => {
     getHospitalInfo();
+    getHospitalFunded();
+    getHospitalRequest();
     setWindowHeight(window.innerHeight);
 
     function handleResize() {
@@ -58,7 +99,7 @@ function App() {
             <Box padding={1}>
               <SearchAndSort />
             </Box>
-            <Box padding={1}  data-testid="hospital-list">
+            <Box padding={1} data-testid="hospital-list">
               <HospitalList />
             </Box>
           </Box>

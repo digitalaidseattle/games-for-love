@@ -10,9 +10,9 @@ import {
   Chip,
   FormControl,
   FormLabel,
-  FormGroup,
+  RadioGroup,
+  Radio,
   FormControlLabel,
-  Checkbox,
   DialogActions,
   Button,
   Divider,
@@ -29,7 +29,7 @@ import { DialogProps } from "../types/dialogProps";
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
     width: "400px",
-    height: "480px",
+    height: "730px",
     maxWidth: "none",
     margin: "auto",
     borderRadius: "15px",
@@ -44,13 +44,8 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
     filters.location
   );
 
-  const [status, setStatus] = useState({
-    active: false,
-    past: false,
-    all: false,
-  });
-
-  const [checkedStatus, setCheckedStatus] = useState<string[]>([]);
+  const [status, setStatus] = useState("all");
+  const [sortBy, setSortBy] = useState("fundingDeadline");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && locationValue.trim() !== "") {
@@ -65,16 +60,14 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
     );
   };
 
-  const handleCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name === "all") {
-      setStatus({
-        active: e.target.checked,
-        past: e.target.checked,
-        [e.target.name]: e.target.checked,
-      });
-    } else {
-      setStatus({ ...status, [e.target.name]: e.target.checked });
-    }
+  const handleStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log("Status---->>> ", e.target.value);
+    setStatus(e.target.value);
+  };
+
+  const handleSortbyChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log("Sort by---->>> ", e.target.value);
+    setSortBy(e.target.value);
   };
 
   const handleApplyFilters = () => {
@@ -90,39 +83,29 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
 
   const handleClearAll = () => {
     setLocationChips([]), setLocationValue("");
-    setStatus({
-      active: false,
-      past: false,
-      all: false,
-    });
+    setStatus("all");
     setOriginalFilters({
       location: [],
       status: [],
     });
     hospitalInfoService.getHospitalInfo().then((res) => setOriginals(res));
-    // handleClose();
   };
-
-  useEffect(() => {
-    const updatedCheckedStatus = Object.keys(status).filter(
-      (key) => key !== "all" && status[key as keyof typeof status]
-    );
-    setCheckedStatus(updatedCheckedStatus);
-  }, [status]);
 
   useEffect(() => {
     setOriginalFilters({
       location: locationChips.map((chip) => chip.toLowerCase()),
-      status: checkedStatus.map((status) => status.toLowerCase()),
+      status: [status],
     });
-  }, [locationChips, checkedStatus]);
+  }, [locationChips, status]);
 
   useEffect(() => {
-    setStatus({
-      active: filters.status.includes("active"),
-      past: filters.status.includes("past"),
-      all: filters.status.includes("active") && filters.status.includes("past"),
-    });
+    setStatus(
+      filters.status.includes("active")
+        ? "active"
+        : filters.status.includes("past")
+        ? "past"
+        : "all"
+    );
   }, []);
 
   return (
@@ -149,10 +132,9 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
       >
         <CloseIcon />
       </IconButton>
-      <DialogContent sx={{}}>
+      <DialogContent>
         <Box sx={{ mt: 2, mb: 0.8 }}>
           <Typography
-            // variant="h6"
             sx={{ fontSize: "20px", color: "#000", fontWeight: "bold" }}
           >
             Location
@@ -160,7 +142,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
           <TextField
             fullWidth
             variant="outlined"
-            placeholder=" City, state, or zip code"
+            placeholder="City, state, or zip code"
             onChange={(e) => setLocationValue(e.target.value)}
             sx={{
               mt: 0,
@@ -227,22 +209,31 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
           >
             Status
           </FormLabel>
-          <FormGroup>
+          <RadioGroup
+            value={status}
+            onChange={handleStatusChange}
+            aria-label="status"
+          >
             <FormControlLabel
+              value="all"
               control={
-                <Checkbox
-                  name="active"
-                  checked={status.active}
-                  onChange={handleCheckbox}
+                <Radio
                   sx={{
                     "& .MuiSvgIcon-root": {
                       color: "#000",
-                      "&.Mui-checked": {
-                        color: "#000",
-                      },
-                      "&.Mui-focusVisible": {
-                        outline: "2px solid #000",
-                      },
+                    },
+                  }}
+                />
+              }
+              label="All"
+            />
+            <FormControlLabel
+              value="active"
+              control={
+                <Radio
+                  sx={{
+                    "& .MuiSvgIcon-root": {
+                      color: "#000",
                     },
                   }}
                 />
@@ -250,51 +241,80 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
               label="Active"
             />
             <FormControlLabel
+              value="past"
               control={
-                <Checkbox
-                  name="past"
-                  checked={status.past}
-                  onChange={handleCheckbox}
+                <Radio
                   sx={{
                     "& .MuiSvgIcon-root": {
                       color: "#000",
-                      "&.Mui-focusVisible": {
-                        outline: "2px solid #000",
-                      },
-                      "&.Mui-checked": {
-                        color: "#000",
-                      },
-                      "&:hover": {
-                        backgroundColor: "transparent",
-                      },
                     },
                   }}
                 />
               }
               label="Past"
             />
+          </RadioGroup>
+        </FormControl>
+
+        <FormControl sx={{ mt: 4 }}>
+          <FormLabel
+            component="legend"
+            sx={{
+              fontSize: "20px",
+              color: "#000",
+              fontWeight: "bold",
+              "&.Mui-focused": {
+                color: "#000",
+              },
+            }}
+          >
+            Sort by
+          </FormLabel>
+          <RadioGroup
+            value={sortBy}
+            onChange={handleSortbyChange}
+            aria-label="status"
+          >
             <FormControlLabel
+              value="fundingDeadline"
               control={
-                <Checkbox
-                  name="all"
-                  checked={status.all}
-                  onChange={handleCheckbox}
+                <Radio
                   sx={{
                     "& .MuiSvgIcon-root": {
                       color: "#000",
-                      "&.Mui-checked": {
-                        color: "#000",
-                      },
-                      "&.Mui-focusVisible": {
-                        outline: "2px solid #000",
-                      },
                     },
                   }}
                 />
               }
-              label="All"
+              label="Funding deadline"
             />
-          </FormGroup>
+            <FormControlLabel
+              value="sortingFundingLevelHighToLow"
+              control={
+                <Radio
+                  sx={{
+                    "& .MuiSvgIcon-root": {
+                      color: "#000",
+                    },
+                  }}
+                />
+              }
+              label="Sorting funding level high to low"
+            />
+            <FormControlLabel
+              value="hospitalName"
+              control={
+                <Radio
+                  sx={{
+                    "& .MuiSvgIcon-root": {
+                      color: "#000",
+                    },
+                  }}
+                />
+              }
+              label="Hospital name"
+            />
+          </RadioGroup>
         </FormControl>
       </DialogContent>
       <Divider sx={{ borderBottomWidth: 2.2 }} />
@@ -363,7 +383,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
             },
           }}
         >
-          Apply filters
+          Apply
         </Button>
       </DialogActions>
     </CustomDialog>

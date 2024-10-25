@@ -39,7 +39,8 @@ class HospitalInfoService {
         records.map((r) => {
           return {
             name: `${r.fields["Hospital Name"]}`,
-            status: r.fields["Status"],
+            // status: r.fields["Status"],
+            status: Math.random() * 10 > 5 ? "active" : "past",
             type: r.fields["Type of Organization"],
             description: r.fields["Organization Notes / Description"],
             year: r.fields["Kids Served / Year"],
@@ -53,8 +54,8 @@ class HospitalInfoService {
             hospitalPictures: [
               extractUrls(r.fields["Hospital Picture 1"])[0],
               extractUrls(r.fields["Hospital Picture 2"])[0],
-              extractUrls(r.fields["Hospital Picture 3"])[0]
-            ].filter(u => u !== undefined),
+              extractUrls(r.fields["Hospital Picture 3"])[0],
+            ].filter((u) => u !== undefined),
             id: r.fields["ID"],
           } as HospitalInfo;
         })

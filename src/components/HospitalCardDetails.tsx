@@ -12,7 +12,7 @@ import {
   CardContent,
   CardMedia,
   Stack,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -29,46 +29,54 @@ interface HospitalDetailsProps {
 export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
   hospital,
 }) => {
-  const { selectedHospital, setSelectedHospital } = useContext(SelectedHospitalContext);
+  const { selectedHospital, setSelectedHospital } = useContext(
+    SelectedHospitalContext
+  );
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
 
   useEffect(() => {
     if (hospital) {
-      setBackgroundColor(selectedHospital ? hospital.id === selectedHospital.id ? '#F0F5FA' : '' : '');
-      setPinColor(selectedHospital && hospital.id === selectedHospital.id
-        ? '#FFFF00'
-        : hospital.status === "past"
+      setBackgroundColor(
+        selectedHospital
+          ? hospital.id === selectedHospital.id
+            ? "#F0F5FA"
+            : ""
+          : ""
+      );
+      setPinColor(
+        selectedHospital && hospital.id === selectedHospital.id
+          ? "#FFFF00"
+          : hospital.status === "past"
           ? "#DB5757"
-          : "#92C65E");
+          : "#92C65E"
+      );
     }
   }, [hospital, selectedHospital]);
 
   const changeSelectedHospital = () => {
     if (selectedHospital) {
       if (hospital.id === selectedHospital.id) {
-        setSelectedHospital(undefined)
-      }
-      else {
-        setSelectedHospital(hospital)
+        setSelectedHospital(undefined);
+      } else {
+        setSelectedHospital(hospital);
       }
     } else {
-      setSelectedHospital(hospital)
+      setSelectedHospital(hospital);
     }
-  }
+  };
 
   const handleCarousel = (evt: any) => {
     if (selectedHospital) {
       if (hospital.id === selectedHospital.id) {
-        evt.stopPropagation()
-      }
-      else {
-        setSelectedHospital(hospital)
+        evt.stopPropagation();
+      } else {
+        setSelectedHospital(hospital);
       }
     } else {
-      setSelectedHospital(hospital)
+      setSelectedHospital(hospital);
     }
-  }
+  };
 
   return (
     <div data-testid="hospital-detail-card">
@@ -78,7 +86,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
           alignItems: "center",
           margin: "10px 0",
           cursor: "pointer",
-          backgroundColor: backgroundColor
+          backgroundColor: backgroundColor,
         }}
         onClick={changeSelectedHospital}
       >
@@ -101,24 +109,23 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
             },
           }}
         >
-          <Stack direction={'row'}>
+          <Stack direction={"row"}>
             <CardContent
               sx={{
                 flex: 1,
               }}
             >
-              <Box onClick={handleCarousel}
-              >
+              <Box onClick={handleCarousel}>
                 <Carousel showStatus={false} showThumbs={false}>
-                  {hospital.hospitalPictures.map((url, idx) =>
+                  {hospital.hospitalPictures.map((url, idx) => (
                     <CardMedia
-                      key={'p' + idx}
+                      key={"p" + idx}
                       component="img"
                       sx={{ width: 135, height: 150, borderRadius: 2 }}
                       image={url}
                       alt="Hospital Image"
                     />
-                  )}
+                  ))}
                 </Carousel>
               </Box>
             </CardContent>
@@ -142,7 +149,8 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
                       outlineOffset: "2px",
                     },
                   }}
-                /> {hospital?.city}, {hospital?.state}
+                />{" "}
+                {hospital?.city}, {hospital?.state}
               </Typography>
 
               <Typography variant="h6" component="div">
@@ -153,24 +161,30 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
                 variant="body2"
                 sx={{
                   fontStyle: "italic",
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  display: '-webkit-box',
-                  WebkitLineClamp: '4',
-                  WebkitBoxOrient: 'vertical'
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: "4",
+                  WebkitBoxOrient: "vertical",
                 }}
               >
                 {hospital?.description}
               </Typography>
 
-              <Stack direction={'row'} gap={1} marginTop={2}>
+              <Stack direction={"row"} gap={1} marginTop={2}>
                 <ActionButton
-                  onClick={(evt: any) => { evt.stopPropagation(); alert('learn more') }}
+                  onClick={(evt: any) => {
+                    evt.stopPropagation();
+                    alert("learn more");
+                  }}
                 >
                   Learn more
                 </ActionButton>
                 <ActionButton
-                  onClick={(evt: any) => { evt.stopPropagation(); alert('donate') }}
+                  onClick={(evt: any) => {
+                    evt.stopPropagation();
+                    alert("donate");
+                  }}
                 >
                   Donate
                 </ActionButton>
@@ -194,7 +208,11 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
               </Typography>
 
               <Box display="flex" alignItems="center" marginTop={1}>
-                <Typography variant="body2" color="textSecondary" marginRight={1}>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  marginRight={1}
+                >
                   Matched by
                 </Typography>
                 <Avatar
