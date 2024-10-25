@@ -14,8 +14,8 @@ class HospitalFundedService {
 
     return airtableService.getTableRecords(TABLE, MAX_RECORDS).then((records) =>
       records.map((r) => {
-        console.log(r.fields)
         return {
+          id: r.id,
           hospital: `${r.fields["Hospital Fundraising ID"]}`,
           orderID: `${r.fields["Order ID"]}`,
           equipmentShipped: r.fields["# Equipment Shipped"],

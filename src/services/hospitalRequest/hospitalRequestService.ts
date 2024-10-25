@@ -10,6 +10,7 @@ class HospitalRequestService {
     return airtableService.getTableRecords(TABLE, MAX_RECORDS).then((records) =>
       records.map((r) => {
         return {
+          id: r.id,
           oppReqId: `${r.fields["Opportunities/Requests ID"]}`,
           name: r.fields["Hospital Name (LInked)"],
           requestNarrative: r.fields["Request Narrative"],
