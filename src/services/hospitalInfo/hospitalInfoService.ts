@@ -37,10 +37,10 @@ class HospitalInfoService {
       .getTableRecords(TABLE, MAX_RECORDS)
       .then((records) =>
         records.map((r) => {
-          return {
+          const hospitalData = {
+            recordId: r.id,
             name: `${r.fields["Hospital Name"]}`,
-            // status: r.fields["Status"],
-            status: Math.random() * 10 > 5 ? "active" : "past",
+            status: Math.random() * 10 > 5 ? "active" : "past", //r.fields["Status"],
             type: r.fields["Type of Organization"],
             description: r.fields["Organization Notes / Description"],
             year: r.fields["Kids Served / Year"],
@@ -56,8 +56,9 @@ class HospitalInfoService {
               extractUrls(r.fields["Hospital Picture 2"])[0],
               extractUrls(r.fields["Hospital Picture 3"])[0],
             ].filter((u) => u !== undefined),
-            id: r.fields["ID"],
+            HospitalId: r.fields["ID"],
           } as HospitalInfo;
+          return hospitalData;
         })
       );
 

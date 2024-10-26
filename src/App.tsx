@@ -76,9 +76,6 @@ function App() {
       });
   };
 
-  // console.log("HospitalFunded이렇게생겼다->", hospitalFunded);
-  // console.log("HospitalRequest이렇게생겼다->", HospitalRequest);
-
   useEffect(() => {
     getHospitalInfo();
     getHospitalFunded();

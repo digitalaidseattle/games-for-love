@@ -61,12 +61,10 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
   };
 
   const handleStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log("Status---->>> ", e.target.value);
     setStatus(e.target.value);
   };
 
   const handleSortbyChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log("Sort by---->>> ", e.target.value);
     setSortBy(e.target.value);
   };
 

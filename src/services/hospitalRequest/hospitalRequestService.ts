@@ -12,6 +12,7 @@ class HospitalRequestService {
       .then((records) =>
         records.map((r) => {
           return {
+            recordId: r.id,
             oppReqId: `${r.fields["Opportunities/Requests ID"]}`,
             name: r.fields["Hospital Name (LInked)"],
             requestNarrative: r.fields["Request Narrative"],
@@ -38,7 +39,6 @@ class HospitalRequestService {
           } as HospitalRequest;
         })
       );
-    console.log("[RequestService] hospitalsRequest -> ", hospitalsRequest);
     return hospitalsRequest;
   }
 }

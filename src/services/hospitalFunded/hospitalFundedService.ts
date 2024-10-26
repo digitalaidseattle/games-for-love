@@ -16,8 +16,8 @@ class HospitalFundedService {
       .getTableRecords(TABLE, MAX_RECORDS)
       .then((records) =>
         records.map((r) => {
-          // console.log(r.fields);
           return {
+            hospitalRequestId: `${r.fields["Hospital Request ID (Linked)"]}`,
             hospital: `${r.fields["Hospital Fundraising ID"]}`,
             orderID: `${r.fields["Order ID"]}`,
             equipmentShipped: r.fields["# Equipment Shipped"],
@@ -41,7 +41,6 @@ class HospitalFundedService {
           } as HospitalFunded;
         })
       );
-    console.log("[FundedService] hospitalsFunded-> ", hospitalsFunded);
     return hospitalsFunded;
   }
 }
