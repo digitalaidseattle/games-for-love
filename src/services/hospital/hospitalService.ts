@@ -44,9 +44,6 @@ class HospitalService {
     filter?: FilterType
   ): Promise<Hospital[] | undefined> {
     await this.init();
-    console.log("잘 들어오니? Hospital Info:", this.hospitalInfo);
-    console.log("잘 들어오니?? Hospital Funded:", this.hospitalFunded);
-    console.log("잘 들어오니??? Hospital Request:", this.hospitalRequest);
     if (
       this.hospitalInfo.length === 0 ||
       this.hospitalFunded.length === 0 ||
@@ -114,7 +111,6 @@ class HospitalService {
       });
 
       if (filter) {
-        console.log("hospitalService에서 찍어본 필터: ", filter);
         const filtered_hospitals = hospitals.filter(
           (hospital) =>
             (filter.location.includes(hospital.state?.toLowerCase()) ||
