@@ -4,32 +4,16 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
+
 import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
-
-import { FilterType } from "../../types/fillterType";
 
 const extractUrls = (attachments: any) => {
   return attachments ? attachments.map((att: any) => att.url) : [];
 };
 
 class HospitalInfoService {
-  isHospitalOpen = (hospitalInfo: HospitalInfo | undefined) => {
-    if (hospitalInfo === undefined) {
-      throw new Error("hospitalInfo is undefined");
-    } else {
-      return hospitalInfo.status !== "past";
-    }
-  };
-
-  filterHospitals = (hospitals: HospitalInfo[], searchTerm: string) => {
-    return hospitals.filter(
-      (h: HospitalInfo) =>
-        h.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-    );
-  };
-
-  async getHospitalInfo(filter?: FilterType): Promise<HospitalInfo[]> {
+  async getHospitalInfo(): Promise<HospitalInfo[]> {
     const TABLE = import.meta.env.VITE_AIRTABLE_TABLE_HOSPITAL_REFERENCE;
     const MAX_RECORDS = 100;
 
@@ -62,18 +46,7 @@ class HospitalInfoService {
         })
       );
 
-    if (filter) {
-      const filtered_hospitals = (await hospitals).filter(
-        (hospital) =>
-          (filter.location.includes(hospital.state.toLowerCase()) ||
-            filter.location.includes(hospital.city.toLowerCase()) ||
-            filter.location.includes(hospital.zip.toLowerCase())) &&
-          filter.status.includes(hospital.status.toLowerCase())
-      );
-      return filtered_hospitals;
-    } else {
-      return hospitals;
-    }
+    return hospitals;
   }
 }
 

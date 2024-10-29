@@ -35,7 +35,13 @@ export const FilterContextProvider = (props: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    setFilters(originalFilters);
+    let filters: FilterType;
+    if (originalFilters.status[0] === "all") {
+      filters = { ...originalFilters, status: [] };
+      setFilters(filters);
+    } else {
+      setFilters(originalFilters);
+    }
   }, [originalFilters]);
 
   return (

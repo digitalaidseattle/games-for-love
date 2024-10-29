@@ -16,7 +16,8 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { styled } from "@mui/material/styles";
 
 import { OPEN_MARKER_COLOR, CLOSED_MARKER_COLOR } from "../../styles/theme";
-import { hospitalInfoService } from "../../services/hospitalInfo/hospitalInfoService";
+
+import { hospitalService } from "../../services/hospital/hospitalService";
 
 const CustomCancelIconButton = styled(IconButton)({
   opacity: 0.9,
@@ -48,7 +49,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
   popupInfo,
   onClose,
 }) => {
-  const isOpen = hospitalInfoService.isHospitalOpen(popupInfo?.hospitalInfo);
+  const isOpen = hospitalService.isHospitalOpen(popupInfo?.hospital);
   const markerColor = isOpen ? OPEN_MARKER_COLOR : CLOSED_MARKER_COLOR;
   const buttonWidth = isOpen ? "112px" : "300px";
 
@@ -63,11 +64,11 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
       }}
     >
       <Box className="media-container">
-        {popupInfo && popupInfo.hospitalInfo.hospitalPictures.length > 0 && (
+        {popupInfo && popupInfo.hospital.hospitalPictures.length > 0 && (
           <>
             <Chip
               icon={<LocationOnIcon />}
-              label={`${popupInfo?.hospitalInfo.city},${popupInfo?.hospitalInfo.state}`}
+              label={`${popupInfo?.hospital.city},${popupInfo?.hospital.state}`}
               sx={{
                 "& .MuiChip-icon": {
                   color: markerColor,
@@ -92,8 +93,8 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
             <CardMedia
               component="img"
               height="90"
-              image={popupInfo.hospitalInfo.hospitalPictures[0]}
-              alt={popupInfo?.hospitalInfo.name}
+              image={popupInfo.hospital.hospitalPictures[0]}
+              alt={popupInfo?.hospital.name}
               className="card-media"
             />
           </>
@@ -101,17 +102,17 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
       </Box>
       <CardContent>
         <Typography gutterBottom component="div" sx={{ fontSize: "14px" }}>
-          {popupInfo?.hospitalInfo.name}
+          {popupInfo?.hospital.name}
         </Typography>
         <Typography color="text.secondary" sx={{ fontSize: "10px" }}>
           <span style={{ color: "#828282" }}>25K </span>
           raised of 100k -{" "}
           <span style={{ color: "#92c65e", fontStyle: "italic" }}>
-            {popupInfo?.hospitalInfo.status}
+            {popupInfo?.hospital.status}
           </span>
         </Typography>
         <Typography sx={{ fontSize: "10px" }}>
-          {popupInfo?.hospitalInfo.year}+ kids impacted
+          {popupInfo?.hospital.year}+ kids impacted
         </Typography>
         <Typography sx={{ fontSize: "10px" }}>
           <Box component="span" display="flex" alignItems="center">

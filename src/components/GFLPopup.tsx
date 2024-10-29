@@ -20,8 +20,8 @@ export const GFLPopup: React.FC<GFLPopupProps> = ({
   return (
     popupInfo && (
       <Popup
-        longitude={popupInfo.hospitalInfo.longitude}
-        latitude={popupInfo.hospitalInfo.latitude}
+        longitude={popupInfo.hospital.longitude}
+        latitude={popupInfo.hospital.latitude}
         closeButton={false}
         closeOnClick={false}
         onClose={onClose}

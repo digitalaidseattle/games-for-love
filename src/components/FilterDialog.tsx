@@ -45,9 +45,8 @@ const CustomDialog = styled(Dialog)(() => ({
 }));
 
 const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
-  const { setOriginalInfo } = useContext(HospitalInfoContext);
-  const { setOriginalFilters, filters } = useContext(FilterContext);
   const { setOriginals } = useContext(HospitalsContext);
+  const { setOriginalFilters, filters } = useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
   const [locationChips, setLocationChips] = useState<string[]>(
     filters.location
@@ -79,7 +78,9 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
 
   const handleApplyFilters = async () => {
     if (filters.location.length === 0 && filters.status.length === 0) {
-      hospitalInfoService.getHospitalInfo().then((res) => setOriginalInfo(res));
+      hospitalService
+        .combineHospitalInfoAndRequestAndFunded()
+        .then((res) => setOriginals(res));
     } else {
       const filteredHospitals =
         await hospitalService.combineHospitalInfoAndRequestAndFunded(filters);
@@ -98,7 +99,6 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
     const hospitals =
       await hospitalService.combineHospitalInfoAndRequestAndFunded();
     setOriginals(hospitals);
-    // hospitalInfoService.getHospitalInfo().then((res) => setOriginalInfo(res));
   };
 
   useEffect(() => {

@@ -111,12 +111,13 @@ class HospitalService {
       });
 
       if (filter) {
-        const filtered_hospitals = hospitals.filter(
-          (hospital) =>
-            (filter.location.includes(hospital.state?.toLowerCase()) ||
-              filter.location.includes(hospital.city.toLowerCase()) ||
-              filter.location.includes(hospital.zip.toLowerCase())) &&
-            filter.status.includes(hospital.status.toLowerCase())
+        const filtered_hospitals = hospitals.filter((hospital) =>
+          filter.location.length === 0
+            ? filter.status.includes(hospital.status.toLowerCase())
+            : (filter.location.includes(hospital.state?.toLowerCase()) ||
+                filter.location.includes(hospital.city.toLowerCase()) ||
+                filter.location.includes(hospital.zip.toLowerCase())) &&
+              filter.status.includes(hospital.status.toLowerCase())
         );
         return filtered_hospitals;
       } else {
