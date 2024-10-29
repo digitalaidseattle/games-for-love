@@ -1,5 +1,5 @@
 /**
- *  HospitalsContext.tsx
+ *  HospitalInfoContext.tsx
  *
  *  Provides application-wide holder for hospitals
  *
@@ -9,14 +9,14 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { HospitalInfo } from "../models/hospitalInfo";
 
-interface HospitalsContextType {
+interface HospitalInfoContextType {
   hospitalInfo: HospitalInfo[];
   setHospitalInfo: (hospitals: HospitalInfo[]) => void;
   originalInfo: HospitalInfo[];
   setOriginalInfo: (hospitals: HospitalInfo[]) => void;
 }
 
-export const HospitalInfoContext = createContext<HospitalsContextType>({
+export const HospitalInfoContext = createContext<HospitalInfoContextType>({
   hospitalInfo: [],
   setHospitalInfo: () => {},
   originalInfo: [],

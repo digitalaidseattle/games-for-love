@@ -9,15 +9,16 @@
 import { ReactNode, createContext, useState } from "react";
 import { Hospital } from "../models/hospital";
 
-interface HospitalContextType {
+interface SelectedHospitalContextType {
   selectedHospital: Hospital | undefined;
   setSelectedHospital: (hospital: Hospital | undefined) => void;
 }
 
-export const SelectedHospitalContext = createContext<HospitalContextType>({
-  selectedHospital: undefined,
-  setSelectedHospital: () => {},
-});
+export const SelectedHospitalContext =
+  createContext<SelectedHospitalContextType>({
+    selectedHospital: undefined,
+    setSelectedHospital: () => {},
+  });
 
 export const SelectedHospitalsContextProvider = (props: {
   children: ReactNode;
