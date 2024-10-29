@@ -14,7 +14,6 @@ import { SearchAndSort } from "./components/SearchAndSort";
 import "./App.css";
 
 import { FilterType } from "./types/fillterType";
-import { SelectedHospitalsContextProvider } from "./context/SelectedHospitalContext";
 import { hospitalService } from "./services/hospital/hospitalService";
 import { Hospital } from "./models/hospital";
 import { HospitalsContext } from "./context/HospitalContext";
@@ -49,25 +48,23 @@ function App() {
   console.log("HOSPITALS", hospitals);
 
   return (
-    <SelectedHospitalsContextProvider>
-      <Grid container>
-        <Grid item xs={12} lg={7}>
-          <Box sx={{ height: windowHeight, overflowY: "auto" }}>
-            <Box padding={1}>
-              <SearchAndSort />
-            </Box>
-            <Box padding={1} data-testid="hospital-list">
-              <HospitalList />
-            </Box>
+    <Grid container>
+      <Grid item xs={12} lg={7}>
+        <Box sx={{ height: windowHeight, overflowY: "auto" }}>
+          <Box padding={1}>
+            <SearchAndSort />
           </Box>
-        </Grid>
-        <Grid item xs={12} lg={5}>
-          <Box height={windowHeight} data-testid="gfl-map-box">
-            <GFLMap />
+          <Box padding={1} data-testid="hospital-list">
+            <HospitalList />
           </Box>
-        </Grid>
+        </Box>
       </Grid>
-    </SelectedHospitalsContextProvider>
+      <Grid item xs={12} lg={5}>
+        <Box height={windowHeight} data-testid="gfl-map-box">
+          <GFLMap />
+        </Box>
+      </Grid>
+    </Grid>
   );
 }
 
