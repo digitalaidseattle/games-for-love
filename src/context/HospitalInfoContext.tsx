@@ -24,8 +24,6 @@ export const HospitalInfoContext = createContext<HospitalInfoContextType>({
 });
 
 export const HospitalInfoContextProvider = (props: { children: ReactNode }) => {
-  // originals held in memory for faster searching.
-  // originals updated when Airtable is queried.
   const [originalInfo, setOriginalInfo] = useState<HospitalInfo[]>([]);
   const [hospitalInfo, setHospitalInfo] = useState<HospitalInfo[]>([]);
 
