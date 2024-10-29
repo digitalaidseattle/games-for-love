@@ -1,3 +1,9 @@
+/**
+ *  FilterDialog.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import {
   Dialog,
@@ -22,9 +28,11 @@ import { styled } from "@mui/material/styles";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { InputAdornment } from "@mui/material";
 import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
-import { HospitalsContext } from "../context/HospitalsContext";
+import { HospitalInfoContext } from "../context/HospitalInfoContext";
 import { FilterContext } from "../context/FilterContext";
 import { DialogProps } from "../types/dialogProps";
+import { hospitalService } from "../services/hospital/hospitalService";
+import { HospitalsContext } from "../context/HospitalContext";
 
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -37,8 +45,9 @@ const CustomDialog = styled(Dialog)(() => ({
 }));
 
 const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
-  const { setOriginals } = useContext(HospitalsContext);
+  const { setOriginalInfo } = useContext(HospitalInfoContext);
   const { setOriginalFilters, filters } = useContext(FilterContext);
+  const { setOriginals } = useContext(HospitalsContext);
   const [locationValue, setLocationValue] = useState<string>("");
   const [locationChips, setLocationChips] = useState<string[]>(
     filters.location
@@ -68,25 +77,28 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
     setSortBy(e.target.value);
   };
 
-  const handleApplyFilters = () => {
+  const handleApplyFilters = async () => {
     if (filters.location.length === 0 && filters.status.length === 0) {
-      hospitalInfoService.getHospitalInfo().then((res) => setOriginals(res));
+      hospitalInfoService.getHospitalInfo().then((res) => setOriginalInfo(res));
     } else {
-      hospitalInfoService
-        .getHospitalInfo(filters)
-        .then((res) => setOriginals(res));
+      const filteredHospitals =
+        await hospitalService.combineHospitalInfoAndRequestAndFunded(filters);
+      setOriginals(filteredHospitals);
     }
     handleClose();
   };
 
-  const handleClearAll = () => {
+  const handleClearAll = async () => {
     setLocationChips([]), setLocationValue("");
     setStatus("all");
     setOriginalFilters({
       location: [],
       status: [],
     });
-    hospitalInfoService.getHospitalInfo().then((res) => setOriginals(res));
+    const hospitals =
+      await hospitalService.combineHospitalInfoAndRequestAndFunded();
+    setOriginals(hospitals);
+    // hospitalInfoService.getHospitalInfo().then((res) => setOriginalInfo(res));
   };
 
   useEffect(() => {

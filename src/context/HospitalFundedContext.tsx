@@ -6,7 +6,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 
 import { HospitalFunded } from "../models/hospitalFunded";
 
@@ -20,7 +20,7 @@ export const HospitalFundedContext = createContext<HospitalFundedContextType>({
   setHospitalFunded: () => {},
 });
 
-export const HospitalFundedContexProvider = (props: {
+export const HospitalFundedContextProvider = (props: {
   children: ReactNode;
 }) => {
   const [hospitalFunded, setHospitalFunded] = useState<HospitalFunded[]>([]);

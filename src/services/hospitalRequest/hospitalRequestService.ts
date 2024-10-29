@@ -1,3 +1,9 @@
+/**
+ *  HospitalRequestService.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { airtableService } from "../../mapping/airtableService";
 import { HospitalRequest } from "../../models/hospitalRequest";
 
@@ -13,7 +19,7 @@ class HospitalRequestService {
         records.map((r) => {
           return {
             recordId: r.id,
-            oppReqId: `${r.fields["Opportunities/Requests ID"]}`,
+            oppReqId: `${r.fields["Hospital Request ID"]}`,
             name: r.fields["Hospital Name (LInked)"],
             requestNarrative: r.fields["Request Narrative"],
             equipReq:
@@ -21,6 +27,7 @@ class HospitalRequestService {
                 "# Equipment Requested (TBD if we show single brands + extras)"
               ],
             requested: r.fields["$ Requested"],
+            fundingDeadline: r.fields["Funding Deadline"],
             kids3Y: r.fields["Kids 3Y"],
             play3Y: r.fields["Play 3Y"],
             collected: r.fields["$ Collected"],

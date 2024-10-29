@@ -19,11 +19,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { Room } from "@mui/icons-material";
 import { Carousel } from "react-responsive-carousel";
 import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
-import { HospitalInfo } from "../models/hospitalInfo";
 import ActionButton from "../styles/ActionButton";
+import { Hospital } from "../models/hospital";
 
 interface HospitalDetailsProps {
-  hospital: HospitalInfo;
+  hospital: Hospital;
 }
 
 export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({

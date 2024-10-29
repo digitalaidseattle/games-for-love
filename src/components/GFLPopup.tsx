@@ -1,3 +1,9 @@
+/**
+ *  GFLPopup.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { Popup } from "react-map-gl";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { PopupInfo } from "../models/popupInfo";

@@ -12,74 +12,33 @@ import { HospitalCardDetails } from "./components/HospitalCardDetails";
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
-import { HospitalsContext } from "./context/HospitalsContext";
-import { HospitalInfo } from "./models/hospitalInfo";
-import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
+
 import { FilterType } from "./types/fillterType";
 import { SelectedHospitalsContextProvider } from "./context/SelectedHospitalContext";
-import { HospitalFundedContext } from "./context/HospitalFundedContext";
-import { HospitalRequestContext } from "./context/HospitalRequestContext";
-
-import { hospitalFundedService } from "./services/hospitalFunded/hospitalFundedService";
-import { HospitalFunded } from "./models/hospitalFunded";
-import { hospitalRequestService } from "./services/hospitalRequest/hospitalRequestService";
-import { HospitalRequest } from "./models/hospitalRequest";
+import { hospitalService } from "./services/hospital/hospitalService";
+import { Hospital } from "./models/hospital";
+import { HospitalsContext } from "./context/HospitalContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
-  return hospitals.map((hospital, idx: number) => (
+  return hospitals?.map((hospital, idx: number) => (
     <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
   ));
 };
 
 function App() {
-  const { setOriginals } = useContext(HospitalsContext);
-  const { hospitalFunded, setHospitalFunded } = useContext(
-    HospitalFundedContext
-  );
-  const { HospitalRequest, setHospitalRequest } = useContext(
-    HospitalRequestContext
-  );
-
+  const { hospitals, setOriginals } = useContext(HospitalsContext);
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
-  const getHospitalInfo = (filter?: FilterType) => {
-    hospitalInfoService
-      .getHospitalInfo(filter)
-      .then((res: HospitalInfo[]) => {
-        setOriginals(res);
-      })
-      .catch((error) => {
-        console.error("An error occurred while fetching data:", error);
-      });
-  };
-
-  const getHospitalFunded = () => {
-    hospitalFundedService
-      .getHospitalFunded()
-      .then((res: HospitalFunded[]) => {
-        setHospitalFunded(res);
-      })
-      .catch((error) => {
-        console.error("An error occurred while fetching data:", error);
-      });
-  };
-
-  const getHospitalRequest = () => {
-    hospitalRequestService
-      .getHospitalRequest()
-      .then((res: HospitalRequest[]) => {
-        setHospitalRequest(res);
-      })
-      .catch((error) => {
-        console.error("An error occurred while fetching data:", error);
-      });
+  const getCombinedHospital = async (filter?: FilterType) => {
+    const _hospitals: Hospital[] | undefined =
+      await hospitalService.combineHospitalInfoAndRequestAndFunded(filter);
+    setOriginals(_hospitals);
   };
 
   useEffect(() => {
-    getHospitalInfo();
-    getHospitalFunded();
-    getHospitalRequest();
+    getCombinedHospital();
+
     setWindowHeight(window.innerHeight);
 
     function handleResize() {
@@ -87,6 +46,7 @@ function App() {
     }
     window.addEventListener("resize", handleResize);
   }, []);
+  console.log("HOSPITALS", hospitals);
 
   return (
     <SelectedHospitalsContextProvider>

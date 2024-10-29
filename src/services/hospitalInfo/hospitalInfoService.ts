@@ -56,7 +56,7 @@ class HospitalInfoService {
               extractUrls(r.fields["Hospital Picture 2"])[0],
               extractUrls(r.fields["Hospital Picture 3"])[0],
             ].filter((u) => u !== undefined),
-            HospitalId: r.fields["ID"],
+            id: r.fields["ID"],
           } as HospitalInfo;
           return hospitalData;
         })

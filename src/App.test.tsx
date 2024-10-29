@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
-import { HospitalsContextProvider } from "./context/HospitalsContext";
+import { HospitalsContextProvider } from "./context/HospitalInfoContext";
 
 vi.mock("./services/hospitalInfo/hospitalInfoService");
 
@@ -25,8 +25,11 @@ describe("App component", () => {
       },
     ]);
 
-
-    render(<HospitalsContextProvider><App /></HospitalsContextProvider>);
+    render(
+      <HospitalsContextProvider>
+        <App />
+      </HospitalsContextProvider>
+    );
 
     const searchAndSortElement = screen.getByTestId("search-and-sort-box");
     expect(searchAndSortElement).toBeInTheDocument();
@@ -74,7 +77,11 @@ describe("App component", () => {
         status: "past",
       },
     ]);
-    render(<HospitalsContextProvider><App /></HospitalsContextProvider>);
+    render(
+      <HospitalsContextProvider>
+        <App />
+      </HospitalsContextProvider>
+    );
     await waitFor(() => {
       const hospitalDetailCards = screen.getAllByTestId("hospital-detail-card");
       expect(hospitalDetailCards.length).toEqual(2);

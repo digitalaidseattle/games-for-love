@@ -1,3 +1,9 @@
+/**
+ *  SearchAndSort.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { ChangeEvent, useContext, useState } from "react";
 import {
   Box,
@@ -7,14 +13,14 @@ import {
   InputAdornment,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import ImportExportIcon from "@mui/icons-material/ImportExport";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
 import FilterDialog from "./FilterDialog";
-import { HospitalsContext } from "../context/HospitalsContext";
-import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
+
+import { HospitalsContext } from "../context/HospitalContext";
+import { hospitalService } from "../services/hospital/hospitalService";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -31,9 +37,7 @@ export const SearchAndSort = () => {
 
   const changeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     //searching through originals
-    setHospitals(
-      hospitalInfoService.filterHospitals(originals, e.target.value)
-    );
+    setHospitals(hospitalService.filterHospitals(originals, e.target.value));
   };
 
   const handelOrderButton = () => {

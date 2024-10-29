@@ -1,3 +1,9 @@
+/**
+ *  airtableService.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import Airtable, { FieldSet, Records } from "airtable";
 import { airtableClient } from "./airtableClient";
 

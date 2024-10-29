@@ -7,13 +7,13 @@
  *
  */
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { HospitalInfo } from "../models/hospitalInfo";
+import { Hospital } from "../models/hospital";
 
 interface HospitalsContextType {
-  hospitals: HospitalInfo[];
-  setHospitals: (hospitals: HospitalInfo[]) => void;
-  originals: HospitalInfo[];
-  setOriginals: (hospitals: HospitalInfo[]) => void;
+  hospitals: Hospital[] | undefined;
+  setHospitals: (hospitals: Hospital[] | undefined) => void;
+  originals: Hospital[] | undefined;
+  setOriginals: (hospitals: Hospital[] | undefined) => void;
 }
 
 export const HospitalsContext = createContext<HospitalsContextType>({
@@ -26,8 +26,8 @@ export const HospitalsContext = createContext<HospitalsContextType>({
 export const HospitalsContextProvider = (props: { children: ReactNode }) => {
   // originals held in memory for faster searching.
   // originals updated when Airtable is queried.
-  const [originals, setOriginals] = useState<HospitalInfo[]>([]);
-  const [hospitals, setHospitals] = useState<HospitalInfo[]>([]);
+  const [originals, setOriginals] = useState<Hospital[] | undefined>(undefined);
+  const [hospitals, setHospitals] = useState<Hospital[] | undefined>(undefined);
 
   useEffect(() => {
     setHospitals(originals);

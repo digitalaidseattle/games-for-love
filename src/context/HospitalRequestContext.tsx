@@ -6,30 +6,30 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 import { HospitalRequest } from "../models/hospitalRequest";
 
 interface HospitalRequestContextType {
-  HospitalRequest: HospitalRequest[];
+  hospitalRequest: HospitalRequest[];
   setHospitalRequest: (hospitalRequest: HospitalRequest[]) => void;
 }
 
 export const HospitalRequestContext = createContext<HospitalRequestContextType>(
   {
-    HospitalRequest: [],
+    hospitalRequest: [],
     setHospitalRequest: () => {},
   }
 );
 
-export const HospitalRequestContexProvider = (props: {
+export const HospitalRequestContextProvider = (props: {
   children: ReactNode;
 }) => {
-  const [HospitalRequest, setHospitalRequest] = useState<HospitalRequest[]>([]);
+  const [hospitalRequest, setHospitalRequest] = useState<HospitalRequest[]>([]);
 
   return (
     <HospitalRequestContext.Provider
       value={{
-        HospitalRequest,
+        hospitalRequest,
         setHospitalRequest,
       }}
     >
