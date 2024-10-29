@@ -204,128 +204,129 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
             />
           ))}
         </Box>
-
-        <FormControl>
-          <FormLabel
-            component="legend"
-            sx={{
-              fontSize: "20px",
-              color: "#000",
-              fontWeight: "bold",
-              "&.Mui-focused": {
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <FormControl>
+            <FormLabel
+              component="legend"
+              sx={{
+                fontSize: "20px",
                 color: "#000",
-              },
-            }}
-          >
-            Status
-          </FormLabel>
-          <RadioGroup
-            value={status}
-            onChange={handleStatusChange}
-            aria-label="status"
-          >
-            <FormControlLabel
-              value="all"
-              control={
-                <Radio
-                  sx={{
-                    "& .MuiSvgIcon-root": {
-                      color: "#000",
-                    },
-                  }}
-                />
-              }
-              label="All"
-            />
-            <FormControlLabel
-              value="active"
-              control={
-                <Radio
-                  sx={{
-                    "& .MuiSvgIcon-root": {
-                      color: "#000",
-                    },
-                  }}
-                />
-              }
-              label="Active"
-            />
-            <FormControlLabel
-              value="past"
-              control={
-                <Radio
-                  sx={{
-                    "& .MuiSvgIcon-root": {
-                      color: "#000",
-                    },
-                  }}
-                />
-              }
-              label="Past"
-            />
-          </RadioGroup>
-        </FormControl>
+                fontWeight: "bold",
+                "&.Mui-focused": {
+                  color: "#000",
+                },
+              }}
+            >
+              Status
+            </FormLabel>
+            <RadioGroup
+              value={status}
+              onChange={handleStatusChange}
+              aria-label="status"
+            >
+              <FormControlLabel
+                value="all"
+                control={
+                  <Radio
+                    sx={{
+                      "& .MuiSvgIcon-root": {
+                        color: "#000",
+                      },
+                    }}
+                  />
+                }
+                label="All"
+              />
+              <FormControlLabel
+                value="active"
+                control={
+                  <Radio
+                    sx={{
+                      "& .MuiSvgIcon-root": {
+                        color: "#000",
+                      },
+                    }}
+                  />
+                }
+                label="Active"
+              />
+              <FormControlLabel
+                value="past"
+                control={
+                  <Radio
+                    sx={{
+                      "& .MuiSvgIcon-root": {
+                        color: "#000",
+                      },
+                    }}
+                  />
+                }
+                label="Past"
+              />
+            </RadioGroup>
+          </FormControl>
 
-        <FormControl sx={{ mt: 4 }}>
-          <FormLabel
-            component="legend"
-            sx={{
-              fontSize: "20px",
-              color: "#000",
-              fontWeight: "bold",
-              "&.Mui-focused": {
+          <FormControl>
+            <FormLabel
+              component="legend"
+              sx={{
+                fontSize: "20px",
                 color: "#000",
-              },
-            }}
-          >
-            Sort by
-          </FormLabel>
-          <RadioGroup
-            value={sortBy}
-            onChange={handleSortbyChange}
-            aria-label="status"
-          >
-            <FormControlLabel
-              value="fundingDeadline"
-              control={
-                <Radio
-                  sx={{
-                    "& .MuiSvgIcon-root": {
-                      color: "#000",
-                    },
-                  }}
-                />
-              }
-              label="Funding deadline"
-            />
-            <FormControlLabel
-              value="sortingFundingLevelHighToLow"
-              control={
-                <Radio
-                  sx={{
-                    "& .MuiSvgIcon-root": {
-                      color: "#000",
-                    },
-                  }}
-                />
-              }
-              label="Sorting funding level high to low"
-            />
-            <FormControlLabel
-              value="hospitalName"
-              control={
-                <Radio
-                  sx={{
-                    "& .MuiSvgIcon-root": {
-                      color: "#000",
-                    },
-                  }}
-                />
-              }
-              label="Hospital name"
-            />
-          </RadioGroup>
-        </FormControl>
+                fontWeight: "bold",
+                "&.Mui-focused": {
+                  color: "#000",
+                },
+              }}
+            >
+              Sort by
+            </FormLabel>
+            <RadioGroup
+              value={sortBy}
+              onChange={handleSortbyChange}
+              aria-label="status"
+            >
+              <FormControlLabel
+                value="fundingDeadline"
+                control={
+                  <Radio
+                    sx={{
+                      "& .MuiSvgIcon-root": {
+                        color: "#000",
+                      },
+                    }}
+                  />
+                }
+                label="Funding deadline"
+              />
+              <FormControlLabel
+                value="sortingFundingLevelHighToLow"
+                control={
+                  <Radio
+                    sx={{
+                      "& .MuiSvgIcon-root": {
+                        color: "#000",
+                      },
+                    }}
+                  />
+                }
+                label="Funding level"
+              />
+              <FormControlLabel
+                value="hospitalName"
+                control={
+                  <Radio
+                    sx={{
+                      "& .MuiSvgIcon-root": {
+                        color: "#000",
+                      },
+                    }}
+                  />
+                }
+                label="Hospital name"
+              />
+            </RadioGroup>
+          </FormControl>
+        </Box>
       </DialogContent>
       <Divider sx={{ borderBottomWidth: 2.2 }} />
       <DialogActions

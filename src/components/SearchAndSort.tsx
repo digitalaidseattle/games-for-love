@@ -103,26 +103,26 @@ export const SearchAndSort = () => {
 
         <Button
           variant="outlined"
-          endIcon={isDescending ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
           onClick={handelOrderButton}
           sx={{
             color: "#000",
             textTransform: "capitalize",
-            padding: "0px", // 패딩을 제거하여 내부 여백 제거
-            margin: "0px", // 외부 마진 제거
-            width: "40px", // 너비를 고정
-            height: "40px", // 높이를 고정 (정사각형)
-            display: "flex", // 플렉스 박스로 아이콘 중앙 정렬
-            alignItems: "center", // 세로 중앙 정렬
-            justifyContent: "center", // 가로 중앙 정렬
+            padding: "0px",
+            margin: "0px",
+            width: "40px",
+            height: "40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             borderRadius: "12px",
-            border: "1px solid #d9d9d9", // 외곽선 설정
+            border: "1px solid #d9d9d9",
+            backgroundColor: "white",
             "&:hover": {
               border: "1px solid #d9d9d9",
             },
           }}
         >
-          {isDescending ? "Des" : "Asc"}
+          {isDescending ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
         </Button>
       </Box>
       {showFilters && (
