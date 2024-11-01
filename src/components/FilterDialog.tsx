@@ -27,8 +27,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { InputAdornment } from "@mui/material";
-import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
-import { HospitalInfoContext } from "../context/HospitalInfoContext";
 import { FilterContext } from "../context/FilterContext";
 import { DialogProps } from "../types/dialogProps";
 import { hospitalService } from "../services/hospital/hospitalService";
@@ -82,6 +80,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
         .combineHospitalInfoAndRequestAndFunded()
         .then((res) => setOriginals(res));
     } else {
+      console.log("fff", filters);
       const filteredHospitals =
         await hospitalService.combineHospitalInfoAndRequestAndFunded(filters);
       setOriginals(filteredHospitals);
@@ -102,20 +101,26 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
   };
 
   useEffect(() => {
-    setOriginalFilters({
+    const filter = {
       location: locationChips.map((chip) => chip.toLowerCase()),
       status: [status],
-    });
+    };
+    const newFilter =
+      status === "all" ? { ...filters, status: ["active", "past"] } : filter;
+    setOriginalFilters(newFilter);
   }, [locationChips, status]);
 
   useEffect(() => {
-    setStatus(
-      filters.status.includes("active")
-        ? "active"
-        : filters.status.includes("past")
-        ? "past"
-        : "all"
-    );
+    let initialStatus;
+    if (
+      filters.status.length === 2 ||
+      !(filters.status.includes("active") && filters.status.includes("past"))
+    ) {
+      initialStatus = "all";
+    } else {
+      initialStatus = filters.status[0];
+    }
+    setStatus(initialStatus);
   }, []);
 
   return (
