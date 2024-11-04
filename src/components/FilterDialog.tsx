@@ -25,6 +25,7 @@ import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoServic
 import { HospitalsContext } from "../context/HospitalsContext";
 import { FilterContext } from "../context/FilterContext";
 import { DialogProps } from "../types/dialogProps";
+import ActionButton from "../styles/ActionButton";
 
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -336,35 +337,14 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
         >
           Clear all
         </Button>
-
-        <Button
-          variant="contained"
-          fullWidth
+        <ActionButton
           onClick={handleApplyFilters}
           sx={{
-            width: "50%",
-            margin: "0 auto",
-            backgroundColor: "#000",
-            borderRadius: "15px",
-            textTransform: "capitalize",
-            "&:hover": {
-              backgroundColor: "transparent",
-              color: "#000",
-            },
-            "&:focus": {
-              outline: "none",
-            },
-            "&:active": {
-              outline: "none",
-              border: "none",
-            },
-            "&.MuiButton-root": {
-              border: "none",
-            },
+            width: "50%"
           }}
         >
-          Apply filters
-        </Button>
+          Apply
+        </ActionButton>
       </DialogActions>
     </CustomDialog>
   );
