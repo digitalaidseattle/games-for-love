@@ -21,17 +21,13 @@ import { Carousel } from "react-responsive-carousel";
 import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import { HospitalInfo } from "../models/hospitalInfo";
 import ActionButton from "../styles/ActionButton";
+import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
 
-interface HospitalDetailsProps {
-  hospital: HospitalInfo;
-}
-
-export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
-  hospital,
-}) => {
+export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hospital }) => {
   const { selectedHospital, setSelectedHospital } = useContext(SelectedHospitalContext);
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   useEffect(() => {
     if (hospital) {
@@ -41,6 +37,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
         : hospital.status === "past"
           ? "#DB5757"
           : "#92C65E");
+      setIsOpen(hospitalInfoService.isHospitalOpen(hospital));
     }
   }, [hospital, selectedHospital]);
 
@@ -107,8 +104,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
                 flex: 1,
               }}
             >
-              <Box onClick={handleCarousel}
-              >
+              <Box onClick={handleCarousel} >
                 <Carousel showStatus={false} showThumbs={false}>
                   {hospital.hospitalPictures.map((url, idx) =>
                     <CardMedia
@@ -170,6 +166,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
                   Learn more
                 </ActionButton>
                 <ActionButton
+                  disabled={!isOpen}
                   onClick={(evt: any) => { evt.stopPropagation(); alert('donate') }}
                 >
                   Donate
