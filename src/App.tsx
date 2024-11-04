@@ -18,8 +18,12 @@ import { hospitalService } from "./services/hospital/hospitalService";
 import { Hospital } from "./models/hospital";
 import { HospitalsContext } from "./context/HospitalContext";
 
-const HospitalList = () => {
-  const { hospitals } = useContext(HospitalsContext);
+type HospitalListProps = {
+  hospitals: Hospital[] | undefined;
+};
+
+const HospitalList: React.FC<HospitalListProps> = ({ hospitals }) => {
+  // const { hospitals } = useContext(HospitalsContext);
   return hospitals?.map((hospital, idx: number) => (
     <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
   ));
@@ -29,10 +33,10 @@ function App() {
   const { hospitals, setOriginals } = useContext(HospitalsContext);
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
-  const getCombinedHospital = async (filter?: FilterType) => {
-    const _hospitals: Hospital[] | undefined =
-      await hospitalService.combineHospitalInfoAndRequestAndFunded(filter);
-    setOriginals(_hospitals);
+  const getCombinedHospital = async () => {
+    hospitalService
+      .combineHospitalInfoAndRequestAndFunded()
+      .then((res) => setOriginals(res));
   };
 
   useEffect(() => {
@@ -45,7 +49,7 @@ function App() {
     }
     window.addEventListener("resize", handleResize);
   }, []);
-  console.log("HOSPITALS", hospitals);
+  console.log("app에서 HOSPITALS", hospitals);
 
   return (
     <Grid container>
@@ -55,7 +59,7 @@ function App() {
             <SearchAndSort />
           </Box>
           <Box padding={1} data-testid="hospital-list">
-            <HospitalList />
+            <HospitalList hospitals={hospitals} />
           </Box>
         </Box>
       </Grid>

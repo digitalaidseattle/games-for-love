@@ -31,6 +31,7 @@ import { FilterContext } from "../context/FilterContext";
 import { DialogProps } from "../types/dialogProps";
 import { hospitalService } from "../services/hospital/hospitalService";
 import { HospitalsContext } from "../context/HospitalContext";
+import { FilterType } from "../types/fillterType";
 
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -43,15 +44,16 @@ const CustomDialog = styled(Dialog)(() => ({
 }));
 
 const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
-  const { setOriginals } = useContext(HospitalsContext);
-  const { setOriginalFilters, filters } = useContext(FilterContext);
+  const { hospitals, setHospitals, setOriginals } =
+    useContext(HospitalsContext);
+  const { filters, setFilters } = useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
   const [locationChips, setLocationChips] = useState<string[]>(
     filters.location
   );
 
   const [status, setStatus] = useState("all");
-  const [sortBy, setSortBy] = useState("fundingDeadline");
+  // const [sortBy, setSortBy] = useState("fundingDeadline");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && locationValue.trim() !== "") {
@@ -71,7 +73,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
   };
 
   const handleSortbyChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSortBy(e.target.value);
+    setFilters({ ...filters, sortBy: e.target.value });
   };
 
   const handleApplyFilters = async () => {
@@ -79,11 +81,22 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
       hospitalService
         .combineHospitalInfoAndRequestAndFunded()
         .then((res) => setOriginals(res));
+      const sortedHospitals = hospitalService.sortingHospitals(
+        hospitals,
+        filters.sortBy,
+        false
+      );
+      setHospitals(sortedHospitals);
     } else {
       console.log("fff", filters);
       const filteredHospitals =
         await hospitalService.combineHospitalInfoAndRequestAndFunded(filters);
-      setOriginals(filteredHospitals);
+      const sortedHospitals = hospitalService.sortingHospitals(
+        filteredHospitals,
+        filters.sortBy,
+        false
+      );
+      setHospitals(sortedHospitals);
     }
     handleClose();
   };
@@ -91,9 +104,11 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
   const handleClearAll = async () => {
     setLocationChips([]), setLocationValue("");
     setStatus("all");
-    setOriginalFilters({
+    setFilters({
       location: [],
       status: [],
+      sortBy: "fundingDeadline",
+      sortDirection: false,
     });
     const hospitals =
       await hospitalService.combineHospitalInfoAndRequestAndFunded();
@@ -101,13 +116,15 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
   };
 
   useEffect(() => {
-    const filter = {
+    const filter: FilterType = {
       location: locationChips.map((chip) => chip.toLowerCase()),
       status: [status],
+      sortBy: "fundingDeadline",
+      sortDirection: false,
     };
     const newFilter =
       status === "all" ? { ...filters, status: ["active", "past"] } : filter;
-    setOriginalFilters(newFilter);
+    setFilters(newFilter);
   }, [locationChips, status]);
 
   useEffect(() => {
@@ -286,7 +303,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
               Sort by
             </FormLabel>
             <RadioGroup
-              value={sortBy}
+              value={filters.sortBy}
               onChange={handleSortbyChange}
               aria-label="status"
             >
@@ -304,7 +321,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
                 label="Funding deadline"
               />
               <FormControlLabel
-                value="sortingFundingLevelHighToLow"
+                value="fundingLevel"
                 control={
                   <Radio
                     sx={{

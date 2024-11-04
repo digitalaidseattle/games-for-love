@@ -140,6 +140,53 @@ class HospitalService {
         h.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
     );
   };
+
+  sortingHospitals = (
+    hospitals: Hospital[] | undefined,
+    sortBy: string,
+    sortDirection: boolean
+  ) => {
+    console.log("sortingHospitla끼지 옴");
+    let sortedHospitals;
+    if (sortBy === "fundingDeadline") {
+      sortedHospitals = hospitals?.sort((a, b) => {
+        const dateA = new Date(a.fundingDeadline);
+        const dateB = new Date(b.fundingDeadline);
+
+        if (sortDirection) {
+          return dateB.getTime() - dateA.getTime();
+        } else {
+          return dateA.getTime() - dateB.getTime();
+        }
+      });
+    }
+    if (sortBy === "hospitalName") {
+      sortedHospitals = hospitals?.sort((a, b) => {
+        if (sortDirection) {
+          return b.name.localeCompare(a.name);
+        } else {
+          return a.name.localeCompare(b.name);
+        }
+      });
+    }
+    if (sortBy === "fundingLevel") {
+      sortedHospitals = hospitals?.sort((a, b) => {
+        const a_fundingLevel = a.requested
+          ? (a.fundingCompleted || 0) / a.requested
+          : 0;
+        const b_fundingLevel = b.requested
+          ? (b.fundingCompleted || 0) / b.requested
+          : 0;
+
+        if (sortDirection) {
+          return b_fundingLevel - a_fundingLevel;
+        } else {
+          return a_fundingLevel - b_fundingLevel;
+        }
+      });
+    }
+    return sortedHospitals;
+  };
 }
 
 const hospitalService = new HospitalService();

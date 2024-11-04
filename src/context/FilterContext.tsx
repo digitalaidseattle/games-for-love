@@ -12,39 +12,48 @@ import { FilterType } from "../types/fillterType";
 interface FilterContextType {
   filters: FilterType;
   setFilters: (filters: FilterType) => void;
-  originalFilters: FilterType;
-  setOriginalFilters: (filters: FilterType) => void;
+  // originalFilters: FilterType;
+  // setOriginalFilters: (filters: FilterType) => void;
 }
 
 export const FilterContext = createContext<FilterContextType>({
-  filters: { location: [], status: [] },
+  filters: {
+    location: [],
+    status: [],
+    sortBy: "fundingDeadline",
+    sortDirection: false,
+  },
   setFilters: () => {},
-  originalFilters: { location: [], status: [] },
-  setOriginalFilters: () => {},
+  // originalFilters: { location: [], status: [] },
+  // setOriginalFilters: () => {},
 });
 
 export const FilterContextProvider = (props: { children: ReactNode }) => {
   const [filters, setFilters] = useState<FilterType>({
     location: [],
     status: [],
+    sortBy: "fundingDeadline",
+    sortDirection: false,
   });
 
-  const [originalFilters, setOriginalFilters] = useState<FilterType>({
-    location: [],
-    status: [],
-  });
+  // const [originalFilters, setOriginalFilters] = useState<FilterType>({
+  //   location: [],
+  //   status: [],
+  //   sortBy: "fundingDeadline",
+  //   sortDirection: false,
+  // });
 
   useEffect(() => {
-    setFilters(originalFilters);
-  }, [originalFilters]);
+    setFilters(filters);
+  }, [filters]);
 
   return (
     <FilterContext.Provider
       value={{
         filters,
         setFilters,
-        originalFilters,
-        setOriginalFilters,
+        // originalFilters,
+        // setOriginalFilters,
       }}
     >
       {props.children}

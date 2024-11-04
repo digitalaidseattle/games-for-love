@@ -4,7 +4,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ChangeEvent, useContext, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import {
   Box,
   TextField,
@@ -21,11 +21,15 @@ import FilterDialog from "./FilterDialog";
 
 import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
+import { FilterContext } from "../context/FilterContext";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [isDescending, setIsDescending] = useState(true);
-  const { originals, setHospitals } = useContext(HospitalsContext);
+  const { originals, hospitals, setOriginals, setHospitals } =
+    useContext(HospitalsContext);
+  const { filters, setFilters } = useContext(FilterContext);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleOpenFilters = () => {
     setShowFilters(true);
@@ -38,11 +42,29 @@ export const SearchAndSort = () => {
   const changeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     //searching through originals
     setHospitals(hospitalService.filterHospitals(originals, e.target.value));
+    if (e.target.value !== "") {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
   };
 
   const handelOrderButton = () => {
-    setIsDescending(!isDescending);
+    // setIsDescending(!isDescending);
+    setIsDescending((prev) => !prev);
   };
+
+  useEffect(() => {
+    console.log("isDescending?", isDescending);
+    setFilters({ ...filters, sortDirection: isDescending });
+    const sortedHospitals = hospitalService.sortingHospitals(
+      hospitals,
+      filters.sortBy,
+      isDescending
+    );
+    console.log("sortedHospital??", sortedHospitals);
+    setHospitals(sortedHospitals);
+  }, [isDescending]);
 
   return (
     <Box data-testid="search-and-sort-box">
@@ -90,12 +112,14 @@ export const SearchAndSort = () => {
         />
         <IconButton
           onClick={handleOpenFilters}
+          disabled={isDisabled}
           sx={{
             padding: "10px",
             backgroundColor: "#ffffff",
             borderRadius: "12px",
             border: "1px solid #d9d9d9",
             height: "36px",
+            width: "64px",
           }}
         >
           <FilterListIcon />
@@ -104,13 +128,14 @@ export const SearchAndSort = () => {
         <Button
           variant="outlined"
           onClick={handelOrderButton}
+          disabled={isDisabled}
           sx={{
             color: "#000",
             textTransform: "capitalize",
             padding: "0px",
             margin: "0px",
             width: "40px",
-            height: "40px",
+            height: "36px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
