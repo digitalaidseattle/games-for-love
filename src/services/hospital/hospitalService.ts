@@ -8,7 +8,7 @@ import { Hospital } from "../../models/hospital";
 import { HospitalFunded } from "../../models/hospitalFunded";
 import { HospitalInfo } from "../../models/hospitalInfo";
 import { HospitalRequest } from "../../models/hospitalRequest";
-import { FilterType } from "../../types/fillterType";
+import { FilterType, sortDirection } from "../../types/fillterType";
 import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
@@ -52,6 +52,7 @@ class HospitalService {
       return undefined;
     } else {
       const _hospitals = this.hospitalInfo.map((hi) => {
+        const currentDate = new Date();
         const hospital: Hospital = {
           hospitalInfoRecordId: "",
           requestRecordId: undefined,
@@ -68,14 +69,13 @@ class HospitalService {
           longitude: 0,
           latitude: 0,
           hospitalPictures: [],
-          fundingDeadline: undefined,
+          fundingDeadline: "",
           requested: undefined,
           fundingCompleted: undefined,
           id: "",
         };
         hospital.hospitalInfoRecordId = hi.recordId;
         hospital.name = hi.name;
-        hospital.status = hi.status;
         hospital.type = hi.type;
         hospital.description = hi.description;
         hospital.year = hi.year;
@@ -97,6 +97,9 @@ class HospitalService {
           hospital.requested = matchedRequest.requested;
           hospital.fundingDeadline = matchedRequest.fundingDeadline;
         }
+        hospital.status =
+          currentDate > new Date(hospital.fundingDeadline) ? "past" : "active";
+
         return hospital;
       });
 
@@ -144,16 +147,15 @@ class HospitalService {
   sortingHospitals = (
     hospitals: Hospital[] | undefined,
     sortBy: string,
-    sortDirection: boolean
+    sortDir: string
   ) => {
-    console.log("sortingHospitla끼지 옴");
     let sortedHospitals;
     if (sortBy === "fundingDeadline") {
       sortedHospitals = hospitals?.sort((a, b) => {
         const dateA = new Date(a.fundingDeadline);
         const dateB = new Date(b.fundingDeadline);
 
-        if (sortDirection) {
+        if (sortDir === sortDirection.DESCENDING) {
           return dateB.getTime() - dateA.getTime();
         } else {
           return dateA.getTime() - dateB.getTime();
@@ -162,7 +164,7 @@ class HospitalService {
     }
     if (sortBy === "hospitalName") {
       sortedHospitals = hospitals?.sort((a, b) => {
-        if (sortDirection) {
+        if (sortDir === sortDirection.DESCENDING) {
           return b.name.localeCompare(a.name);
         } else {
           return a.name.localeCompare(b.name);
@@ -178,7 +180,7 @@ class HospitalService {
           ? (b.fundingCompleted || 0) / b.requested
           : 0;
 
-        if (sortDirection) {
+        if (sortDir === sortDirection.DESCENDING) {
           return b_fundingLevel - a_fundingLevel;
         } else {
           return a_fundingLevel - b_fundingLevel;

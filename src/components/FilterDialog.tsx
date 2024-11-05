@@ -29,9 +29,10 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { InputAdornment } from "@mui/material";
 import { FilterContext } from "../context/FilterContext";
 import { DialogProps } from "../types/dialogProps";
+import ActionButton from "../styles/ActionButton";
 import { hospitalService } from "../services/hospital/hospitalService";
 import { HospitalsContext } from "../context/HospitalContext";
-import { FilterType } from "../types/fillterType";
+import { FilterType, sortDirection } from "../types/fillterType";
 
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -44,16 +45,15 @@ const CustomDialog = styled(Dialog)(() => ({
 }));
 
 const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
-  const { hospitals, setHospitals, setOriginals } =
-    useContext(HospitalsContext);
-  const { filters, setFilters } = useContext(FilterContext);
+  const { setOriginals } = useContext(HospitalsContext);
+  const { filters, clearFilters, setOriginalFilters } =
+    useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
   const [locationChips, setLocationChips] = useState<string[]>(
     filters.location
   );
 
   const [status, setStatus] = useState("all");
-  // const [sortBy, setSortBy] = useState("fundingDeadline");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && locationValue.trim() !== "") {
@@ -73,65 +73,43 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
   };
 
   const handleSortbyChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFilters({ ...filters, sortBy: e.target.value });
+    setOriginalFilters({ ...filters, sortBy: e.target.value });
   };
 
   const handleApplyFilters = async () => {
-    if (filters.location.length === 0 && filters.status.length === 0) {
-      hospitalService
-        .combineHospitalInfoAndRequestAndFunded()
-        .then((res) => setOriginals(res));
-      const sortedHospitals = hospitalService.sortingHospitals(
-        hospitals,
-        filters.sortBy,
-        false
-      );
-      setHospitals(sortedHospitals);
-    } else {
-      console.log("fff", filters);
-      const filteredHospitals =
-        await hospitalService.combineHospitalInfoAndRequestAndFunded(filters);
-      const sortedHospitals = hospitalService.sortingHospitals(
-        filteredHospitals,
-        filters.sortBy,
-        false
-      );
-      setHospitals(sortedHospitals);
-    }
+    setOriginalFilters({ ...filters, sortDirection: sortDirection.ASCENDING });
     handleClose();
   };
 
   const handleClearAll = async () => {
     setLocationChips([]), setLocationValue("");
     setStatus("all");
-    setFilters({
-      location: [],
-      status: [],
-      sortBy: "fundingDeadline",
-      sortDirection: false,
-    });
+    clearFilters();
     const hospitals =
       await hospitalService.combineHospitalInfoAndRequestAndFunded();
     setOriginals(hospitals);
   };
 
   useEffect(() => {
-    const filter: FilterType = {
+    const oldFilter: FilterType = {
       location: locationChips.map((chip) => chip.toLowerCase()),
       status: [status],
-      sortBy: "fundingDeadline",
-      sortDirection: false,
+      sortBy: filters.sortBy,
+      sortDirection: sortDirection.UNDEFINED,
     };
     const newFilter =
-      status === "all" ? { ...filters, status: ["active", "past"] } : filter;
-    setFilters(newFilter);
-  }, [locationChips, status]);
+      status === "all"
+        ? { ...oldFilter, status: ["active", "past"] }
+        : oldFilter;
+
+    setOriginalFilters(newFilter);
+  }, [status, filters.sortBy, locationChips]);
 
   useEffect(() => {
     let initialStatus;
     if (
       filters.status.length === 2 ||
-      !(filters.status.includes("active") && filters.status.includes("past"))
+      (!filters.status.includes("active") && !filters.status.includes("past"))
     ) {
       initialStatus = "all";
     } else {
@@ -389,35 +367,14 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
         >
           Clear all
         </Button>
-
-        <Button
-          variant="contained"
-          fullWidth
+        <ActionButton
           onClick={handleApplyFilters}
           sx={{
             width: "50%",
-            margin: "0 auto",
-            backgroundColor: "#000",
-            borderRadius: "15px",
-            textTransform: "capitalize",
-            "&:hover": {
-              backgroundColor: "transparent",
-              color: "#000",
-            },
-            "&:focus": {
-              outline: "none",
-            },
-            "&:active": {
-              outline: "none",
-              border: "none",
-            },
-            "&.MuiButton-root": {
-              border: "none",
-            },
           }}
         >
           Apply
-        </Button>
+        </ActionButton>
       </DialogActions>
     </CustomDialog>
   );

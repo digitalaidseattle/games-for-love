@@ -24,7 +24,6 @@ class HospitalInfoService {
           const hospitalData = {
             recordId: r.id,
             name: `${r.fields["Hospital Name"]}`,
-            status: Math.random() * 10 > 5 ? "active" : "past", //r.fields["Status"],
             type: r.fields["Type of Organization"],
             description: r.fields["Organization Notes / Description"],
             year: r.fields["Kids Served / Year"],

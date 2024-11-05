@@ -4,7 +4,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import {
   Box,
   TextField,
@@ -22,13 +22,12 @@ import FilterDialog from "./FilterDialog";
 import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
 import { FilterContext } from "../context/FilterContext";
+import { sortDirection } from "../types/fillterType";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const [isDescending, setIsDescending] = useState(true);
-  const { originals, hospitals, setOriginals, setHospitals } =
-    useContext(HospitalsContext);
-  const { filters, setFilters } = useContext(FilterContext);
+  const { originals, setHospitals } = useContext(HospitalsContext);
+  const { filters, setOriginalFilters } = useContext(FilterContext);
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleOpenFilters = () => {
@@ -50,21 +49,18 @@ export const SearchAndSort = () => {
   };
 
   const handelOrderButton = () => {
-    // setIsDescending(!isDescending);
-    setIsDescending((prev) => !prev);
+    if (filters.sortDirection === sortDirection.DESCENDING) {
+      setOriginalFilters({
+        ...filters,
+        sortDirection: sortDirection.ASCENDING,
+      });
+    } else {
+      setOriginalFilters({
+        ...filters,
+        sortDirection: sortDirection.DESCENDING,
+      });
+    }
   };
-
-  useEffect(() => {
-    console.log("isDescending?", isDescending);
-    setFilters({ ...filters, sortDirection: isDescending });
-    const sortedHospitals = hospitalService.sortingHospitals(
-      hospitals,
-      filters.sortBy,
-      isDescending
-    );
-    console.log("sortedHospital??", sortedHospitals);
-    setHospitals(sortedHospitals);
-  }, [isDescending]);
 
   return (
     <Box data-testid="search-and-sort-box">
@@ -128,7 +124,9 @@ export const SearchAndSort = () => {
         <Button
           variant="outlined"
           onClick={handelOrderButton}
-          disabled={isDisabled}
+          disabled={
+            isDisabled || filters.sortDirection === sortDirection.UNDEFINED
+          }
           sx={{
             color: "#000",
             textTransform: "capitalize",
@@ -147,7 +145,11 @@ export const SearchAndSort = () => {
             },
           }}
         >
-          {isDescending ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
+          {filters.sortDirection === sortDirection.DESCENDING ? (
+            <ArrowDownwardIcon />
+          ) : (
+            <ArrowUpwardIcon />
+          )}
         </Button>
       </Box>
       {showFilters && (

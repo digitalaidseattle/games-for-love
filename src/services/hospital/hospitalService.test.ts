@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import { airtableService } from "../../mapping/airtableService";
-import { hospitalInfoService } from "./hospitalInfoService";
-import { HospitalInfo } from "../../models/hospitalInfo";
+import { hospitalService } from "./hospitalService";
+import { Hospital } from "../../models/hospital";
 
-describe("HospitalInfoService tests", () => {
-  it("getHospitalInfo", async () => {
+describe("HospitalService tests", () => {
+  it("comnbineHospitalInfoAndRequestFunded", async () => {
     const mockRecords = [
       {
         fields: {
@@ -33,6 +33,7 @@ describe("HospitalInfoService tests", () => {
     expect(result).toEqual([
       {
         name: "May Hospital",
+        status: "active",
         type: "A Organization",
         description: "A Organization",
         year: 2024,
@@ -52,6 +53,7 @@ describe("HospitalInfoService tests", () => {
     const mockHospitalInfo: HospitalInfo = {
       id: "Hopsital_1",
       name: "May Hospital",
+      status: "active",
       type: "A Organization",
       description: "A Organization",
       year: 2024,

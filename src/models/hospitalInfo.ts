@@ -2,7 +2,6 @@ export type HospitalInfo = {
   recordId: string;
   id: string;
   name: string;
-  status: "active" | "past";
   type: string;
   description: string;
   year: number;

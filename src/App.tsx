@@ -13,24 +13,21 @@ import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
 
-import { FilterType } from "./types/fillterType";
+import { sortDirection } from "./types/fillterType";
 import { hospitalService } from "./services/hospital/hospitalService";
-import { Hospital } from "./models/hospital";
 import { HospitalsContext } from "./context/HospitalContext";
+import { FilterContext } from "./context/FilterContext";
 
-type HospitalListProps = {
-  hospitals: Hospital[] | undefined;
-};
-
-const HospitalList: React.FC<HospitalListProps> = ({ hospitals }) => {
-  // const { hospitals } = useContext(HospitalsContext);
+const HospitalList = () => {
+  const { hospitals } = useContext(HospitalsContext);
   return hospitals?.map((hospital, idx: number) => (
     <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
   ));
 };
 
 function App() {
-  const { hospitals, setOriginals } = useContext(HospitalsContext);
+  const { setHospitals, setOriginals } = useContext(HospitalsContext);
+  const { filters } = useContext(FilterContext);
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
   const getCombinedHospital = async () => {
@@ -49,7 +46,23 @@ function App() {
     }
     window.addEventListener("resize", handleResize);
   }, []);
-  console.log("app에서 HOSPITALS", hospitals);
+
+  const filterHospitals = async () => {
+    const filteredHospitals =
+      await hospitalService.combineHospitalInfoAndRequestAndFunded(filters);
+    const sortedHospitals = hospitalService.sortingHospitals(
+      filteredHospitals,
+      filters.sortBy,
+      filters.sortDirection
+    );
+    setHospitals(sortedHospitals);
+  };
+
+  useEffect(() => {
+    if (filters.sortDirection !== sortDirection.UNDEFINED) {
+      filterHospitals();
+    }
+  }, [filters.sortDirection]);
 
   return (
     <Grid container>
@@ -59,7 +72,7 @@ function App() {
             <SearchAndSort />
           </Box>
           <Box padding={1} data-testid="hospital-list">
-            <HospitalList hospitals={hospitals} />
+            <HospitalList />
           </Box>
         </Box>
       </Grid>

@@ -21,6 +21,7 @@ import { Carousel } from "react-responsive-carousel";
 import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import ActionButton from "../styles/ActionButton";
 import { Hospital } from "../models/hospital";
+import { hospitalService } from "../services/hospital/hospitalService";
 
 interface HospitalDetailsProps {
   hospital: Hospital;
@@ -34,6 +35,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
   );
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   useEffect(() => {
     if (hospital) {
@@ -51,6 +53,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
           ? "#DB5757"
           : "#92C65E"
       );
+      setIsOpen(hospitalService.isHospitalOpen(hospital));
     }
   }, [hospital, selectedHospital]);
 
@@ -181,6 +184,7 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
                   Learn more
                 </ActionButton>
                 <ActionButton
+                  disabled={!isOpen}
                   onClick={(evt: any) => {
                     evt.stopPropagation();
                     alert("donate");

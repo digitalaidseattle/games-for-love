@@ -1,22 +1,22 @@
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import {
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  Box,
   Avatar,
-  Button,
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
   Chip,
   IconButton,
+  Stack,
+  Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { PopupInfo } from "../../models/popupInfo";
 import "./HospitalCard.style.css";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
-import { styled } from "@mui/material/styles";
 
 import { OPEN_MARKER_COLOR, CLOSED_MARKER_COLOR } from "../../styles/theme";
-
+import ActionButton from "../../styles/ActionButton";
 import { hospitalService } from "../../services/hospital/hospitalService";
 
 const CustomCancelIconButton = styled(IconButton)({
@@ -51,7 +51,6 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
 }) => {
   const isOpen = hospitalService.isHospitalOpen(popupInfo?.hospital);
   const markerColor = isOpen ? OPEN_MARKER_COLOR : CLOSED_MARKER_COLOR;
-  const buttonWidth = isOpen ? "112px" : "300px";
 
   return (
     <Card
@@ -121,57 +120,35 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
             <CustomAvatar src="/path/to/profile2.jpg" />+
           </Box>
         </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            width: "100%",
-          }}
-        >
-          <Button
-            variant="contained"
-            href="#"
+        <Stack direction="row" marginTop={"8px"} gap={1}>
+          <ActionButton
             sx={{
-              backgroundColor: "black",
-              marginTop: "8px",
-              width: buttonWidth,
               height: "26px",
               borderRadius: "10px",
-              textTransform: "none",
               fontSize: "10px",
-              marginRight: "2px",
-              "&:hover": {
-                backgroundColor: "transparent",
-                color: "#000",
-              },
+            }}
+            onClick={(evt: any) => {
+              evt.stopPropagation();
+              alert("learn more");
             }}
           >
             Learn more
-          </Button>
-          {isOpen && (
-            <Button
-              variant="contained"
-              href="#"
-              sx={{
-                backgroundColor: "black",
-                marginTop: "8px",
-                width: "112px",
-                height: "26px",
-                borderRadius: "10px",
-                textTransform: "none",
-                fontSize: "10px",
-                marginLeft: "2px",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  color: "#000",
-                },
-              }}
-            >
-              Donate
-            </Button>
-          )}
-        </Box>
+          </ActionButton>
+          <ActionButton
+            disabled={!isOpen}
+            sx={{
+              height: "26px",
+              borderRadius: "10px",
+              fontSize: "10px",
+            }}
+            onClick={(evt: any) => {
+              evt.stopPropagation();
+              alert("donate");
+            }}
+          >
+            Donate
+          </ActionButton>
+        </Stack>
         <Box sx={{ marginBottom: "5px" }}>
           <Typography
             textAlign={"center"}
