@@ -8,10 +8,11 @@ import { Button } from "@mui/material"
 
 const ActionButton = (props: any) => {
     return <Button
+        disabled={props.disabled}
         variant="contained"
         href="#"
         sx={Object.assign({
-            backgroundColor: "black",
+            backgroundColor: props.disabled ? "gray" : "black",
             width: "100%",
             borderRadius: "40px",
             textTransform: "none",
