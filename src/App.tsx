@@ -12,12 +12,13 @@ import { HospitalCardDetails } from "./components/HospitalCardDetails";
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
-import { DonationOverlay } from "./components/DonationOverlay";
 import { HospitalsContext } from "./context/HospitalsContext";
 import { DonationHospitalContextProvider, LearnMoreHospitalContextProvider, SelectedHospitalsContextProvider } from "./context/SelectedHospitalContext";
 import { HospitalInfo } from "./models/hospitalInfo";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import { FilterType } from "./types/fillterType";
+import DonationDialog from "./components/DonationDialog";
+import LearnMoreOverlay from "./components/LearnMoreOverlay";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -72,7 +73,8 @@ function App() {
               </Box>
             </Grid>
           </Grid>
-          <DonationOverlay />
+          <LearnMoreOverlay />
+          <DonationDialog />
         </LearnMoreHospitalContextProvider>
       </DonationHospitalContextProvider>
     </SelectedHospitalsContextProvider>

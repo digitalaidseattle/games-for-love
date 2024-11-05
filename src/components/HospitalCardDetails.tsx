@@ -24,7 +24,10 @@ import ActionButton from "../styles/ActionButton";
 import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
 
 export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hospital }) => {
-  const { selectedHospital, setSelectedHospital } = useContext(SelectedHospitalContext);
+  const { hospital: selectedHospital, setHospital: setSelectedHospital } = useContext(SelectedHospitalContext);
+  const { setHospital: setDonationHospital } = useContext(DonationHospitalContext);
+  const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
+
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -177,7 +180,7 @@ export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hosp
                 </ActionButton>
                 <ActionButton
                   disabled={!isOpen}
-                  onClick={(evt: any) => { evt.stopPropagation(); alert('donate') }}
+                  onClick={handleDonate}
                 >
                   Donate
                 </ActionButton>
