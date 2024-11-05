@@ -45,13 +45,13 @@ describe("HospitalInfoService tests", () => {
         longitude: 1,
         latitude: 1,
         hospitalPictures: ["pic1.com"],
-        id: 1,
+        id: undefined,
       },
     ]);
   });
   it("should return true if hospital status is active", () => {
     const mockHospitalInfo: HospitalInfo = {
-      id: 1,
+      id: 'Hopsital_1',
       name: "May Hospital",
       status: "active",
       type: "A Organization",
@@ -72,7 +72,7 @@ describe("HospitalInfoService tests", () => {
 
   it("should return true if hospital status is past", () => {
     const mockHospitalInfo: HospitalInfo = {
-      id: 1,
+      id: 'Hopsital_1',
       name: "May Hospital",
       status: "past",
       type: "A Organization",

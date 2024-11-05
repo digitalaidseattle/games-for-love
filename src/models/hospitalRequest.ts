@@ -1,4 +1,5 @@
 export type HospitalRequest = {
+    id: string,
     oppReqId: string;
     name: string;
     requestNarrative: string;

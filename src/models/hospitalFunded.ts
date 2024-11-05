@@ -1,4 +1,5 @@
 export type HospitalFunded = {
+    id: string;
     hospital: string;
     orderID: string;
     equipmentShipped: boolean;

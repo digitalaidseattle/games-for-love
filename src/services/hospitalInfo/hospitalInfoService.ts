@@ -8,6 +8,8 @@ import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
 
 import { FilterType } from "../../types/fillterType";
+import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
+import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 
 const extractUrls = (attachments: any) => {
   return attachments ? attachments.map((att: any) => att.url) : [];
@@ -37,9 +39,15 @@ class HospitalInfoService {
       .getTableRecords(TABLE, MAX_RECORDS)
       .then((records) =>
         records.map((r) => {
+
+          hospitalFundedService.getHospitalFunded()
+            .then(hf => console.log('getHospitalFunded', hf))
+          hospitalRequestService.getHospitalRequest()
+            .then(hr => console.log('getHospitalRequest', hr))
           return {
+            id: r.id,
             name: `${r.fields["Hospital Name"]}`,
-            status: r.fields["Status"],
+            status: r.fields["Status"], // (Math.random() * 10.0) > 5 ? 'active' : 'past', //,
             type: r.fields["Type of Organization"],
             description: r.fields["Organization Notes / Description"],
             year: r.fields["Kids Served / Year"],
@@ -55,7 +63,6 @@ class HospitalInfoService {
               extractUrls(r.fields["Hospital Picture 2"])[0],
               extractUrls(r.fields["Hospital Picture 3"])[0]
             ].filter(u => u !== undefined),
-            id: r.fields["ID"],
           } as HospitalInfo;
         })
       );
