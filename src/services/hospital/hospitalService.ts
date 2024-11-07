@@ -11,22 +11,31 @@ import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 
 class HospitalService {
-
-  async combineHospitalInfoAndRequestAndFunded(filter?: FilterType): Promise<Hospital[]> {
+  async combineHospitalInfoAndRequestAndFunded(
+    filter?: FilterType
+  ): Promise<Hospital[] | undefined> {
     return Promise.all([
       hospitalInfoService.getHospitalInfo(),
       hospitalRequestService.getHospitalRequest(),
-      hospitalFundedService.getHospitalFunded()
+      hospitalFundedService.getHospitalFunded(),
     ]).then((resps) => {
       return resps[0]
         .map((hi) => {
           const currentDate = new Date();
-          const matchedRequest = resps[1].find((hr) => hr.name[0] === hi.recordId);
-          const matchedFund = resps[2].find((hf) => hf.hospitalRequestId === (matchedRequest ? matchedRequest.recordId : undefined));
+          const matchedRequest = resps[1].find(
+            (hr) => hr.name[0] === hi.recordId
+          );
+          const matchedFund = resps[2].find(
+            (hf) =>
+              hf.hospitalRequestId ===
+              (matchedRequest ? matchedRequest.recordId : undefined)
+          );
           return {
             id: hi.id,
             hospitalInfoRecordId: hi.recordId,
-            requestRecordId: matchedRequest ? matchedRequest.recordId : undefined,
+            requestRecordId: matchedRequest
+              ? matchedRequest.recordId
+              : undefined,
             name: hi.name,
             type: hi.type,
             description: hi.description,
@@ -39,23 +48,31 @@ class HospitalService {
             longitude: hi.longitude,
             latitude: hi.latitude,
             hospitalPictures: hi.hospitalPictures,
-            fundingDeadline: matchedRequest ? matchedRequest.fundingDeadline : "",
+            fundingDeadline: matchedRequest
+              ? matchedRequest.fundingDeadline
+              : "",
             requested: matchedRequest ? matchedRequest.requested : undefined,
-            fundingCompleted: matchedFund ? matchedFund.fundingCompleted : undefined,
-            status: currentDate > new Date(matchedRequest ? matchedRequest.fundingDeadline : "") ? "past" : "active"
+            fundingCompleted: matchedFund
+              ? matchedFund.fundingCompleted
+              : undefined,
+            status:
+              currentDate >
+              new Date(matchedRequest ? matchedRequest.fundingDeadline : "")
+                ? "past"
+                : "active",
           };
         })
         .filter((hospital) =>
-          filter ?
-            filter.location.length === 0
+          filter
+            ? filter.location.length === 0
               ? filter.status.includes(hospital.status.toLowerCase())
               : (filter.location.includes(hospital.state?.toLowerCase()) ||
-                filter.location.includes(hospital.city.toLowerCase()) ||
-                filter.location.includes(hospital.zip.toLowerCase())) &&
-              filter.status.includes(hospital.status.toLowerCase())
+                  filter.location.includes(hospital.city.toLowerCase()) ||
+                  filter.location.includes(hospital.zip.toLowerCase())) &&
+                filter.status.includes(hospital.status.toLowerCase())
             : true
         ) as Hospital[];
-    })
+    });
   }
 
   isHospitalOpen = (hospital: Hospital | undefined) => {
