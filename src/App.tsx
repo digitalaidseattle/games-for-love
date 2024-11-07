@@ -13,10 +13,12 @@ import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
 import { HospitalsContext } from "./context/HospitalsContext";
+import { DonationHospitalContextProvider, LearnMoreHospitalContextProvider, SelectedHospitalsContextProvider } from "./context/SelectedHospitalContext";
 import { HospitalInfo } from "./models/hospitalInfo";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import { FilterType } from "./types/fillterType";
-import { SelectedHospitalsContextProvider } from "./context/SelectedHospitalContext";
+import DonationDialog from "./components/DonationDialog";
+import LearnMoreOverlay from "./components/LearnMoreOverlay";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -52,23 +54,29 @@ function App() {
 
   return (
     <SelectedHospitalsContextProvider>
-      <Grid container>
-        <Grid item xs={12} lg={7}>
-          <Box sx={{ height: windowHeight, overflowY: "auto" }}>
-            <Box padding={1}>
-              <SearchAndSort />
-            </Box>
-            <Box padding={1}  data-testid="hospital-list">
-              <HospitalList />
-            </Box>
-          </Box>
-        </Grid>
-        <Grid item xs={12} lg={5}>
-          <Box height={windowHeight} data-testid="gfl-map-box">
-            <GFLMap />
-          </Box>
-        </Grid>
-      </Grid>
+      <DonationHospitalContextProvider>
+        <LearnMoreHospitalContextProvider>
+          <Grid container>
+            <Grid item xs={12} lg={7}>
+              <Box sx={{ height: windowHeight, overflowY: "auto" }}>
+                <Box padding={1}>
+                  <SearchAndSort />
+                </Box>
+                <Box padding={1} data-testid="hospital-list">
+                  <HospitalList />
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} lg={5}>
+              <Box height={windowHeight} data-testid="gfl-map-box">
+                <GFLMap />
+              </Box>
+            </Grid>
+          </Grid>
+          <LearnMoreOverlay />
+          <DonationDialog />
+        </LearnMoreHospitalContextProvider>
+      </DonationHospitalContextProvider>
     </SelectedHospitalsContextProvider>
   );
 }

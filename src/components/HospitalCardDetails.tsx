@@ -18,13 +18,16 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { Room } from "@mui/icons-material";
 import { Carousel } from "react-responsive-carousel";
-import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
+import { DonationHospitalContext, LearnMoreHospitalContext, SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import { HospitalInfo } from "../models/hospitalInfo";
 import ActionButton from "../styles/ActionButton";
 import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
 
 export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hospital }) => {
-  const { selectedHospital, setSelectedHospital } = useContext(SelectedHospitalContext);
+  const { hospital: selectedHospital, setHospital: setSelectedHospital } = useContext(SelectedHospitalContext);
+  const { setHospital: setDonationHospital } = useContext(DonationHospitalContext);
+  const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
+
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -65,6 +68,16 @@ export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hosp
     } else {
       setSelectedHospital(hospital)
     }
+  }
+
+  const handleLearnMore = (evt: any) => {
+    evt.stopPropagation();
+    setLearnMoreHospital(hospital);
+  }
+
+  const handleDonate = (evt: any) => {
+    evt.stopPropagation();
+    setDonationHospital(hospital);
   }
 
   return (
@@ -161,13 +174,13 @@ export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hosp
 
               <Stack direction={'row'} gap={1} marginTop={2}>
                 <ActionButton
-                  onClick={(evt: any) => { evt.stopPropagation(); alert('learn more') }}
+                  onClick={handleLearnMore}
                 >
                   Learn more
                 </ActionButton>
                 <ActionButton
                   disabled={!isOpen}
-                  onClick={(evt: any) => { evt.stopPropagation(); alert('donate') }}
+                  onClick={handleDonate}
                 >
                   Donate
                 </ActionButton>

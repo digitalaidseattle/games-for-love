@@ -18,6 +18,8 @@ import "./HospitalCard.style.css";
 import { hospitalInfoService } from "../../services/hospitalInfo/hospitalInfoService";
 import ActionButton from "../../styles/ActionButton";
 import { CLOSED_MARKER_COLOR, OPEN_MARKER_COLOR } from "../../styles/theme";
+import { DonationHospitalContext, LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
+import { useContext } from "react";
 
 const CustomCancelIconButton = styled(IconButton)({
   opacity: 0.9,
@@ -49,6 +51,9 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
   popupInfo,
   onClose,
 }) => {
+  const { setHospital: setDonationHospital } = useContext(DonationHospitalContext);
+  const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
+
   const isOpen = hospitalInfoService.isHospitalOpen(popupInfo?.hospitalInfo);
   const markerColor = isOpen ? OPEN_MARKER_COLOR : CLOSED_MARKER_COLOR;
 
@@ -130,8 +135,8 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
               borderRadius: "10px",
               fontSize: "10px"
             }}
-            onClick={(evt: any) => { evt.stopPropagation(); alert('learn more') }}
-          >
+            onClick={(evt: any) => { evt.stopPropagation(); setLearnMoreHospital(popupInfo?.hospitalInfo) }}
+s          >
             Learn more
           </ActionButton>
           <ActionButton
@@ -141,7 +146,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
               borderRadius: "10px",
               fontSize: "10px"
             }}
-            onClick={(evt: any) => { evt.stopPropagation(); alert('donate') }}
+            onClick={(evt: any) => { evt.stopPropagation(); setDonationHospital(popupInfo?.hospitalInfo) }}
           >
             Donate
           </ActionButton>
