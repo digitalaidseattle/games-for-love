@@ -5,7 +5,6 @@ import {
   CardContent,
   Typography,
   Box,
-  Avatar,
   Button,
   Chip,
   IconButton,
@@ -33,14 +32,14 @@ const CustomCancelIconButton = styled(IconButton)({
   },
 });
 
-const CustomAvatar = styled(Avatar)({
-  width: 13,
-  height: 13,
-  marginLeft: 1,
-  marginRight: 1,
-  fontSize: 12,
-  textTransform: "none",
-});
+// const CustomAvatar = styled(Avatar)({
+//   width: 13,
+//   height: 13,
+//   marginLeft: 1,
+//   marginRight: 1,
+//   fontSize: 12,
+//   textTransform: "none",
+// });
 
 interface HospitalCardProps {
   popupInfo: PopupInfo | null;
