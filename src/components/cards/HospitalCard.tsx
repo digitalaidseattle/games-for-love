@@ -5,7 +5,7 @@ import {
   CardContent,
   Typography,
   Box,
-  Avatar,
+  // Avatar,
   Button,
   Chip,
   IconButton,
@@ -82,8 +82,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
     fetchGeneralInfo();
   }, []);
 
-  const partnerName = generalInfo?.corpPartner1Name || "Unknown Partner";
-  console.log("partnerName: ", partnerName); //GeneralDatabase is empty
+  const partnerName = generalInfo?.corpPartner1Name || "Unknown Partner"; //GeneralDatabase is empty
 
   return (
     <>
