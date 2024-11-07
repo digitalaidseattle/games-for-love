@@ -1,9 +1,16 @@
+/**
+ *  App.test.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
+
 import "@testing-library/jest-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
-import { HospitalsContextProvider } from "./context/HospitalInfoContext";
+import Providers from "./providers/Providers";
 
 vi.mock("./services/hospitalInfo/hospitalInfoService");
 
@@ -26,9 +33,9 @@ describe("App component", () => {
     ]);
 
     render(
-      <HospitalsContextProvider>
+      <Providers>
         <App />
-      </HospitalsContextProvider>
+      </Providers>
     );
 
     const searchAndSortElement = screen.getByTestId("search-and-sort-box");
@@ -78,9 +85,9 @@ describe("App component", () => {
       },
     ]);
     render(
-      <HospitalsContextProvider>
+      <Providers>
         <App />
-      </HospitalsContextProvider>
+      </Providers>
     );
     await waitFor(() => {
       const hospitalDetailCards = screen.getAllByTestId("hospital-detail-card");

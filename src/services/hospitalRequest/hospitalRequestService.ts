@@ -18,13 +18,14 @@ class HospitalRequestService {
       .then((records) =>
         records.map((r) => {
           return {
+            id: r.id,
             recordId: r.id,
             oppReqId: `${r.fields["Hospital Request ID"]}`,
             name: r.fields["Hospital Name (LInked)"],
             requestNarrative: r.fields["Request Narrative"],
             equipReq:
               r.fields[
-                "# Equipment Requested (TBD if we show single brands + extras)"
+              "# Equipment Requested (TBD if we show single brands + extras)"
               ],
             requested: r.fields["$ Requested"],
             fundingDeadline: r.fields["Funding Deadline"],

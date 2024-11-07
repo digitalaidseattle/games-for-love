@@ -22,6 +22,7 @@ class HospitalInfoService {
       .then((records) =>
         records.map((r) => {
           const hospitalData = {
+            id: r.id,
             recordId: r.id,
             name: `${r.fields["Hospital Name"]}`,
             type: r.fields["Type of Organization"],
@@ -39,7 +40,6 @@ class HospitalInfoService {
               extractUrls(r.fields["Hospital Picture 2"])[0],
               extractUrls(r.fields["Hospital Picture 3"])[0],
             ].filter((u) => u !== undefined),
-            id: r.fields["ID"],
           } as HospitalInfo;
           return hospitalData;
         })

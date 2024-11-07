@@ -1,12 +1,19 @@
+/**
+ *  HospitalInfoService.test.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
+
 import { describe, expect, it, vi } from "vitest";
 import { airtableService } from "../../mapping/airtableService";
 import { hospitalInfoService } from "./hospitalInfoService";
-import { HospitalInfo } from "../../models/hospitalInfo";
 
 describe("HospitalInfoService tests", () => {
   it("getHospitalInfo", async () => {
     const mockRecords = [
       {
+        id: "23456",
         fields: {
           "Hospital Name": "May Hospital",
           Status: "active",
@@ -32,6 +39,8 @@ describe("HospitalInfoService tests", () => {
     expect(getTableRecordsSpy).toHaveBeenCalled();
     expect(result).toEqual([
       {
+        id: "23456",
+        recordId: "23456",
         name: "May Hospital",
         type: "A Organization",
         description: "A Organization",
@@ -44,55 +53,8 @@ describe("HospitalInfoService tests", () => {
         longitude: 1,
         latitude: 1,
         hospitalPictures: ["pic1.com"],
-        id: undefined,
       },
     ]);
   });
-  it("should return true if hospital status is active", () => {
-    const mockHospitalInfo: HospitalInfo = {
-      id: "Hopsital_1",
-      name: "May Hospital",
-      type: "A Organization",
-      description: "A Organization",
-      year: 2024,
-      country: "US",
-      state: "WA",
-      zip: "ZIP12345",
-      city: "Seattle",
-      address: "Type 2",
-      longitude: 1,
-      latitude: 1,
-      hospitalPictures: ["pic1.com"],
-    };
-    const result = hospitalInfoService.isHospitalOpen(mockHospitalInfo);
-    expect(result).toBeTruthy();
-  });
 
-  it("should return true if hospital status is past", () => {
-    const mockHospitalInfo: HospitalInfo = {
-      id: "Hopsital_1",
-      name: "May Hospital",
-      status: "past",
-      type: "A Organization",
-      description: "A Organization",
-      year: 2024,
-      country: "US",
-      state: "WA",
-      zip: "ZIP12345",
-      city: "Seattle",
-      address: "Type 2",
-      longitude: 1,
-      latitude: 1,
-      hospitalPictures: ["pic1.com"],
-    };
-    const result = hospitalInfoService.isHospitalOpen(mockHospitalInfo);
-    expect(result).toBeFalsy();
-  });
-
-  it("should throw error if hospital status is undefined", () => {
-    const mockHospitalInfo = undefined;
-    expect(() => {
-      hospitalInfoService.isHospitalOpen(mockHospitalInfo);
-    }).toThrow("hospitalInfo is undefined");
-  });
 });

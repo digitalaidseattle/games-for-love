@@ -17,6 +17,7 @@ class HospitalFundedService {
       .then((records) =>
         records.map((r) => {
           return {
+            id: r.id,
             hospitalRequestId: `${r.fields["Hospital Request ID (Linked)"]}`,
             hospital: `${r.fields["Hospital Fundraising ID"]}`,
             orderID: `${r.fields["Order ID"]}`,

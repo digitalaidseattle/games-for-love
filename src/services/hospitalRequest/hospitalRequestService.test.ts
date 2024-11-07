@@ -1,3 +1,9 @@
+/**
+ *  HospitalRequestService.test.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { describe, expect, it, vi } from "vitest";
 import { airtableService } from "../../mapping/airtableService";
 import { hospitalRequestService } from "./hospitalRequestService";
@@ -6,7 +12,9 @@ describe("HospitalRequestService tests", () => {
   it("getHospitalRequest", async () => {
     const mockRecords = [
       {
+        id: "12345",
         fields: {
+          "Hospital Request ID": "REQ12345",
           "Opportunities/Requests ID": "REQ12345",
           "Hospital Name (LInked)": "May's Hospital",
           "Request Narrative": "Request for new equipment",
@@ -27,6 +35,7 @@ describe("HospitalRequestService tests", () => {
           "Corp Partner 2 Name": "Partner 2",
           "Corp Partner 2 Logo": "logo2.png",
           "Corp Partner 2 Type": "Type 2",
+          "Funding Deadline": "2024/12/31"
         },
       },
     ];
@@ -40,6 +49,8 @@ describe("HospitalRequestService tests", () => {
 
     expect(result).toEqual([
       {
+        id: "12345",
+        recordId: "12345",
         oppReqId: "REQ12345",
         name: "May's Hospital",
         requestNarrative: "Request for new equipment",
@@ -60,6 +71,7 @@ describe("HospitalRequestService tests", () => {
         corpPartner2Name: "Partner 2",
         corpPartner2Logo: "logo2.png",
         corpPartner2Type: "Type 2",
+        fundingDeadline: "2024/12/31",
       },
     ]);
   });

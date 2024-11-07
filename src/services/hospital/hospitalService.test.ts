@@ -1,35 +1,52 @@
+/**
+ *  HospitalService.test.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
+
 import { describe, expect, it, vi } from "vitest";
-import { airtableService } from "../../mapping/airtableService";
-import { hospitalService } from "./hospitalService";
 import { Hospital } from "../../models/hospital";
+import { HospitalInfo } from "../../models/hospitalInfo";
+import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
+import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
+import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
+import { hospitalService } from "./hospitalService";
 
 describe("HospitalService tests", () => {
   it("comnbineHospitalInfoAndRequestFunded", async () => {
-    const mockRecords = [
+    const hospitalInfos = [
       {
-        fields: {
-          "Hospital Name": "May Hospital",
-          Status: "active",
-          "Type of Organization": "A Organization",
-          "Organization Notes / Description": "A Organization",
-          "Kids Served / Year": 2024,
-          Country: "US",
-          State: "WA",
-          ZIP: "ZIP12345",
-          City: "Seattle",
-          Address: "Type 2",
-          Long: 1,
-          Lat: 1,
-          "Hospital Picture 1": [{ url: "pic1.com" }],
-          ID: 1,
-        },
-      },
+        name: "May Hospital",
+        type: "A Organization",
+        description: "A Organization",
+        year: 2024,
+        country: "US",
+        state: "WA",
+        zip: "ZIP12345",
+        city: "Seattle",
+        address: "Type 2",
+        longitude: 1,
+        latitude: 1,
+        hospitalPictures: ["pic1.com"],
+      } as HospitalInfo,
     ];
-    const getTableRecordsSpy = vi
-      .spyOn(airtableService, "getTableRecords")
-      .mockResolvedValue(mockRecords as any);
-    const result = await hospitalInfoService.getHospitalInfo();
-    expect(getTableRecordsSpy).toHaveBeenCalled();
+    const getHospitalInfoSpy = vi
+      .spyOn(hospitalInfoService, "getHospitalInfo")
+      .mockResolvedValue(hospitalInfos);
+    const getHospitalRequestSpy = vi
+      .spyOn(hospitalRequestService, "getHospitalRequest")
+      .mockResolvedValue([]);
+    const getHospitalFundedSpy = vi
+      .spyOn(hospitalFundedService, "getHospitalFunded")
+      .mockResolvedValue([]);
+
+    const result = await hospitalService.combineHospitalInfoAndRequestAndFunded();
+
+    expect(getHospitalInfoSpy).toHaveBeenCalled();
+    expect(getHospitalRequestSpy).toHaveBeenCalled();
+    expect(getHospitalFundedSpy).toHaveBeenCalled();
+
     expect(result).toEqual([
       {
         name: "May Hospital",
@@ -46,11 +63,17 @@ describe("HospitalService tests", () => {
         latitude: 1,
         hospitalPictures: ["pic1.com"],
         id: undefined,
+        fundingCompleted: undefined,
+        fundingDeadline: "",
+        hospitalInfoRecordId: undefined,
+        requestRecordId: undefined,
+        requested: undefined,
       },
     ]);
   });
+
   it("should return true if hospital status is active", () => {
-    const mockHospitalInfo: HospitalInfo = {
+    const mockHospitalInfo: Hospital = {
       id: "Hopsital_1",
       name: "May Hospital",
       status: "active",
@@ -65,13 +88,19 @@ describe("HospitalService tests", () => {
       longitude: 1,
       latitude: 1,
       hospitalPictures: ["pic1.com"],
+      hospitalInfoRecordId: "",
+      requestRecordId: undefined,
+      fundingDeadline: "",
+      requested: undefined,
+      fundingCompleted: undefined
     };
-    const result = hospitalInfoService.isHospitalOpen(mockHospitalInfo);
+
+    const result = hospitalService.isHospitalOpen(mockHospitalInfo);
     expect(result).toBeTruthy();
   });
 
   it("should return true if hospital status is past", () => {
-    const mockHospitalInfo: HospitalInfo = {
+    const hospital: Hospital = {
       id: "Hopsital_1",
       name: "May Hospital",
       status: "past",
@@ -86,15 +115,22 @@ describe("HospitalService tests", () => {
       longitude: 1,
       latitude: 1,
       hospitalPictures: ["pic1.com"],
+      hospitalInfoRecordId: "",
+      requestRecordId: undefined,
+      fundingDeadline: "",
+      requested: undefined,
+      fundingCompleted: undefined
     };
-    const result = hospitalInfoService.isHospitalOpen(mockHospitalInfo);
+    const result = hospitalService.isHospitalOpen(hospital);
     expect(result).toBeFalsy();
   });
 
   it("should throw error if hospital status is undefined", () => {
     const mockHospitalInfo = undefined;
     expect(() => {
-      hospitalInfoService.isHospitalOpen(mockHospitalInfo);
+      hospitalService.isHospitalOpen(mockHospitalInfo);
     }).toThrow("hospitalInfo is undefined");
   });
+
+
 });
