@@ -6,7 +6,6 @@ import {
   Typography,
   Box,
   // Avatar,
-  Button,
   Chip,
   IconButton,
   Stack,
@@ -14,7 +13,6 @@ import {
 import { PopupInfo } from "../../models/popupInfo";
 import "./HospitalCard.style.css";
 
-import { hospitalInfoService } from "../../services/hospitalInfo/hospitalInfoService";
 import ActionButton from "../../styles/ActionButton";
 import { CLOSED_MARKER_COLOR, OPEN_MARKER_COLOR } from "../../styles/theme";
 import {
