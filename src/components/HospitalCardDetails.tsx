@@ -18,21 +18,27 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { Room } from "@mui/icons-material";
 import { Carousel } from "react-responsive-carousel";
-import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
-import ActionButton from "../styles/ActionButton";
+import {
+  DonationHospitalContext,
+  LearnMoreHospitalContext,
+  SelectedHospitalContext,
+} from "../context/SelectedHospitalContext";
 import { Hospital } from "../models/hospital";
+import ActionButton from "../styles/ActionButton";
 import { hospitalService } from "../services/hospital/hospitalService";
 
-interface HospitalDetailsProps {
-  hospital: Hospital;
-}
-
-export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
+export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   hospital,
 }) => {
-  const { selectedHospital, setSelectedHospital } = useContext(
-    SelectedHospitalContext
+  const { hospital: selectedHospital, setHospital: setSelectedHospital } =
+    useContext(SelectedHospitalContext);
+  const { setHospital: setDonationHospital } = useContext(
+    DonationHospitalContext
   );
+  const { setHospital: setLearnMoreHospital } = useContext(
+    LearnMoreHospitalContext
+  );
+
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -79,6 +85,16 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
     } else {
       setSelectedHospital(hospital);
     }
+  };
+
+  const handleLearnMore = (evt: any) => {
+    evt.stopPropagation();
+    setLearnMoreHospital(hospital);
+  };
+
+  const handleDonate = (evt: any) => {
+    evt.stopPropagation();
+    setDonationHospital(hospital);
   };
 
   return (
@@ -175,21 +191,10 @@ export const HospitalCardDetails: React.FC<HospitalDetailsProps> = ({
               </Typography>
 
               <Stack direction={"row"} gap={1} marginTop={2}>
-                <ActionButton
-                  onClick={(evt: any) => {
-                    evt.stopPropagation();
-                    alert("learn more");
-                  }}
-                >
+                <ActionButton onClick={handleLearnMore}>
                   Learn more
                 </ActionButton>
-                <ActionButton
-                  disabled={!isOpen}
-                  onClick={(evt: any) => {
-                    evt.stopPropagation();
-                    alert("donate");
-                  }}
-                >
+                <ActionButton disabled={!isOpen} onClick={handleDonate}>
                   Donate
                 </ActionButton>
               </Stack>

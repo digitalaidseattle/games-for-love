@@ -9,14 +9,23 @@ import {
   Button,
   Chip,
   IconButton,
+  Stack,
 } from "@mui/material";
 import { PopupInfo } from "../../models/popupInfo";
 import "./HospitalCard.style.css";
+
+import { hospitalInfoService } from "../../services/hospitalInfo/hospitalInfoService";
+import ActionButton from "../../styles/ActionButton";
+import { CLOSED_MARKER_COLOR, OPEN_MARKER_COLOR } from "../../styles/theme";
+import {
+  DonationHospitalContext,
+  LearnMoreHospitalContext,
+} from "../../context/SelectedHospitalContext";
+import { useContext } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { styled } from "@mui/material/styles";
 import { GeneralInfo } from "../../models/generalInfo";
-import { OPEN_MARKER_COLOR, CLOSED_MARKER_COLOR } from "../../styles/theme";
 
 import { hospitalService } from "../../services/hospital/hospitalService";
 import { differenceInDays } from "date-fns";
@@ -54,6 +63,13 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
   popupInfo,
   onClose,
 }) => {
+  const { setHospital: setDonationHospital } = useContext(
+    DonationHospitalContext
+  );
+  const { setHospital: setLearnMoreHospital } = useContext(
+    LearnMoreHospitalContext
+  );
+
   const [generalInfo, setGeneralInfo] = useState<GeneralInfo | null>(null);
 
   const isOpen = hospitalService.isHospitalOpen(popupInfo?.hospital);
@@ -196,7 +212,45 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
             {popupInfo?.hospital.year}+ kids impacted
           </Typography>
 
-          <Box
+          <Stack
+            direction="row"
+            marginTop={"8px"}
+            gap={1}
+            paddingTop={
+              popupInfo?.hospital.status === "active" ? "0px" : "19px"
+            }
+          >
+            <ActionButton
+              sx={{
+                height: "26px",
+                borderRadius: "10px",
+                fontSize: "10px",
+              }}
+              onClick={(evt: any) => {
+                evt.stopPropagation();
+                setLearnMoreHospital(popupInfo?.hospital);
+              }}
+              s
+            >
+              Learn more
+            </ActionButton>
+            <ActionButton
+              disabled={!isOpen}
+              sx={{
+                height: "26px",
+                borderRadius: "10px",
+                fontSize: "10px",
+              }}
+              onClick={(evt: any) => {
+                evt.stopPropagation();
+                setDonationHospital(popupInfo?.hospital);
+              }}
+            >
+              Donate
+            </ActionButton>
+          </Stack>
+
+          {/* <Box
             sx={{
               display: "flex",
               flexDirection: "row",
@@ -258,7 +312,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
             >
               Donate
             </Button>
-          </Box>
+          </Box> */}
 
           <Box sx={{ marginBottom: "5px" }}>
             <Typography
