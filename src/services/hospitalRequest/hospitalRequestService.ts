@@ -18,6 +18,7 @@ class HospitalRequestService {
       .then((records) =>
         records.map((r) => {
           return {
+            id: r.id,
             recordId: r.id,
             oppReqId: `${r.fields["Hospital Request ID"]}`,
             name: r.fields["Hospital Name (LInked)"],
