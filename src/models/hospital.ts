@@ -1,9 +1,10 @@
+import { HospitalFunded } from "./hospitalFunded";
+import { HospitalRequest } from "./hospitalRequest";
+
 export type Hospital = {
   id: string;
   hospitalInfoRecordId: string;
-  requestRecordId: string | undefined;
   name: string;
-  status: "active" | "past";
   type: string;
   description: string;
   year: number;
@@ -15,7 +16,8 @@ export type Hospital = {
   longitude: number;
   latitude: number;
   hospitalPictures: string[];
-  fundingDeadline: string;
-  requested: number | undefined;
-  fundingCompleted: number | undefined;
+  matchedRequest: HospitalRequest | undefined;
+  matchedFunded: HospitalFunded | undefined;
+  status: string;
+  fundingLevel: number;
 };

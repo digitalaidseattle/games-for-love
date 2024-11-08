@@ -39,7 +39,7 @@ function App() {
 
   const getCombinedHospital = async () => {
     hospitalService
-      .combineHospitalInfoAndRequestAndFunded()
+      .findAll()
       .then((res) => setOriginals(res));
   };
 
@@ -56,7 +56,7 @@ function App() {
 
   const filterHospitals = async () => {
     const filteredHospitals =
-      await hospitalService.combineHospitalInfoAndRequestAndFunded(filters);
+      await hospitalService.findAll(filters);
     const sortedHospitals = hospitalService.sortingHospitals(
       filteredHospitals,
       filters.sortBy,

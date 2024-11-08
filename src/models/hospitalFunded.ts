@@ -1,4 +1,5 @@
 export type HospitalFunded = {
+  id: string;
   hospitalRequestId: string;
   hospital: string;
   orderID: string;

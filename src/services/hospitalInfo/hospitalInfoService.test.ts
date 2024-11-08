@@ -10,7 +10,7 @@ import { airtableService } from "../../mapping/airtableService";
 import { hospitalInfoService } from "./hospitalInfoService";
 
 describe("HospitalInfoService tests", () => {
-  it("getHospitalInfo", async () => {
+  it("findAll", async () => {
     const mockRecords = [
       {
         id: "23456",
@@ -35,7 +35,7 @@ describe("HospitalInfoService tests", () => {
     const getTableRecordsSpy = vi
       .spyOn(airtableService, "getTableRecords")
       .mockResolvedValue(mockRecords as any);
-    const result = await hospitalInfoService.getHospitalInfo();
+    const result = await hospitalInfoService.findAll();
     expect(getTableRecordsSpy).toHaveBeenCalled();
     expect(result).toEqual([
       {

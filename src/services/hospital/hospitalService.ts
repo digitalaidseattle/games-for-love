@@ -12,21 +12,19 @@ import { hospitalRequestService } from "../hospitalRequest/hospitalRequestServic
 
 class HospitalService {
 
-  async combineHospitalInfoAndRequestAndFunded(filter?: FilterType): Promise<Hospital[]> {
+  async findAll(filter?: FilterType): Promise<Hospital[]> {
     return Promise.all([
-      hospitalInfoService.getHospitalInfo(),
-      hospitalRequestService.getHospitalRequest(),
-      hospitalFundedService.getHospitalFunded()
+      hospitalInfoService.findAll(),
+      hospitalRequestService.findAll(),
+      hospitalFundedService.findAll()
     ]).then((resps) => {
       return resps[0]
         .map((hi) => {
-          const currentDate = new Date();
           const matchedRequest = resps[1].find((hr) => hr.name[0] === hi.recordId);
           const matchedFund = resps[2].find((hf) => hf.hospitalRequestId === (matchedRequest ? matchedRequest.recordId : undefined));
           return {
             id: hi.id,
             hospitalInfoRecordId: hi.recordId,
-            requestRecordId: matchedRequest ? matchedRequest.recordId : undefined,
             name: hi.name,
             type: hi.type,
             description: hi.description,
@@ -39,11 +37,15 @@ class HospitalService {
             longitude: hi.longitude,
             latitude: hi.latitude,
             hospitalPictures: hi.hospitalPictures,
-            fundingDeadline: matchedRequest ? matchedRequest.fundingDeadline : "",
-            requested: matchedRequest ? matchedRequest.requested : undefined,
-            fundingCompleted: matchedFund ? matchedFund.fundingCompleted : undefined,
-            status: currentDate > new Date(matchedRequest ? matchedRequest.fundingDeadline : "") ? "past" : "active"
-          };
+            matchedRequest: matchedRequest,
+            matchedFunded: matchedFund,
+          } as Hospital;
+        })
+        .map(hospital => {
+          const currentDate = new Date();
+          hospital.status = this.calcStatus(hospital, currentDate);
+          hospital.fundingLevel = this.calcFundingLevel(hospital);
+          return hospital;
         })
         .filter((hospital) =>
           filter ?
@@ -57,6 +59,23 @@ class HospitalService {
         ) as Hospital[];
     })
   }
+
+  calcStatus(hospital: Hospital, currentDate: Date): string {
+    if (hospital.matchedRequest && hospital.matchedRequest.fundingDeadline) {
+      return currentDate > hospital.matchedRequest.fundingDeadline ? "past" : "active"
+    }
+    return "active";
+  }
+
+  calcFundingLevel(hospital: Hospital): number {
+    if (hospital.matchedRequest && hospital.matchedFunded) {
+      hospital.matchedRequest.requested
+        ? (hospital.matchedFunded.fundingCompleted || 0) / hospital.matchedRequest.requested
+        : 0;
+    }
+    return 0;
+  }
+
 
   isHospitalOpen = (hospital: Hospital | undefined) => {
     if (!hospital) {
@@ -73,50 +92,45 @@ class HospitalService {
     );
   };
 
+  fundingDeadlineComparator = (a: Hospital, b: Hospital): number => {
+    const dateA = a.matchedRequest ? a.matchedRequest.fundingDeadline : undefined;
+    const dateB = b.matchedRequest ? b.matchedRequest.fundingDeadline : undefined;
+    if (!dateA) {
+      return -1;
+    }
+    if (!dateB) {
+      return 1;
+    }
+    return dateA.getTime() - dateB.getTime();
+  };
+
+  hospitalNameComparator = (a: Hospital, b: Hospital): number => {
+    return a.name.localeCompare(b.name);
+  }
+
+  fundingLevelComparator = (a: Hospital, b: Hospital): number => {
+    return a.fundingLevel - b.fundingLevel;
+  }
+
+  getSortComparator = (sortBy: string) => {
+    switch (sortBy) {
+      case "fundingDeadline":
+        return this.fundingDeadlineComparator;
+      case "fundingLevel":
+        return this.fundingLevelComparator;
+      case "hospitalName":
+      default:
+        return this.hospitalNameComparator;
+    }
+  }
+
   sortingHospitals = (
-    hospitals: Hospital[] | undefined,
+    hospitals: Hospital[],
     sortBy: string,
-    sortDir: string
-  ) => {
-    let sortedHospitals;
-    if (sortBy === "fundingDeadline") {
-      sortedHospitals = hospitals?.sort((a, b) => {
-        const dateA = new Date(a.fundingDeadline);
-        const dateB = new Date(b.fundingDeadline);
-
-        if (sortDir === sortDirection.DESCENDING) {
-          return dateB.getTime() - dateA.getTime();
-        } else {
-          return dateA.getTime() - dateB.getTime();
-        }
-      });
-    }
-    if (sortBy === "hospitalName") {
-      sortedHospitals = hospitals?.sort((a, b) => {
-        if (sortDir === sortDirection.DESCENDING) {
-          return b.name.localeCompare(a.name);
-        } else {
-          return a.name.localeCompare(b.name);
-        }
-      });
-    }
-    if (sortBy === "fundingLevel") {
-      sortedHospitals = hospitals?.sort((a, b) => {
-        const a_fundingLevel = a.requested
-          ? (a.fundingCompleted || 0) / a.requested
-          : 0;
-        const b_fundingLevel = b.requested
-          ? (b.fundingCompleted || 0) / b.requested
-          : 0;
-
-        if (sortDir === sortDirection.DESCENDING) {
-          return b_fundingLevel - a_fundingLevel;
-        } else {
-          return a_fundingLevel - b_fundingLevel;
-        }
-      });
-    }
-    return sortedHospitals;
+    sortDir: "asc" | "desc" | ""
+  ): Hospital[] => {
+    const comparator = this.getSortComparator(sortBy);
+    return hospitals.sort((a, b) => (sortDir === sortDirection.DESCENDING ? -1 : 1) * comparator(a, b));
   };
 }
 

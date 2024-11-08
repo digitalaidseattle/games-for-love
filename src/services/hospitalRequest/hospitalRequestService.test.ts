@@ -9,7 +9,7 @@ import { airtableService } from "../../mapping/airtableService";
 import { hospitalRequestService } from "./hospitalRequestService";
 
 describe("HospitalRequestService tests", () => {
-  it("getHospitalRequest", async () => {
+  it("findAll", async () => {
     const mockRecords = [
       {
         id: "12345",
@@ -43,7 +43,7 @@ describe("HospitalRequestService tests", () => {
       .spyOn(airtableService, "getTableRecords")
       .mockResolvedValue(mockRecords as any);
 
-    const result = await hospitalRequestService.getHospitalRequest();
+    const result = await hospitalRequestService.findAll();
 
     expect(getTableRecordsSpy).toHaveBeenCalled();
 
@@ -71,7 +71,7 @@ describe("HospitalRequestService tests", () => {
         corpPartner2Name: "Partner 2",
         corpPartner2Logo: "logo2.png",
         corpPartner2Type: "Type 2",
-        fundingDeadline: "2024/12/31",
+        fundingDeadline: new Date("2024/12/31"),
       },
     ]);
   });

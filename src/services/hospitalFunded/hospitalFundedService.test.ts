@@ -9,7 +9,7 @@ import { airtableService } from '../../mapping/airtableService'
 import { hospitalFundedService } from "./hospitalFundedService";
 
 describe("HospitalFundedService tests", () => {
-    it("getHospitalFunded", async () => {
+    it("findAll", async () => {
         const mockRecords = [
             {
                 fields: {
@@ -32,7 +32,7 @@ describe("HospitalFundedService tests", () => {
             }
         ];
         const getTableRecordsSpy = vi.spyOn(airtableService, "getTableRecords").mockResolvedValue(mockRecords as any);
-        const result = await hospitalFundedService.getHospitalFunded();
+        const result = await hospitalFundedService.findAll();
         expect(getTableRecordsSpy).toHaveBeenCalledWith(import.meta.env.VITE_AIRTABLE_TABLE_HOSPITAL_FUNDED_REFERENCE, 100);
         expect(result).toEqual([
             {

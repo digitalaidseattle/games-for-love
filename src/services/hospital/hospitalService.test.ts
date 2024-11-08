@@ -14,123 +14,182 @@ import { hospitalRequestService } from "../hospitalRequest/hospitalRequestServic
 import { hospitalService } from "./hospitalService";
 
 describe("HospitalService tests", () => {
-  it("comnbineHospitalInfoAndRequestFunded", async () => {
-    const hospitalInfos = [
-      {
-        name: "May Hospital",
-        type: "A Organization",
-        description: "A Organization",
-        year: 2024,
-        country: "US",
-        state: "WA",
-        zip: "ZIP12345",
-        city: "Seattle",
-        address: "Type 2",
-        longitude: 1,
-        latitude: 1,
-        hospitalPictures: ["pic1.com"],
-      } as HospitalInfo,
-    ];
-    const getHospitalInfoSpy = vi
-      .spyOn(hospitalInfoService, "getHospitalInfo")
-      .mockResolvedValue(hospitalInfos);
-    const getHospitalRequestSpy = vi
-      .spyOn(hospitalRequestService, "getHospitalRequest")
-      .mockResolvedValue([]);
-    const getHospitalFundedSpy = vi
-      .spyOn(hospitalFundedService, "getHospitalFunded")
-      .mockResolvedValue([]);
+    it("findAll", async () => {
+        const hospitalInfos = [
+            {
+                name: "May Hospital",
+                type: "A Organization",
+                description: "A Organization",
+                year: 2024,
+                country: "US",
+                state: "WA",
+                zip: "ZIP12345",
+                city: "Seattle",
+                address: "Type 2",
+                longitude: 1,
+                latitude: 1,
+                hospitalPictures: ["pic1.com"],
+            } as HospitalInfo,
+        ];
+        const getHospitalInfoSpy = vi
+            .spyOn(hospitalInfoService, "findAll")
+            .mockResolvedValue(hospitalInfos);
+        const getHospitalRequestSpy = vi
+            .spyOn(hospitalRequestService, "findAll")
+            .mockResolvedValue([]);
+        const getHospitalFundedSpy = vi
+            .spyOn(hospitalFundedService, "findAll")
+            .mockResolvedValue([]);
 
-    const result = await hospitalService.combineHospitalInfoAndRequestAndFunded();
+        const result = await hospitalService.findAll();
 
-    expect(getHospitalInfoSpy).toHaveBeenCalled();
-    expect(getHospitalRequestSpy).toHaveBeenCalled();
-    expect(getHospitalFundedSpy).toHaveBeenCalled();
+        expect(getHospitalInfoSpy).toHaveBeenCalled();
+        expect(getHospitalRequestSpy).toHaveBeenCalled();
+        expect(getHospitalFundedSpy).toHaveBeenCalled();
 
-    expect(result).toEqual([
-      {
-        name: "May Hospital",
-        status: "active",
-        type: "A Organization",
-        description: "A Organization",
-        year: 2024,
-        country: "US",
-        state: "WA",
-        zip: "ZIP12345",
-        city: "Seattle",
-        address: "Type 2",
-        longitude: 1,
-        latitude: 1,
-        hospitalPictures: ["pic1.com"],
-        id: undefined,
-        fundingCompleted: undefined,
-        fundingDeadline: "",
-        hospitalInfoRecordId: undefined,
-        requestRecordId: undefined,
-        requested: undefined,
-      },
-    ]);
-  });
+        expect(result).toEqual([
+            {
+                id: undefined,
+                name: "May Hospital",
+                status: "active",
+                type: "A Organization",
+                description: "A Organization",
+                year: 2024,
+                country: "US",
+                state: "WA",
+                zip: "ZIP12345",
+                city: "Seattle",
+                address: "Type 2",
+                longitude: 1,
+                latitude: 1,
+                hospitalPictures: ["pic1.com"],
+                matchedRequest: undefined,
+                matchedFunded: undefined,
+                fundingLevel: 0,
+            },
+        ]);
+    });
 
-  it("should return true if hospital status is active", () => {
-    const mockHospitalInfo: Hospital = {
-      id: "Hopsital_1",
-      name: "May Hospital",
-      status: "active",
-      type: "A Organization",
-      description: "A Organization",
-      year: 2024,
-      country: "US",
-      state: "WA",
-      zip: "ZIP12345",
-      city: "Seattle",
-      address: "Type 2",
-      longitude: 1,
-      latitude: 1,
-      hospitalPictures: ["pic1.com"],
-      hospitalInfoRecordId: "",
-      requestRecordId: undefined,
-      fundingDeadline: "",
-      requested: undefined,
-      fundingCompleted: undefined
-    };
+    it("should return true if hospital status is active", () => {
+        const mockHospitalInfo: Hospital = {
+            id: "Hopsital_1",
+            name: "May Hospital",
+            status: "active",
+            type: "A Organization",
+            description: "A Organization",
+            year: 2024,
+            country: "US",
+            state: "WA",
+            zip: "ZIP12345",
+            city: "Seattle",
+            address: "Type 2",
+            longitude: 1,
+            latitude: 1,
+            hospitalPictures: ["pic1.com"],
+            hospitalInfoRecordId: "",
+            matchedFunded: undefined,
+            matchedRequest: undefined,
+            fundingLevel: 0,
+        };
 
-    const result = hospitalService.isHospitalOpen(mockHospitalInfo);
-    expect(result).toBeTruthy();
-  });
+        const result = hospitalService.isHospitalOpen(mockHospitalInfo);
+        expect(result).toBeTruthy();
+    });
 
-  it("should return true if hospital status is past", () => {
-    const hospital: Hospital = {
-      id: "Hopsital_1",
-      name: "May Hospital",
-      status: "past",
-      type: "A Organization",
-      description: "A Organization",
-      year: 2024,
-      country: "US",
-      state: "WA",
-      zip: "ZIP12345",
-      city: "Seattle",
-      address: "Type 2",
-      longitude: 1,
-      latitude: 1,
-      hospitalPictures: ["pic1.com"],
-      hospitalInfoRecordId: "",
-      requestRecordId: undefined,
-      fundingDeadline: "",
-      requested: undefined,
-      fundingCompleted: undefined
-    };
-    const result = hospitalService.isHospitalOpen(hospital);
-    expect(result).toBeFalsy();
-  });
+    it("should return true if hospital status is past", () => {
+        const hospital: Hospital = {
+            id: "Hopsital_1",
+            name: "May Hospital",
+            status: "past",
+            type: "A Organization",
+            description: "A Organization",
+            year: 2024,
+            country: "US",
+            state: "WA",
+            zip: "ZIP12345",
+            city: "Seattle",
+            address: "Type 2",
+            longitude: 1,
+            latitude: 1,
+            hospitalPictures: ["pic1.com"],
+            hospitalInfoRecordId: "",
+            matchedRequest: undefined,
+            matchedFunded: undefined,
+            fundingLevel: 0,
+        };
+        const result = hospitalService.isHospitalOpen(hospital);
+        expect(result).toBeFalsy();
+    });
 
-  it("should throw error if hospital status is undefined", () => {
-    const mockHospitalInfo = undefined;
-    expect(() => {
-      hospitalService.isHospitalOpen(mockHospitalInfo);
-    }).toThrow("hospitalInfo is undefined");
-  });
+    it("should throw error if hospital status is undefined", () => {
+        const mockHospitalInfo = undefined;
+        expect(() => {
+            hospitalService.isHospitalOpen(mockHospitalInfo);
+        }).toThrow("hospitalInfo is undefined");
+    });
 
+    it("fundingLevelComparator", () => {
+        const hospitalA: Hospital = {
+            id: "Hopsital_1",
+            name: "May Hospital",
+            fundingLevel: 0,
+        } as Hospital;
+        const hospitalB: Hospital = {
+            id: "Hopsital_2",
+            name: "May Hospital",
+            fundingLevel: 10,
+        } as Hospital;
+        expect(hospitalService.fundingLevelComparator(hospitalA, hospitalB)).toEqual(-10);
+    });
 
+    it("hospitalNameComparator", () => {
+        const hospitalA: Hospital = {
+            id: "Hopsital_1",
+            name: "May Hospital",
+            fundingLevel: 0,
+        } as Hospital;
+        const hospitalB: Hospital = {
+            id: "Hopsital_2",
+            name: "Jeff Hospital",
+            fundingLevel: 10,
+        } as Hospital;
+        expect(hospitalService.hospitalNameComparator(hospitalA, hospitalB)).toEqual(1);
+    });
+
+    it("fundingDeadlineComparator", () => {
+        const hospitalA: Hospital = {
+            id: "Hopsital_1",
+            name: "May Hospital",
+            matchedRequest: {
+                fundingDeadline: new Date("2024-01-31"),
+            }
+        } as Hospital;
+        const hospitalB: Hospital = {
+            id: "Hopsital_2",
+            name: "Jeff Hospital",
+            matchedRequest: {
+                fundingDeadline: new Date("2023-01-31"),
+            }
+        } as Hospital;
+        expect(hospitalService.fundingDeadlineComparator(hospitalA, hospitalB)).toBeGreaterThan(0);
+    });
+
+    it("sortingHospitals", () => {
+        const hospitalA: Hospital = {
+            id: "Hopsital_1",
+            name: "May Hospital",
+            matchedRequest: {
+                fundingDeadline: new Date("2024-01-31"),
+            }
+        } as Hospital;
+        const hospitalB: Hospital = {
+            id: "Hopsital_2",
+            name: "Jeff Hospital",
+            matchedRequest: {
+                fundingDeadline: new Date("2023-01-31"),
+            }
+        } as Hospital;
+        expect(hospitalService.sortingHospitals([hospitalA, hospitalB], "hospitalName", "desc")).toEqual([hospitalA, hospitalB]);
+        expect(hospitalService.sortingHospitals([hospitalA, hospitalB], "hospitalName", "asc")).toEqual([hospitalB, hospitalA]);
+    });
 });
