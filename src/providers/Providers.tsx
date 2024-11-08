@@ -3,17 +3,23 @@ import { ReactNode } from "react";
 import { FilterContextProvider } from "../context/FilterContext.tsx";
 
 import { HospitalsContextProvider } from "../context/HospitalContext.tsx";
-import { SelectedHospitalsContextProvider } from "../context/SelectedHospitalContext.tsx";
+import { DonationHospitalContextProvider, LearnMoreHospitalContextProvider, SelectedHospitalContextProvider } from "../context/SelectedHospitalContext.tsx";
 
 type ProvidersProps = { children: ReactNode };
 
 const Providers = ({ children }: ProvidersProps) => {
   return (
-    <SelectedHospitalsContextProvider>
-      <HospitalsContextProvider>
-        <FilterContextProvider>{children}</FilterContextProvider>
-      </HospitalsContextProvider>
-    </SelectedHospitalsContextProvider>
+    <HospitalsContextProvider>
+      <SelectedHospitalContextProvider>
+        <DonationHospitalContextProvider>
+          <LearnMoreHospitalContextProvider>
+            <FilterContextProvider>
+              {children}
+            </FilterContextProvider>
+          </LearnMoreHospitalContextProvider>
+        </DonationHospitalContextProvider>
+      </SelectedHospitalContextProvider>
+    </HospitalsContextProvider>
   );
 };
 export default Providers;
