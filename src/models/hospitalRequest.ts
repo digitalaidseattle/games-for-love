@@ -5,7 +5,7 @@ export type HospitalRequest = {
   requestNarrative: string;
   equipReq: string;
   requested: number;
-  fundingDeadline: string;
+  fundingDeadline: Date | undefined;
   kids3Y: number;
   play3Y: string;
   collected: string;

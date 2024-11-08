@@ -76,10 +76,11 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
   const getDonationMessage = () => {
     if (
       popupInfo?.hospital.status === "active" &&
-      popupInfo.hospital.fundingDeadline
+      popupInfo.hospital.matchedRequest &&
+      popupInfo.hospital.matchedRequest.fundingDeadline
     ) {
       const currentDate = new Date();
-      const deadlineDate = new Date(popupInfo.hospital.fundingDeadline);
+      const deadlineDate = new Date(popupInfo.hospital.matchedRequest.fundingDeadline);
       const daysLeft = differenceInDays(deadlineDate, currentDate);
       return daysLeft > 0
         ? `${daysLeft} days left to donate!`

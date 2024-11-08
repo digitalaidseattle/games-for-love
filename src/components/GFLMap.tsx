@@ -30,7 +30,6 @@ const HospitalMarker = (props: {
   const hospital = props.hospital;
   return (
     <Marker
-      key={hospital.id}
       longitude={hospital.longitude}
       latitude={hospital.latitude}
       onClick={() => props.onClick(hospital)}
@@ -51,8 +50,8 @@ const HospitalMarker = (props: {
             color: props.selected
               ? "#FFFF00"
               : hospital.status === "past"
-              ? "#DB5757"
-              : "#92C65E",
+                ? "#DB5757"
+                : "#92C65E",
             strokeWidth: "0.2px",
             stroke: "black",
             fontSize: "3rem",
@@ -105,9 +104,8 @@ export const GFLMap = () => {
       {...viewState}
       ref={markerRef}
       onMove={(evt) => setViewState(evt.viewState)}
-      mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${
-        import.meta.env.VITE_MAPTILER_API_KEY
-      }`}
+      mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${import.meta.env.VITE_MAPTILER_API_KEY
+        }`}
     >
       <FullscreenControl position="top-left" />
       <NavigationControl position="top-left" />
@@ -117,6 +115,7 @@ export const GFLMap = () => {
         .map((hospital) => {
           return (
             <HospitalMarker
+              key={hospital.id}
               hospital={hospital}
               selected={false}
               onClick={handleMarkerSelection}
@@ -125,6 +124,7 @@ export const GFLMap = () => {
         })}
       {selectedHospital && (
         <HospitalMarker
+          key={selectedHospital.id}
           hospital={selectedHospital}
           selected={true}
           onClick={handleMarkerSelection}

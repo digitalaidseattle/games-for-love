@@ -5,6 +5,7 @@
  *
  */
 
+import { FieldSet, Record } from "airtable";
 import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
 
@@ -13,39 +14,37 @@ const extractUrls = (attachments: any) => {
 };
 
 class HospitalInfoService {
-  async getHospitalInfo(): Promise<HospitalInfo[]> {
+
+  transform = (record: Record<FieldSet>): HospitalInfo => {
+    return {
+      id: record.id,
+      recordId: record.id,
+      name: `${record.fields["Hospital Name"]}`,
+      type: record.fields["Type of Organization"],
+      description: record.fields["Organization Notes / Description"],
+      year: record.fields["Kids Served / Year"],
+      country: record.fields["Country"],
+      state: record.fields["State"],
+      zip: record.fields["ZIP"],
+      city: record.fields["City"],
+      address: record.fields["Address"],
+      longitude: record.fields["Long"],
+      latitude: record.fields["Lat"],
+      hospitalPictures: [
+        extractUrls(record.fields["Hospital Picture 1"])[0],
+        extractUrls(record.fields["Hospital Picture 2"])[0],
+        extractUrls(record.fields["Hospital Picture 3"])[0],
+      ].filter((u) => u !== undefined),
+    } as HospitalInfo;
+  }
+
+  async findAll(): Promise<HospitalInfo[]> {
     const TABLE = import.meta.env.VITE_AIRTABLE_TABLE_HOSPITAL_REFERENCE;
     const MAX_RECORDS = 100;
 
-    const hospitals = airtableService
+    return airtableService
       .getTableRecords(TABLE, MAX_RECORDS)
-      .then((records) =>
-        records.map((r) => {
-          const hospitalData = {
-            id: r.id,
-            recordId: r.id,
-            name: `${r.fields["Hospital Name"]}`,
-            type: r.fields["Type of Organization"],
-            description: r.fields["Organization Notes / Description"],
-            year: r.fields["Kids Served / Year"],
-            country: r.fields["Country"],
-            state: r.fields["State"],
-            zip: r.fields["ZIP"],
-            city: r.fields["City"],
-            address: r.fields["Address"],
-            longitude: r.fields["Long"],
-            latitude: r.fields["Lat"],
-            hospitalPictures: [
-              extractUrls(r.fields["Hospital Picture 1"])[0],
-              extractUrls(r.fields["Hospital Picture 2"])[0],
-              extractUrls(r.fields["Hospital Picture 3"])[0],
-            ].filter((u) => u !== undefined),
-          } as HospitalInfo;
-          return hospitalData;
-        })
-      );
-
-    return hospitals;
+      .then((records) => records.map((r) => this.transform(r)));
   }
 }
 
@@ -73,10 +72,10 @@ class HospitalInfoService {
 //     if (filter) {
 //       const filtered_hospitals = hospitals.filter(
 //         (hospital) =>
-//           (filter.location.includes(hospital.state.toLowerCase()) ||
-//             filter.location.includes(hospital.city.toLowerCase()) ||
-//             filter.location.includes(hospital.zip.toLowerCase())) &&
-//           filter.status.includes(hospital.status.toLowerCase())
+//           (filterecord.location.includes(hospital.state.toLowerCase()) ||
+//             filterecord.location.includes(hospital.city.toLowerCase()) ||
+//             filterecord.location.includes(hospital.zip.toLowerCase())) &&
+//           filterecord.status.includes(hospital.status.toLowerCase())
 //       );
 //       return filtered_hospitals;
 //     } else {

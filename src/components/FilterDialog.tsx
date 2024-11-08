@@ -86,7 +86,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
     setStatus("all");
     clearFilters();
     const hospitals =
-      await hospitalService.combineHospitalInfoAndRequestAndFunded();
+      await hospitalService.findAll();
     setOriginals(hospitals);
   };
 

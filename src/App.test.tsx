@@ -13,7 +13,7 @@ beforeEach(() => {
 
 describe("App component", () => {
   it("renders the SearchAndSort component and HospitalDetailCard component, when hospitalInfoService returns hospitals", async () => {
-    hospitalInfoService.getHospitalInfo = vi.fn().mockResolvedValue([
+    hospitalInfoService.findAll = vi.fn().mockResolvedValue([
       {
         id: 1,
         name: "hospital 1",
@@ -47,7 +47,7 @@ describe("App component", () => {
   });
 
   it("renders no HospitalDetailCard component, when hospitalInfoService returns no hospitals", async () => {
-    hospitalInfoService.getHospitalInfo = vi.fn().mockResolvedValue([]);
+    hospitalInfoService.findAll = vi.fn().mockResolvedValue([]);
     render(<App />);
     await waitFor(() => {
       const hospitalDetailCard = screen.queryByTestId("hospital-detail-card");
@@ -57,7 +57,7 @@ describe("App component", () => {
   //   it done
 
   it("renders as many HospitalCards as the number of hospitals returned by getHospitalInfo", async () => {
-    hospitalInfoService.getHospitalInfo = vi.fn().mockResolvedValue([
+    hospitalInfoService.findAll = vi.fn().mockResolvedValue([
       {
         id: 1,
         name: "hospital 1",
@@ -90,7 +90,7 @@ describe("App component", () => {
   //it done
 
   it("updates windowHeight on window resize", () => {
-    hospitalInfoService.getHospitalInfo = vi.fn().mockResolvedValue([
+    hospitalInfoService.findAll = vi.fn().mockResolvedValue([
       {
         id: 1,
         name: "hospital 1",
