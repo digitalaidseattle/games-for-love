@@ -73,9 +73,8 @@ export const GFLMap = () => {
   const { hospitals } = useContext(HospitalsContext);
   const [viewState, setViewState] = useState(siteService.DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const { selectedHospital, setSelectedHospital } = useContext(
-    SelectedHospitalContext
-  );
+  const { hospital: selectedHospital, setHospital: setSelectedHospital } =
+    useContext(SelectedHospitalContext);
 
   useEffect(() => {
     if (selectedHospital) {
