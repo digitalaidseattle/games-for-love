@@ -1,3 +1,9 @@
+/**
+ *  SearchAndSort.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { ChangeEvent, useContext, useState } from "react";
 import {
   Box,
@@ -7,16 +13,22 @@ import {
   InputAdornment,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import ImportExportIcon from "@mui/icons-material/ImportExport";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
 import FilterDialog from "./FilterDialog";
-import { HospitalsContext } from "../context/HospitalsContext";
-import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
+
+import { HospitalsContext } from "../context/HospitalContext";
+import { hospitalService } from "../services/hospital/hospitalService";
+import { FilterContext } from "../context/FilterContext";
+import { sortDirection } from "../types/fillterType";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
   const { originals, setHospitals } = useContext(HospitalsContext);
+  const { filters, setOriginalFilters } = useContext(FilterContext);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleOpenFilters = () => {
     setShowFilters(true);
@@ -28,9 +40,26 @@ export const SearchAndSort = () => {
 
   const changeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     //searching through originals
-    setHospitals(
-      hospitalInfoService.filterHospitals(originals, e.target.value)
-    );
+    setHospitals(hospitalService.filterHospitals(originals, e.target.value));
+    if (e.target.value !== "") {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  };
+
+  const handelOrderButton = () => {
+    if (filters.sortDirection === sortDirection.DESCENDING) {
+      setOriginalFilters({
+        ...filters,
+        sortDirection: sortDirection.ASCENDING,
+      });
+    } else {
+      setOriginalFilters({
+        ...filters,
+        sortDirection: sortDirection.DESCENDING,
+      });
+    }
   };
 
   return (
@@ -79,12 +108,14 @@ export const SearchAndSort = () => {
         />
         <IconButton
           onClick={handleOpenFilters}
+          disabled={isDisabled}
           sx={{
             padding: "10px",
             backgroundColor: "#ffffff",
             borderRadius: "12px",
             border: "1px solid #d9d9d9",
             height: "36px",
+            width: "64px",
           }}
         >
           <FilterListIcon />
@@ -92,19 +123,33 @@ export const SearchAndSort = () => {
 
         <Button
           variant="outlined"
-          endIcon={<ImportExportIcon />}
+          onClick={handelOrderButton}
+          disabled={
+            isDisabled || filters.sortDirection === sortDirection.UNDEFINED
+          }
           sx={{
             color: "#000",
             textTransform: "capitalize",
-            marginRight: "20px",
+            padding: "0px",
+            margin: "0px",
+            width: "40px",
+            height: "36px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             borderRadius: "12px",
             border: "1px solid #d9d9d9",
+            backgroundColor: "white",
             "&:hover": {
               border: "1px solid #d9d9d9",
             },
           }}
         >
-          Sort by
+          {filters.sortDirection === sortDirection.DESCENDING ? (
+            <ArrowDownwardIcon />
+          ) : (
+            <ArrowUpwardIcon />
+          )}
         </Button>
       </Box>
       {showFilters && (

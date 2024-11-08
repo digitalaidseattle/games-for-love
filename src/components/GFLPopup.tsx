@@ -1,3 +1,9 @@
+/**
+ *  GFLPopup.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { Popup } from "react-map-gl";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { PopupInfo } from "../models/popupInfo";
@@ -14,8 +20,8 @@ export const GFLPopup: React.FC<GFLPopupProps> = ({
   return (
     popupInfo && (
       <Popup
-        longitude={popupInfo.hospitalInfo.longitude}
-        latitude={popupInfo.hospitalInfo.latitude}
+        longitude={popupInfo.hospital.longitude}
+        latitude={popupInfo.hospital.latitude}
         closeButton={false}
         closeOnClick={false}
         onClose={onClose}

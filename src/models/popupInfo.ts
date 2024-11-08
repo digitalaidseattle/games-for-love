@@ -1,4 +1,4 @@
-import { HospitalInfo } from './hospitalInfo';
+import { Hospital } from "./hospital";
 export interface PopupInfo {
-  hospitalInfo: HospitalInfo;
+  hospital: Hospital;
 }

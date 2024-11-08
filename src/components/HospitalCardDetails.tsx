@@ -12,21 +12,32 @@ import {
   CardContent,
   CardMedia,
   Stack,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
 import { Room } from "@mui/icons-material";
 import { Carousel } from "react-responsive-carousel";
-import { DonationHospitalContext, LearnMoreHospitalContext, SelectedHospitalContext } from "../context/SelectedHospitalContext";
-import { HospitalInfo } from "../models/hospitalInfo";
+import {
+  DonationHospitalContext,
+  LearnMoreHospitalContext,
+  SelectedHospitalContext,
+} from "../context/SelectedHospitalContext";
+import { Hospital } from "../models/hospital";
 import ActionButton from "../styles/ActionButton";
-import { hospitalInfoService } from "../services/hospitalInfo/hospitalInfoService";
+import { hospitalService } from "../services/hospital/hospitalService";
 
-export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hospital }) => {
-  const { hospital: selectedHospital, setHospital: setSelectedHospital } = useContext(SelectedHospitalContext);
-  const { setHospital: setDonationHospital } = useContext(DonationHospitalContext);
-  const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
+export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
+  hospital,
+}) => {
+  const { hospital: selectedHospital, setHospital: setSelectedHospital } =
+    useContext(SelectedHospitalContext);
+  const { setHospital: setDonationHospital } = useContext(
+    DonationHospitalContext
+  );
+  const { setHospital: setLearnMoreHospital } = useContext(
+    LearnMoreHospitalContext
+  );
 
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
@@ -34,51 +45,57 @@ export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hosp
 
   useEffect(() => {
     if (hospital) {
-      setBackgroundColor(selectedHospital ? hospital.id === selectedHospital.id ? '#F0F5FA' : '' : '');
-      setPinColor(selectedHospital && hospital.id === selectedHospital.id
-        ? '#FFFF00'
-        : hospital.status === "past"
+      setBackgroundColor(
+        selectedHospital
+          ? hospital.id === selectedHospital.id
+            ? "#F0F5FA"
+            : ""
+          : ""
+      );
+      setPinColor(
+        selectedHospital && hospital.id === selectedHospital.id
+          ? "#FFFF00"
+          : hospital.status === "past"
           ? "#DB5757"
-          : "#92C65E");
-      setIsOpen(hospitalInfoService.isHospitalOpen(hospital));
+          : "#92C65E"
+      );
+      setIsOpen(hospitalService.isHospitalOpen(hospital));
     }
   }, [hospital, selectedHospital]);
 
   const changeSelectedHospital = () => {
     if (selectedHospital) {
       if (hospital.id === selectedHospital.id) {
-        setSelectedHospital(undefined)
-      }
-      else {
-        setSelectedHospital(hospital)
+        setSelectedHospital(undefined);
+      } else {
+        setSelectedHospital(hospital);
       }
     } else {
-      setSelectedHospital(hospital)
+      setSelectedHospital(hospital);
     }
-  }
+  };
 
   const handleCarousel = (evt: any) => {
     if (selectedHospital) {
       if (hospital.id === selectedHospital.id) {
-        evt.stopPropagation()
-      }
-      else {
-        setSelectedHospital(hospital)
+        evt.stopPropagation();
+      } else {
+        setSelectedHospital(hospital);
       }
     } else {
-      setSelectedHospital(hospital)
+      setSelectedHospital(hospital);
     }
-  }
+  };
 
   const handleLearnMore = (evt: any) => {
     evt.stopPropagation();
     setLearnMoreHospital(hospital);
-  }
+  };
 
   const handleDonate = (evt: any) => {
     evt.stopPropagation();
     setDonationHospital(hospital);
-  }
+  };
 
   return (
     <div data-testid="hospital-detail-card">
@@ -88,7 +105,7 @@ export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hosp
           alignItems: "center",
           margin: "10px 0",
           cursor: "pointer",
-          backgroundColor: backgroundColor
+          backgroundColor: backgroundColor,
         }}
         onClick={changeSelectedHospital}
       >
@@ -111,23 +128,23 @@ export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hosp
             },
           }}
         >
-          <Stack direction={'row'}>
+          <Stack direction={"row"}>
             <CardContent
               sx={{
                 flex: 1,
               }}
             >
-              <Box onClick={handleCarousel} >
+              <Box onClick={handleCarousel}>
                 <Carousel showStatus={false} showThumbs={false}>
-                  {hospital.hospitalPictures.map((url, idx) =>
+                  {hospital.hospitalPictures.map((url, idx) => (
                     <CardMedia
-                      key={'p' + idx}
+                      key={"p" + idx}
                       component="img"
                       sx={{ width: 135, height: 150, borderRadius: 2 }}
                       image={url}
                       alt="Hospital Image"
                     />
-                  )}
+                  ))}
                 </Carousel>
               </Box>
             </CardContent>
@@ -151,7 +168,8 @@ export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hosp
                       outlineOffset: "2px",
                     },
                   }}
-                /> {hospital?.city}, {hospital?.state}
+                />{" "}
+                {hospital?.city}, {hospital?.state}
               </Typography>
 
               <Typography variant="h6" component="div">
@@ -162,26 +180,21 @@ export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hosp
                 variant="body2"
                 sx={{
                   fontStyle: "italic",
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  display: '-webkit-box',
-                  WebkitLineClamp: '4',
-                  WebkitBoxOrient: 'vertical'
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: "4",
+                  WebkitBoxOrient: "vertical",
                 }}
               >
                 {hospital?.description}
               </Typography>
 
-              <Stack direction={'row'} gap={1} marginTop={2}>
-                <ActionButton
-                  onClick={handleLearnMore}
-                >
+              <Stack direction={"row"} gap={1} marginTop={2}>
+                <ActionButton onClick={handleLearnMore}>
                   Learn more
                 </ActionButton>
-                <ActionButton
-                  disabled={!isOpen}
-                  onClick={handleDonate}
-                >
+                <ActionButton disabled={!isOpen} onClick={handleDonate}>
                   Donate
                 </ActionButton>
               </Stack>
@@ -204,7 +217,11 @@ export const HospitalCardDetails: React.FC<{ hospital: HospitalInfo }> = ({ hosp
               </Typography>
 
               <Box display="flex" alignItems="center" marginTop={1}>
-                <Typography variant="body2" color="textSecondary" marginRight={1}>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  marginRight={1}
+                >
                   Matched by
                 </Typography>
                 <Avatar

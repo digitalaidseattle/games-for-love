@@ -1,3 +1,9 @@
+/**
+ *  GeneralInfoService.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { airtableService } from "../../mapping/airtableService";
 import { GeneralInfo } from "../../models/generalInfo";
 

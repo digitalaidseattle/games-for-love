@@ -12,38 +12,40 @@ import { HospitalCardDetails } from "./components/HospitalCardDetails";
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
-import { HospitalsContext } from "./context/HospitalsContext";
-import { DonationHospitalContextProvider, LearnMoreHospitalContextProvider, SelectedHospitalsContextProvider } from "./context/SelectedHospitalContext";
-import { HospitalInfo } from "./models/hospitalInfo";
-import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
-import { FilterType } from "./types/fillterType";
+
+import {
+  DonationHospitalContextProvider,
+  LearnMoreHospitalContextProvider,
+  SelectedHospitalsContextProvider,
+} from "./context/SelectedHospitalContext";
+import { sortDirection } from "./types/fillterType";
 import DonationDialog from "./components/DonationDialog";
 import LearnMoreOverlay from "./components/LearnMoreOverlay";
+import { HospitalsContext } from "./context/HospitalContext";
+import { FilterContext } from "./context/FilterContext";
+import { hospitalService } from "./services/hospital/hospitalService";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
-  return hospitals.map((hospital, idx: number) => (
+  return hospitals?.map((hospital, idx: number) => (
     <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
   ));
 };
 
 function App() {
-  const { setOriginals } = useContext(HospitalsContext);
+  const { setHospitals, setOriginals } = useContext(HospitalsContext);
+  const { filters } = useContext(FilterContext);
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
-  const getHospitalInfo = (filter?: FilterType) => {
-    hospitalInfoService
-      .getHospitalInfo(filter)
-      .then((res: HospitalInfo[]) => {
-        setOriginals(res);
-      })
-      .catch((error) => {
-        console.error("An error occurred while fetching data:", error);
-      });
+  const getCombinedHospital = async () => {
+    hospitalService
+      .combineHospitalInfoAndRequestAndFunded()
+      .then((res) => setOriginals(res));
   };
 
   useEffect(() => {
-    getHospitalInfo();
+    getCombinedHospital();
+
     setWindowHeight(window.innerHeight);
 
     function handleResize() {
@@ -51,6 +53,23 @@ function App() {
     }
     window.addEventListener("resize", handleResize);
   }, []);
+
+  const filterHospitals = async () => {
+    const filteredHospitals =
+      await hospitalService.combineHospitalInfoAndRequestAndFunded(filters);
+    const sortedHospitals = hospitalService.sortingHospitals(
+      filteredHospitals,
+      filters.sortBy,
+      filters.sortDirection
+    );
+    setHospitals(sortedHospitals);
+  };
+
+  useEffect(() => {
+    if (filters.sortDirection !== sortDirection.UNDEFINED) {
+      filterHospitals();
+    }
+  }, [filters.sortDirection]);
 
   return (
     <SelectedHospitalsContextProvider>

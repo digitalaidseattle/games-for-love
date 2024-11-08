@@ -4,34 +4,16 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
+
 import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
-
-import { FilterType } from "../../types/fillterType";
-import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
-import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 
 const extractUrls = (attachments: any) => {
   return attachments ? attachments.map((att: any) => att.url) : [];
 };
 
 class HospitalInfoService {
-  isHospitalOpen = (hospitalInfo: HospitalInfo | undefined) => {
-    if (hospitalInfo === undefined) {
-      throw new Error("hospitalInfo is undefined");
-    } else {
-      return hospitalInfo.status !== "past";
-    }
-  };
-
-  filterHospitals = (hospitals: HospitalInfo[], searchTerm: string) => {
-    return hospitals.filter(
-      (h: HospitalInfo) =>
-        h.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-    );
-  };
-
-  async getHospitalInfo(filter?: FilterType): Promise<HospitalInfo[]> {
+  async getHospitalInfo(): Promise<HospitalInfo[]> {
     const TABLE = import.meta.env.VITE_AIRTABLE_TABLE_HOSPITAL_REFERENCE;
     const MAX_RECORDS = 100;
 
@@ -39,15 +21,10 @@ class HospitalInfoService {
       .getTableRecords(TABLE, MAX_RECORDS)
       .then((records) =>
         records.map((r) => {
-
-          hospitalFundedService.getHospitalFunded()
-            .then(hf => console.log('getHospitalFunded', hf))
-          hospitalRequestService.getHospitalRequest()
-            .then(hr => console.log('getHospitalRequest', hr))
-          return {
+          const hospitalData = {
             id: r.id,
+            recordId: r.id,
             name: `${r.fields["Hospital Name"]}`,
-            status: r.fields["Status"], // (Math.random() * 10.0) > 5 ? 'active' : 'past', //,
             type: r.fields["Type of Organization"],
             description: r.fields["Organization Notes / Description"],
             year: r.fields["Kids Served / Year"],
@@ -61,24 +38,14 @@ class HospitalInfoService {
             hospitalPictures: [
               extractUrls(r.fields["Hospital Picture 1"])[0],
               extractUrls(r.fields["Hospital Picture 2"])[0],
-              extractUrls(r.fields["Hospital Picture 3"])[0]
-            ].filter(u => u !== undefined),
+              extractUrls(r.fields["Hospital Picture 3"])[0],
+            ].filter((u) => u !== undefined),
           } as HospitalInfo;
+          return hospitalData;
         })
       );
 
-    if (filter) {
-      const filtered_hospitals = (await hospitals).filter(
-        (hospital) =>
-          (filter.location.includes(hospital.state.toLowerCase()) ||
-            filter.location.includes(hospital.city.toLowerCase()) ||
-            filter.location.includes(hospital.zip.toLowerCase())) &&
-          filter.status.includes(hospital.status.toLowerCase())
-      );
-      return filtered_hospitals;
-    } else {
-      return hospitals;
-    }
+    return hospitals;
   }
 }
 
