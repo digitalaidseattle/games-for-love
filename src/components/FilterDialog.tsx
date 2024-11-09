@@ -4,35 +4,51 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import {
+  Box,
+  Button,
+  Chip,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
-  Box,
-  Typography,
-  TextField,
-  Chip,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  DialogActions,
-  Button,
   Divider,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  IconButton,
+  InputAdornment,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { InputAdornment } from "@mui/material";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { FilterContext } from "../context/FilterContext";
-import { DialogProps } from "../types/dialogProps";
-import ActionButton from "../styles/ActionButton";
-import { hospitalService } from "../services/hospital/hospitalService";
 import { HospitalsContext } from "../context/HospitalContext";
-import { FilterType, sortDirection } from "../types/fillterType";
+import { hospitalService } from "../services/hospital/hospitalService";
+import ActionButton from "../styles/ActionButton";
+import { DialogProps } from "../types/dialogProps";
+
+const RadioOption = (props: { label: string, value: string }) => {
+  return (
+    <FormControlLabel
+      value={props.value}
+      control={
+        <Radio
+          sx={{
+            "& .MuiSvgIcon-root": {
+              color: "#000",
+            },
+          }}
+        />
+      }
+      label={props.label}
+    />);
+}
 
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -46,14 +62,19 @@ const CustomDialog = styled(Dialog)(() => ({
 
 const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
   const { setOriginals } = useContext(HospitalsContext);
-  const { filters, clearFilters, setOriginalFilters } =
-    useContext(FilterContext);
+  const { filters, setFilters } = useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
-  const [locationChips, setLocationChips] = useState<string[]>(
-    filters.location
-  );
-
+  const [locationChips, setLocationChips] = useState<string[]>(filters.location);
   const [status, setStatus] = useState("all");
+  const [sortBy, setSortBy] = useState("hospitalName");
+
+  useEffect(() => {
+    if (filters) {
+      setLocationChips(filters.location);
+      setSortBy(filters.sortBy)
+      setStatus(filters.status.length === 2 ? "all" : filters.status.length === 1 ? filters.status[0] : "hospitalName");
+    }
+  }, [filters]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && locationValue.trim() !== "") {
@@ -72,38 +93,29 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
     setStatus(e.target.value);
   };
 
-  const handleSortbyChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setOriginalFilters({ ...filters, sortBy: e.target.value });
+  const handleSortByChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSortBy(e.target.value);
   };
 
   const handleApplyFilters = async () => {
-    setOriginalFilters({ ...filters, sortDirection: sortDirection.ASCENDING });
-    handleClose();
+    const updated = Object.assign(filters, {
+      sortBy: sortBy,
+      location: locationChips,
+      status: status === 'all' ? ["active", "past"] : [status]
+    });
+    hospitalService.findAll(updated)
+      .then(hospitals => {
+        setOriginals(hospitals)
+        setFilters(updated);
+        handleClose();
+      })
   };
 
   const handleClearAll = async () => {
-    setLocationChips([]), setLocationValue("");
+    setSortBy("fundingDeadline");
+    setLocationChips([]);
     setStatus("all");
-    clearFilters();
-    const hospitals =
-      await hospitalService.findAll();
-    setOriginals(hospitals);
   };
-
-  useEffect(() => {
-    const oldFilter: FilterType = {
-      location: locationChips.map((chip) => chip.toLowerCase()),
-      status: [status],
-      sortBy: filters.sortBy,
-      sortDirection: sortDirection.UNDEFINED,
-    };
-    const newFilter =
-      status === "all"
-        ? { ...oldFilter, status: ["active", "past"] }
-        : oldFilter;
-
-    setOriginalFilters(newFilter);
-  }, [status, filters.sortBy, locationChips]);
 
   useEffect(() => {
     let initialStatus;
@@ -224,45 +236,9 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
               onChange={handleStatusChange}
               aria-label="status"
             >
-              <FormControlLabel
-                value="all"
-                control={
-                  <Radio
-                    sx={{
-                      "& .MuiSvgIcon-root": {
-                        color: "#000",
-                      },
-                    }}
-                  />
-                }
-                label="All"
-              />
-              <FormControlLabel
-                value="active"
-                control={
-                  <Radio
-                    sx={{
-                      "& .MuiSvgIcon-root": {
-                        color: "#000",
-                      },
-                    }}
-                  />
-                }
-                label="Active"
-              />
-              <FormControlLabel
-                value="past"
-                control={
-                  <Radio
-                    sx={{
-                      "& .MuiSvgIcon-root": {
-                        color: "#000",
-                      },
-                    }}
-                  />
-                }
-                label="Past"
-              />
+              <RadioOption value="all" label="All" />
+              <RadioOption value="active" label="Active" />
+              <RadioOption value="past" label="Past" />
             </RadioGroup>
           </FormControl>
 
@@ -281,49 +257,13 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
               Sort by
             </FormLabel>
             <RadioGroup
-              value={filters.sortBy}
-              onChange={handleSortbyChange}
+              value={sortBy}
+              onChange={handleSortByChange}
               aria-label="status"
             >
-              <FormControlLabel
-                value="fundingDeadline"
-                control={
-                  <Radio
-                    sx={{
-                      "& .MuiSvgIcon-root": {
-                        color: "#000",
-                      },
-                    }}
-                  />
-                }
-                label="Funding deadline"
-              />
-              <FormControlLabel
-                value="fundingLevel"
-                control={
-                  <Radio
-                    sx={{
-                      "& .MuiSvgIcon-root": {
-                        color: "#000",
-                      },
-                    }}
-                  />
-                }
-                label="Funding level"
-              />
-              <FormControlLabel
-                value="hospitalName"
-                control={
-                  <Radio
-                    sx={{
-                      "& .MuiSvgIcon-root": {
-                        color: "#000",
-                      },
-                    }}
-                  />
-                }
-                label="Hospital name"
-              />
+              <RadioOption value="fundingDeadline" label="Funding deadline" />
+              <RadioOption value="fundingLevel" label="Funding level" />
+              <RadioOption value="hospitalName" label="Hospital name" />
             </RadioGroup>
           </FormControl>
         </Box>

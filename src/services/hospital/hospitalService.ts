@@ -56,7 +56,8 @@ class HospitalService {
                 filter.location.includes(hospital.zip.toLowerCase())) &&
               filter.status.includes(hospital.status.toLowerCase())
             : true
-        ) as Hospital[];
+        )
+        .sort(filter ? this.getSortComparator(filter.sortBy, filter?.sortDirection) : () => 0) as Hospital[];
     })
   }
 
@@ -85,8 +86,8 @@ class HospitalService {
     }
   };
 
-  filterHospitals = (hospitals: Hospital[] | undefined, searchTerm: string) => {
-    return hospitals?.filter(
+  filterHospitals = (hospitals: Hospital[], searchTerm: string) => {
+    return hospitals.filter(
       (h: Hospital) =>
         h.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
     );
@@ -112,7 +113,7 @@ class HospitalService {
     return a.fundingLevel - b.fundingLevel;
   }
 
-  getSortComparator = (sortBy: string) => {
+  lookupComparator = (sortBy: string) => {
     switch (sortBy) {
       case "fundingDeadline":
         return this.fundingDeadlineComparator;
@@ -124,14 +125,9 @@ class HospitalService {
     }
   }
 
-  sortingHospitals = (
-    hospitals: Hospital[],
-    sortBy: string,
-    sortDir: "asc" | "desc" | ""
-  ): Hospital[] => {
-    const comparator = this.getSortComparator(sortBy);
-    return hospitals.sort((a, b) => (sortDir === sortDirection.DESCENDING ? -1 : 1) * comparator(a, b));
-  };
+  getSortComparator = (sortBy: string, sortDir: sortDirection) => {
+    return (a: Hospital, b: Hospital) => (sortDir === sortDirection.DESCENDING ? -1 : 1) * this.lookupComparator(sortBy)(a, b);
+  }
 }
 
 const hospitalService = new HospitalService();

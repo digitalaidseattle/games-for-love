@@ -29,7 +29,7 @@ export const LearnMoreHospitalContext = createContext<HospitalContextType>({
   setHospital: () => {},
 });
 
-export const SelectedHospitalsContextProvider = (props: {
+export const SelectedHospitalContextProvider = (props: {
   children: ReactNode;
 }) => {
   const [hospital, setHospital] = useState<Hospital>();

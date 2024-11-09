@@ -26,8 +26,8 @@ import { sortDirection } from "../types/fillterType";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const { originals, setHospitals } = useContext(HospitalsContext);
-  const { filters, setOriginalFilters } = useContext(FilterContext);
+  const { hospitals, setHospitals } = useContext(HospitalsContext);
+  const { filters, setFilters } = useContext(FilterContext);
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleOpenFilters = () => {
@@ -40,7 +40,7 @@ export const SearchAndSort = () => {
 
   const changeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     //searching through originals
-    setHospitals(hospitalService.filterHospitals(originals, e.target.value));
+    setHospitals(hospitalService.filterHospitals(hospitals, e.target.value));
     if (e.target.value !== "") {
       setIsDisabled(true);
     } else {
@@ -49,17 +49,9 @@ export const SearchAndSort = () => {
   };
 
   const handelOrderButton = () => {
-    if (filters.sortDirection === sortDirection.DESCENDING) {
-      setOriginalFilters({
-        ...filters,
-        sortDirection: sortDirection.ASCENDING,
-      });
-    } else {
-      setOriginalFilters({
-        ...filters,
-        sortDirection: sortDirection.DESCENDING,
-      });
-    }
+    const updated = ({...filters, sortDirection: filters.sortDirection === sortDirection.DESCENDING? sortDirection.ASCENDING :  sortDirection.DESCENDING})
+    setHospitals(hospitals.sort(hospitalService.getSortComparator(updated.sortBy, updated.sortDirection)).slice());
+    setFilters(updated);
   };
 
   return (

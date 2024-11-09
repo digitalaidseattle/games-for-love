@@ -6,15 +6,12 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 import { FilterType, sortDirection } from "../types/fillterType";
 
 interface FilterContextType {
   filters: FilterType;
   setFilters: (filters: FilterType) => void;
-  originalFilters: FilterType;
-  setOriginalFilters: (filters: FilterType) => void;
-  clearFilters: () => void;
 }
 
 export const FilterContext = createContext<FilterContextType>({
@@ -24,16 +21,7 @@ export const FilterContext = createContext<FilterContextType>({
     sortBy: "fundingDeadline",
     sortDirection: sortDirection.ASCENDING,
   },
-  setFilters: () => {},
-  originalFilters: {
-    location: [],
-    status: [],
-    sortBy: "fundingDeadline",
-    sortDirection: sortDirection.ASCENDING,
-  },
-
-  setOriginalFilters: () => {},
-  clearFilters: () => {},
+  setFilters: () => { },
 });
 
 export const FilterContextProvider = (props: { children: ReactNode }) => {
@@ -41,39 +29,12 @@ export const FilterContextProvider = (props: { children: ReactNode }) => {
     location: [],
     status: [],
     sortBy: "fundingDeadline",
-    sortDirection: sortDirection.UNDEFINED,
+    sortDirection: sortDirection.ASCENDING,
   });
 
-  const [originalFilters, setOriginalFilters] = useState<FilterType>({
-    location: [],
-    status: [],
-    sortBy: "fundingDeadline",
-    sortDirection: sortDirection.UNDEFINED,
-  });
-
-  const clearFilters = () => {
-    setFilters({
-      location: [],
-      status: [],
-      sortBy: "fundingDeadline",
-      sortDirection: sortDirection.UNDEFINED,
-    });
-  };
-
-  useEffect(() => {
-    setFilters(originalFilters);
-  }, [originalFilters]);
 
   return (
-    <FilterContext.Provider
-      value={{
-        filters,
-        setFilters,
-        originalFilters,
-        setOriginalFilters,
-        clearFilters,
-      }}
-    >
+    <FilterContext.Provider value={{ filters, setFilters }} >
       {props.children}
     </FilterContext.Provider>
   );
