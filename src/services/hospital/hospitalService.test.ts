@@ -12,6 +12,7 @@ import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 import { hospitalService } from "./hospitalService";
+import { sortDirection } from "../../types/fillterType";
 
 describe("HospitalService tests", () => {
     it("findAll", async () => {
@@ -189,7 +190,7 @@ describe("HospitalService tests", () => {
                 fundingDeadline: new Date("2023-01-31"),
             }
         } as Hospital;
-        expect(hospitalService.sortingHospitals([hospitalA, hospitalB], "hospitalName", "desc")).toEqual([hospitalA, hospitalB]);
-        expect(hospitalService.sortingHospitals([hospitalA, hospitalB], "hospitalName", "asc")).toEqual([hospitalB, hospitalA]);
+        expect([hospitalA, hospitalB].sort(hospitalService.getSortComparator("hospitalName", sortDirection.DESCENDING))).toEqual([hospitalA, hospitalB]);
+        expect([hospitalA, hospitalB].sort(hospitalService.getSortComparator("hospitalName", sortDirection.ASCENDING))).toEqual([hospitalB, hospitalA]);
     });
 });
