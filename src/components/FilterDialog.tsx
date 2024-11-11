@@ -33,7 +33,7 @@ import { hospitalService } from "../services/hospital/hospitalService";
 import ActionButton from "../styles/ActionButton";
 import { DialogProps } from "../types/dialogProps";
 
-const RadioOption = (props: { label: string, value: string }) => {
+const RadioOption = (props: { label: string; value: string }) => {
   return (
     <FormControlLabel
       value={props.value}
@@ -47,8 +47,9 @@ const RadioOption = (props: { label: string, value: string }) => {
         />
       }
       label={props.label}
-    />);
-}
+    />
+  );
+};
 
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -64,15 +65,23 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
   const { setOriginals } = useContext(HospitalsContext);
   const { filters, setFilters } = useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
-  const [locationChips, setLocationChips] = useState<string[]>(filters.location);
+  const [locationChips, setLocationChips] = useState<string[]>(
+    filters.location
+  );
   const [status, setStatus] = useState("all");
   const [sortBy, setSortBy] = useState("hospitalName");
 
   useEffect(() => {
     if (filters) {
       setLocationChips(filters.location);
-      setSortBy(filters.sortBy)
-      setStatus(filters.status.length === 2 ? "all" : filters.status.length === 1 ? filters.status[0] : "hospitalName");
+      setSortBy(filters.sortBy);
+      setStatus(
+        filters.status.length === 2
+          ? "all"
+          : filters.status.length === 1
+          ? filters.status[0]
+          : "hospitalName"
+      );
     }
   }, [filters]);
 
@@ -100,15 +109,14 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
   const handleApplyFilters = async () => {
     const updated = Object.assign(filters, {
       sortBy: sortBy,
-      location: locationChips,
-      status: status === 'all' ? ["active", "past"] : [status]
+      location: locationChips.map((chip) => chip.toLowerCase()),
+      status: status === "all" ? ["active", "past"] : [status],
     });
-    hospitalService.findAll(updated)
-      .then(hospitals => {
-        setOriginals(hospitals)
-        setFilters(updated);
-        handleClose();
-      })
+    hospitalService.findAll(updated).then((hospitals) => {
+      setOriginals(hospitals);
+      setFilters(updated);
+      handleClose();
+    });
   };
 
   const handleClearAll = async () => {
