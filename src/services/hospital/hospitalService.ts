@@ -5,6 +5,9 @@
  *
  */
 import { Hospital } from "../../models/hospital";
+import { HospitalFunded } from "../../models/hospitalFunded";
+import { HospitalInfo } from "../../models/hospitalInfo";
+import { HospitalRequest } from "../../models/hospitalRequest";
 import { FilterType, sortDirection } from "../../types/fillterType";
 import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
@@ -12,53 +15,68 @@ import { hospitalRequestService } from "../hospitalRequest/hospitalRequestServic
 
 class HospitalService {
 
+  transform(hi: HospitalInfo, matchedRequest: HospitalRequest, matchedFund: HospitalFunded, currentDate: Date): Hospital {
+    const hospital = {
+      id: hi.id,
+      name: hi.name,
+      type: hi.type,
+      description: hi.description,
+      year: hi.year,
+      country: hi.country ?? "",
+      state: hi.state ?? "",
+      zip: hi.zip,
+      city: hi.city ?? "",
+      address: hi.address,
+      longitude: hi.longitude,
+      latitude: hi.latitude,
+      hospitalPictures: hi.hospitalPictures,
+      matchedRequest: matchedRequest,
+      matchedFunded: matchedFund
+    } as Hospital;
+    hospital.status = this.calcStatus(hospital, currentDate);
+    hospital.fundingLevel = this.calcFundingLevel(hospital);
+    hospital.searchTerm = `${hospital.state?.toLowerCase()}.${hospital.city?.toLowerCase()}.${hospital.zip?.toLowerCase()}.${hospital.name?.toLowerCase()}`;
+    return hospital;
+  }
+
   async findAll(filter?: FilterType): Promise<Hospital[]> {
-    return Promise.all([
-      hospitalInfoService.findAll(),
-      hospitalRequestService.findAll(),
-      hospitalFundedService.findAll()
-    ]).then((resps) => {
-      return resps[0]
-        .map((hi) => {
-          const matchedRequest = resps[1].find((hr) => hr.name[0] === hi.recordId);
-          const matchedFund = resps[2].find((hf) => hf.hospitalRequestId === (matchedRequest ? matchedRequest.recordId : undefined));
-          return {
-            id: hi.id,
-            hospitalInfoRecordId: hi.recordId,
-            name: hi.name,
-            type: hi.type,
-            description: hi.description,
-            year: hi.year,
-            country: hi.country ?? "",
-            state: hi.state ?? "",
-            zip: hi.zip,
-            city: hi.city ?? "",
-            address: hi.address,
-            longitude: hi.longitude,
-            latitude: hi.latitude,
-            hospitalPictures: hi.hospitalPictures,
-            matchedRequest: matchedRequest,
-            matchedFunded: matchedFund,
-          } as Hospital;
-        })
-        .map(hospital => {
-          const currentDate = new Date();
-          hospital.status = this.calcStatus(hospital, currentDate);
-          hospital.fundingLevel = this.calcFundingLevel(hospital);
-          return hospital;
-        })
-        .filter((hospital) =>
-          filter ?
-            filter.location.length === 0
-              ? filter.status.includes(hospital.status.toLowerCase())
-              : (filter.location.includes(hospital.state?.toLowerCase()) ||
-                filter.location.includes(hospital.city.toLowerCase()) ||
-                filter.location.includes(hospital.zip.toLowerCase())) &&
-              filter.status.includes(hospital.status.toLowerCase())
-            : true
-        )
-        .sort(filter ? this.getSortComparator(filter.sortBy, filter?.sortDirection) : () => 0) as Hospital[];
-    })
+    const currentDate = new Date();
+    return Promise
+      .all([
+        hospitalInfoService.findAll(),
+        hospitalRequestService.findAll(),
+        hospitalFundedService.findAll()
+      ])
+      .then((resps) => {
+        return resps[0]
+          .map((hi) => {
+            const matchedRequest = resps[1].find((hr) => hr.name[0] === hi.recordId);
+            const matchedFund = resps[2].find((hf) => hf.hospitalRequestId === (matchedRequest ? matchedRequest.recordId : undefined));
+            return this.transform(hi, matchedRequest!, matchedFund!, currentDate)
+          })
+          .filter(this.filterPredicate(filter!))
+          .sort(this.getSortComparator(filter!)) as Hospital[];
+      })
+  }
+
+  filterPredicate(filter: FilterType) {
+    return (hospital: Hospital) => {
+      if (!filter) {
+        return true;
+      }
+      if (filter.location.length === 0) {
+        return filter.status.includes(hospital.status.toLowerCase());
+      }
+      const lowerLocations = filter.location.map(l => l.toLowerCase());
+      return (
+        // this would allow partial (e.g. sea will find for Seattle Hospitals)
+        // lowerLocations.find(l => hospital.searchTerm.includes(l)) &&
+        (lowerLocations.includes(hospital.state?.toLowerCase()) ||
+          lowerLocations.includes(hospital.city.toLowerCase()) ||
+          lowerLocations.includes(hospital.zip.toLowerCase())) &&
+        filter.status.includes(hospital.status.toLowerCase())
+      )
+    }
   }
 
   calcStatus(hospital: Hospital, currentDate: Date): string {
@@ -87,9 +105,10 @@ class HospitalService {
   };
 
   filterHospitals = (hospitals: Hospital[], searchTerm: string) => {
+    const terms: string[] = searchTerm.toLowerCase().split(" ").filter(t => t);
     return hospitals.filter(
       (h: Hospital) =>
-        h.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+        terms.find(term => h.searchTerm.includes(term))
     );
   };
 
@@ -125,8 +144,11 @@ class HospitalService {
     }
   }
 
-  getSortComparator = (sortBy: string, sortDir: sortDirection) => {
-    return (a: Hospital, b: Hospital) => (sortDir === sortDirection.DESCENDING ? -1 : 1) * this.lookupComparator(sortBy)(a, b);
+  getSortComparator = (filter: FilterType) => {
+    if (!filter) {
+      return () => 0;
+    }
+    return (a: Hospital, b: Hospital) => (filter.sortDirection === sortDirection.DESCENDING ? -1 : 1) * this.lookupComparator(filter.sortBy)(a, b);
   }
 }
 
