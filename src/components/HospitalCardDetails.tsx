@@ -26,6 +26,9 @@ import {
 import { Hospital } from "../models/hospital";
 import ActionButton from "../styles/ActionButton";
 import { hospitalService } from "../services/hospital/hospitalService";
+import { generalInfoService } from "../services/generalInfo/generalInfoService";
+import { GeneralInfo } from "../models/generalInfo";
+import { differenceInDays } from "date-fns";
 
 export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   hospital,
@@ -42,6 +45,23 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [generalInfo, setGeneralInfo] = useState<GeneralInfo | null>(null);
+
+  const getDonationMessage = () => {
+    if (
+      hospital.status === "active" &&
+      hospital.matchedRequest &&
+      hospital.matchedRequest.fundingDeadline
+    ) {
+      const currentDate = new Date();
+      const deadlineDate = new Date(hospital.matchedRequest.fundingDeadline);
+      const daysLeft = differenceInDays(deadlineDate, currentDate);
+      return daysLeft > 0
+        ? `${daysLeft} days left to donate!`
+        : "Donations closed";
+    }
+    return "Donations closed";
+  };
 
   useEffect(() => {
     if (hospital) {
@@ -96,6 +116,15 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
     evt.stopPropagation();
     setDonationHospital(hospital);
   };
+  useEffect(() => {
+    const fetchGeneralInfo = async () => {
+      const [info] = await generalInfoService.getGeneralInfo();
+      setGeneralInfo(info);
+    };
+    fetchGeneralInfo();
+  }, []);
+
+  const partnerName = generalInfo?.corpPartner1Name || "Unknown Partner";
 
   return (
     <div data-testid="hospital-detail-card">
@@ -201,19 +230,25 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
             </CardContent>
             <CardContent sx={{ flex: 1 }}>
               <Typography variant="body2" color="textSecondary">
-                <span style={{ color: "black" }}>25k </span> raised of 100k -{" "}
+                <span style={{ color: "black" }}>
+                  ${hospital.matchedFunded?.fundingCompleted || 0}{" "}
+                </span>{" "}
+                raised of ${hospital.matchedRequest?.requested || 0} -{" "}
                 <Typography
                   variant="body2"
                   component="span"
                   color="success.main"
-                  sx={{ fontStyle: "italic", color: "#92c65e" }}
+                  sx={{
+                    fontStyle: "italic",
+                    color: hospital.status === "active" ? "#92c65e" : "#DB5757",
+                  }}
                 >
                   {hospital?.status}
                 </Typography>
               </Typography>
 
               <Typography variant="body2" color="textSecondary">
-                400+ kids impacted
+                {hospital.year}+ kids impacted
               </Typography>
 
               <Box display="flex" alignItems="center" marginTop={1}>
@@ -222,9 +257,9 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   color="textSecondary"
                   marginRight={1}
                 >
-                  Matched by
+                  Matched by {partnerName}
                 </Typography>
-                <Avatar
+                {/* <Avatar
                   alt="Organization Logo"
                   src="/path/to/profile1.jpg"
                   sx={{ width: 20, height: 20, marginLeft: 1 }}
@@ -234,7 +269,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   src="/path/to/profile2.jpg"
                   sx={{ width: 20, height: 20, marginLeft: 1 }}
                 />
-                +
+                + */}
               </Box>
               <Typography
                 variant="body2"
@@ -242,7 +277,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 align="center"
                 sx={{ marginTop: 1 }}
               >
-                15 days left to donate!
+                {getDonationMessage()}
               </Typography>
             </CardContent>
           </Stack>

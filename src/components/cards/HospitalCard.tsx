@@ -80,7 +80,9 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
       popupInfo.hospital.matchedRequest.fundingDeadline
     ) {
       const currentDate = new Date();
-      const deadlineDate = new Date(popupInfo.hospital.matchedRequest.fundingDeadline);
+      const deadlineDate = new Date(
+        popupInfo.hospital.matchedRequest.fundingDeadline
+      );
       const daysLeft = differenceInDays(deadlineDate, currentDate);
       return daysLeft > 0
         ? `${daysLeft} days left to donate!`
@@ -107,6 +109,12 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
         background: none !important; 
         box-shadow: none !important; 
       }
+      .carousel .control-prev.control-arrow {
+        left: 30px;
+        }
+      .carousel .control-next.control-arrow {
+        right: 30px;
+        }
     `}
       </style>
       <Card
@@ -201,8 +209,10 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
           </Typography>
 
           <Typography color="text.secondary" sx={{ fontSize: "10px" }}>
-            <span style={{ color: "#828282" }}>25K </span>
-            raised of 100k -{" "}
+            <span style={{ color: "#828282" }}>
+              ${popupInfo?.hospital.matchedFunded?.fundingCompleted || 0}{" "}
+            </span>
+            raised of ${popupInfo?.hospital.matchedRequest?.requested} -{" "}
             <span style={{ color: "#92c65e", fontStyle: "italic" }}>
               {popupInfo?.hospital.status === "active" && "Actively Funding"}
             </span>
