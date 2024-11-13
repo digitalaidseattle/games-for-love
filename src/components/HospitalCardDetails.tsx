@@ -5,7 +5,6 @@
  *
  */
 import {
-  Avatar,
   Box,
   Card,
   CardActionArea,
@@ -214,6 +213,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   display: "-webkit-box",
                   WebkitLineClamp: "4",
                   WebkitBoxOrient: "vertical",
+                  color: "#454545",
                 }}
               >
                 {hospital?.description}
@@ -228,12 +228,41 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 </ActionButton>
               </Stack>
             </CardContent>
-            <CardContent sx={{ flex: 1 }}>
+            <CardContent
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: 0.8,
+              }}
+            >
+              <Box
+                display="flex"
+                alignItems="center"
+                marginTop={1}
+                sx={{
+                  backgroundColor: "#FFFCD8",
+                  borderRadius: "8px",
+                  padding: "2px 10px 2px 10px",
+                  width: "245px",
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  marginRight={1}
+                  sx={{ color: "#0000000" }}
+                >
+                  Matched by {partnerName}
+                </Typography>
+              </Box>
               <Typography variant="body2" color="textSecondary">
-                <span style={{ color: "black" }}>
+                <span style={{ color: "#0000000" }}>
                   ${hospital.matchedFunded?.fundingCompleted || 0}{" "}
                 </span>{" "}
-                raised of ${hospital.matchedRequest?.requested || 0} -{" "}
+                <span style={{ color: "#828282" }}>
+                  raised of ${hospital.matchedRequest?.requested || 0} -{" "}
+                </span>
                 <Typography
                   variant="body2"
                   component="span"
@@ -251,31 +280,16 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 {hospital.year}+ kids impacted
               </Typography>
 
-              <Box display="flex" alignItems="center" marginTop={1}>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  marginRight={1}
-                >
-                  Matched by {partnerName}
-                </Typography>
-                {/* <Avatar
-                  alt="Organization Logo"
-                  src="/path/to/profile1.jpg"
-                  sx={{ width: 20, height: 20, marginLeft: 1 }}
-                />
-                <Avatar
-                  alt="Organization Logo"
-                  src="/path/to/profile2.jpg"
-                  sx={{ width: 20, height: 20, marginLeft: 1 }}
-                />
-                + */}
-              </Box>
               <Typography
                 variant="body2"
                 color="textSecondary"
                 align="center"
-                sx={{ marginTop: 1 }}
+                sx={{
+                  marginTop: 5,
+                  fontWeight: "bold",
+                  fontStyle: "italic",
+                  color: "#828282",
+                }}
               >
                 {getDonationMessage()}
               </Typography>
