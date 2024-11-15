@@ -11,6 +11,7 @@ import {
   CardContent,
   CardMedia,
   Stack,
+  Theme,
   Typography,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
@@ -27,7 +28,11 @@ import ActionButton from "../styles/ActionButton";
 import { hospitalService } from "../services/hospital/hospitalService";
 import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { GeneralInfo } from "../models/generalInfo";
-import { differenceInDays } from "date-fns";
+import {
+  CLOSED_MARKER_COLOR,
+  ItalicizedStyle,
+  OPEN_MARKER_COLOR,
+} from "../styles/theme";
 
 export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   hospital,
@@ -45,22 +50,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const [pinColor, setPinColor] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [generalInfo, setGeneralInfo] = useState<GeneralInfo | null>(null);
-
-  const getDonationMessage = () => {
-    if (
-      hospital.status === "active" &&
-      hospital.matchedRequest &&
-      hospital.matchedRequest.fundingDeadline
-    ) {
-      const currentDate = new Date();
-      const deadlineDate = new Date(hospital.matchedRequest.fundingDeadline);
-      const daysLeft = differenceInDays(deadlineDate, currentDate);
-      return daysLeft > 0
-        ? `${daysLeft} days left to donate!`
-        : "Donations closed";
-    }
-    return "Donations closed";
-  };
 
   useEffect(() => {
     if (hospital) {
@@ -207,13 +196,13 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               <Typography
                 variant="body2"
                 sx={{
-                  fontStyle: "italic",
+                  ...ItalicizedStyle,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
                   WebkitLineClamp: "4",
                   WebkitBoxOrient: "vertical",
-                  color: "#454545",
+                  color: (theme) => theme.palette.common.black,
                 }}
               >
                 {hospital?.description}
@@ -251,25 +240,29 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   variant="body2"
                   color="textSecondary"
                   marginRight={1}
-                  sx={{ color: "#0000000" }}
+                  sx={{ color: (theme) => theme.palette.common.black }}
                 >
                   Matched by {partnerName}
                 </Typography>
               </Box>
               <Typography variant="body2" color="textSecondary">
                 <span style={{ color: "#0000000" }}>
-                  ${hospital.matchedFunded?.fundingCompleted || 0}{" "}
+                  ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)}{" "}
                 </span>{" "}
                 <span style={{ color: "#828282" }}>
-                  raised of ${hospital.matchedRequest?.requested || 0} -{" "}
+                  raised of $
+                  {Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
                 </span>
                 <Typography
                   variant="body2"
                   component="span"
                   color="success.main"
                   sx={{
-                    fontStyle: "italic",
-                    color: hospital.status === "active" ? "#92c65e" : "#DB5757",
+                    ...ItalicizedStyle,
+                    color:
+                      hospital.status === "active"
+                        ? OPEN_MARKER_COLOR
+                        : CLOSED_MARKER_COLOR,
                   }}
                 >
                   {hospital?.status}
@@ -288,10 +281,10 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   marginTop: 5,
                   fontWeight: "bold",
                   fontStyle: "italic",
-                  color: "#828282",
+                  color: (theme: Theme) => theme.palette.grey[500],
                 }}
               >
-                {getDonationMessage()}
+                {hospitalService.getDonationMessage(hospital)}
               </Typography>
             </CardContent>
           </Stack>
