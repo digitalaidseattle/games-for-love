@@ -23,6 +23,7 @@ import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
 import { FilterContext } from "../context/FilterContext";
 import { sortDirection } from "../types/fillterType";
+import { BORDER_COLOR } from "../styles/theme";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -113,7 +114,7 @@ export const SearchAndSort = () => {
             padding: "10px",
             backgroundColor: "#ffffff",
             borderRadius: "12px",
-            border: "1px solid #d9d9d9",
+            border: "1px solid " + BORDER_COLOR,
             height: "36px",
             width: "64px",
           }}
@@ -138,10 +139,10 @@ export const SearchAndSort = () => {
             alignItems: "center",
             justifyContent: "center",
             borderRadius: "12px",
-            border: "1px solid #d9d9d9",
+            border: "1px solid " + BORDER_COLOR,
             backgroundColor: "white",
             "&:hover": {
-              border: "1px solid #d9d9d9",
+              border: "1px solid " + BORDER_COLOR,
             },
           }}
         >

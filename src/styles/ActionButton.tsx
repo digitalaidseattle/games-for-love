@@ -4,9 +4,10 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { Button } from "@mui/material"
+import { Button, useTheme } from "@mui/material"
 
 const ActionButton = (props: any) => {
+    const theme = useTheme();
     return <Button
         disabled={props.disabled}
         variant="contained"
@@ -18,7 +19,7 @@ const ActionButton = (props: any) => {
             textTransform: "none",
             "&:hover": {
                 backgroundColor: "transparent",
-                color: "#000",
+                color: theme.palette.common.white,
             },
         }, props.sx)}
         onClick={props.onClick}
