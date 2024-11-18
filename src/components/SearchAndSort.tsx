@@ -49,8 +49,16 @@ export const SearchAndSort = () => {
   };
 
   const handelOrderButton = () => {
-    const updated = ({...filters, sortDirection: filters.sortDirection === sortDirection.DESCENDING? sortDirection.ASCENDING :  sortDirection.DESCENDING})
-    setHospitals(hospitals.sort(hospitalService.getSortComparator(updated)).slice());
+    const updated = {
+      ...filters,
+      sortDirection:
+        filters.sortDirection === sortDirection.DESCENDING
+          ? sortDirection.ASCENDING
+          : sortDirection.DESCENDING,
+    };
+    setHospitals(
+      hospitals.sort(hospitalService.getSortComparator(updated)).slice()
+    );
     setFilters(updated);
   };
 
@@ -65,7 +73,7 @@ export const SearchAndSort = () => {
         }}
       >
         <TextField
-          placeholder="Search"
+          placeholder="Search hospital name"
           onChange={changeSearch}
           InputProps={{
             endAdornment: (

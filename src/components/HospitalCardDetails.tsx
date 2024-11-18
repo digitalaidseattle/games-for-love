@@ -5,13 +5,13 @@
  *
  */
 import {
-  Avatar,
   Box,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
   Stack,
+  Theme,
   Typography,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
@@ -26,6 +26,13 @@ import {
 import { Hospital } from "../models/hospital";
 import ActionButton from "../styles/ActionButton";
 import { hospitalService } from "../services/hospital/hospitalService";
+import { generalInfoService } from "../services/generalInfo/generalInfoService";
+import { GeneralInfo } from "../models/generalInfo";
+import {
+  CLOSED_MARKER_COLOR,
+  ItalicizedStyle,
+  OPEN_MARKER_COLOR,
+} from "../styles/theme";
 
 export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   hospital,
@@ -42,6 +49,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [generalInfo, setGeneralInfo] = useState<GeneralInfo | null>(null);
 
   useEffect(() => {
     if (hospital) {
@@ -96,6 +104,15 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
     evt.stopPropagation();
     setDonationHospital(hospital);
   };
+  useEffect(() => {
+    const fetchGeneralInfo = async () => {
+      const [info] = await generalInfoService.getGeneralInfo();
+      setGeneralInfo(info);
+    };
+    fetchGeneralInfo();
+  }, []);
+
+  const partnerName = generalInfo?.corpPartner1Name || "Unknown Partner";
 
   return (
     <div data-testid="hospital-detail-card">
@@ -179,12 +196,13 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               <Typography
                 variant="body2"
                 sx={{
-                  fontStyle: "italic",
+                  ...ItalicizedStyle,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
                   WebkitLineClamp: "4",
                   WebkitBoxOrient: "vertical",
+                  color: (theme) => theme.palette.common.black,
                 }}
               >
                 {hospital?.description}
@@ -199,50 +217,74 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 </ActionButton>
               </Stack>
             </CardContent>
-            <CardContent sx={{ flex: 1 }}>
+            <CardContent
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: 0.8,
+              }}
+            >
+              <Box
+                display="flex"
+                alignItems="center"
+                marginTop={1}
+                sx={{
+                  backgroundColor: "#FFFCD8",
+                  borderRadius: "8px",
+                  padding: "2px 10px 2px 10px",
+                  width: "245px",
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  marginRight={1}
+                  sx={{ color: (theme) => theme.palette.common.black }}
+                >
+                  Matched by {partnerName}
+                </Typography>
+              </Box>
               <Typography variant="body2" color="textSecondary">
-                <span style={{ color: "black" }}>25k </span> raised of 100k -{" "}
+                <span style={{ color: "#0000000" }}>
+                  ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)}{" "}
+                </span>{" "}
+                <span style={{ color: "#828282" }}>
+                  raised of $
+                  {Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
+                </span>
                 <Typography
                   variant="body2"
                   component="span"
                   color="success.main"
-                  sx={{ fontStyle: "italic", color: "#92c65e" }}
+                  sx={{
+                    ...ItalicizedStyle,
+                    color:
+                      hospital.status === "active"
+                        ? OPEN_MARKER_COLOR
+                        : CLOSED_MARKER_COLOR,
+                  }}
                 >
                   {hospital?.status}
                 </Typography>
               </Typography>
 
               <Typography variant="body2" color="textSecondary">
-                400+ kids impacted
+                {hospital.year}+ kids impacted
               </Typography>
 
-              <Box display="flex" alignItems="center" marginTop={1}>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  marginRight={1}
-                >
-                  Matched by
-                </Typography>
-                <Avatar
-                  alt="Organization Logo"
-                  src="/path/to/profile1.jpg"
-                  sx={{ width: 20, height: 20, marginLeft: 1 }}
-                />
-                <Avatar
-                  alt="Organization Logo"
-                  src="/path/to/profile2.jpg"
-                  sx={{ width: 20, height: 20, marginLeft: 1 }}
-                />
-                +
-              </Box>
               <Typography
                 variant="body2"
                 color="textSecondary"
                 align="center"
-                sx={{ marginTop: 1 }}
+                sx={{
+                  marginTop: 5,
+                  fontWeight: "bold",
+                  fontStyle: "italic",
+                  color: (theme: Theme) => theme.palette.grey[500],
+                }}
               >
-                15 days left to donate!
+                {hospitalService.getDonationMessage(hospital)}
               </Typography>
             </CardContent>
           </Stack>
