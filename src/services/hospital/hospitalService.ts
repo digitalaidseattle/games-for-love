@@ -4,6 +4,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
+import { differenceInDays } from "date-fns";
 import { Hospital } from "../../models/hospital";
 import { HospitalFunded } from "../../models/hospitalFunded";
 import { HospitalInfo } from "../../models/hospitalInfo";
@@ -12,7 +13,6 @@ import { FilterType, sortDirection } from "../../types/fillterType";
 import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
-import { differenceInDays } from "date-fns";
 class HospitalService {
   transform(
     hi: HospitalInfo,
@@ -100,7 +100,7 @@ class HospitalService {
     if (hospital.matchedRequest && hospital.matchedFunded) {
       hospital.matchedRequest.requested
         ? (hospital.matchedFunded.fundingCompleted || 0) /
-          hospital.matchedRequest.requested
+        hospital.matchedRequest.requested
         : 0;
     }
     return 0;
@@ -113,6 +113,10 @@ class HospitalService {
       return hospital.status !== "past";
     }
   };
+
+  isEqual = (test: Hospital, selectedHospital: Hospital | undefined): boolean => {
+    return selectedHospital !== undefined && test.id === selectedHospital.id
+  }
 
   filterHospitals = (hospitals: Hospital[], searchTerm: string) => {
     const terms: string[] = searchTerm

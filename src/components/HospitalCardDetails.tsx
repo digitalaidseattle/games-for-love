@@ -13,6 +13,7 @@ import {
   Stack,
   Theme,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -23,15 +24,17 @@ import {
   LearnMoreHospitalContext,
   SelectedHospitalContext,
 } from "../context/SelectedHospitalContext";
-import { Hospital } from "../models/hospital";
-import ActionButton from "../styles/ActionButton";
-import { hospitalService } from "../services/hospital/hospitalService";
-import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { GeneralInfo } from "../models/generalInfo";
+import { Hospital } from "../models/hospital";
+import { generalInfoService } from "../services/generalInfo/generalInfoService";
+import { hospitalService } from "../services/hospital/hospitalService";
+import ActionButton from "../styles/ActionButton";
+import EmphasizedText from "../styles/EmphasizedText";
 import {
-  CLOSED_MARKER_COLOR,
-  ItalicizedStyle,
-  OPEN_MARKER_COLOR,
+  BORDER_COLOR,
+  getStatusColor,
+  HIGHLIGHT_BACKGROUD_COLOR,
+  SELECTED_BACKGROUD_COLOR
 } from "../styles/theme";
 
 export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
@@ -51,22 +54,22 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [generalInfo, setGeneralInfo] = useState<GeneralInfo | null>(null);
 
+  const theme = useTheme();
+
   useEffect(() => {
     if (hospital) {
       setBackgroundColor(
-        selectedHospital
-          ? hospital.id === selectedHospital.id
-            ? "#F0F5FA"
-            : ""
+        hospitalService.isEqual(hospital, selectedHospital)
+          ? SELECTED_BACKGROUD_COLOR
           : ""
       );
-      setPinColor(
-        selectedHospital && hospital.id === selectedHospital.id
-          ? "#FFFF00"
+      setPinColor(getStatusColor(
+        hospitalService.isEqual(hospital, selectedHospital)
+          ? "selected"
           : hospital.status === "past"
-          ? "#DB5757"
-          : "#92C65E"
-      );
+            ? "past"
+            : "active"
+      ));
       setIsOpen(hospitalService.isHospitalOpen(hospital));
     }
   }, [hospital, selectedHospital]);
@@ -170,10 +173,10 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               sx={{
                 flex: 2,
                 padding: "0 16px",
-                borderRight: "1px solid #d9d9d9",
+                borderRight: "1px solid " + BORDER_COLOR,
               }}
             >
-              <Typography variant="subtitle2" color="textSecondary">
+              <Typography variant="subtitle2" color="text.secondary">
                 <Room
                   sx={{
                     color: pinColor,
@@ -186,28 +189,27 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                     },
                   }}
                 />{" "}
-                {hospital?.city}, {hospital?.state}
+                {
+                  [hospital?.city, hospital?.state]
+                    .filter(s => s)
+                    .join(', ')
+                }
               </Typography>
 
               <Typography variant="h6" component="div">
                 {hospital?.name}
               </Typography>
-
-              <Typography
-                variant="body2"
+              <EmphasizedText
                 sx={{
-                  ...ItalicizedStyle,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
                   WebkitLineClamp: "4",
-                  WebkitBoxOrient: "vertical",
-                  color: (theme) => theme.palette.common.black,
-                }}
-              >
+                  WebkitBoxOrient: "vertical"
+                }}>
                 {hospital?.description}
-              </Typography>
 
+              </EmphasizedText>
               <Stack direction={"row"} gap={1} marginTop={2}>
                 <ActionButton onClick={handleLearnMore}>
                   Learn more
@@ -230,7 +232,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 alignItems="center"
                 marginTop={1}
                 sx={{
-                  backgroundColor: "#FFFCD8",
+                  backgroundColor: HIGHLIGHT_BACKGROUD_COLOR,
                   borderRadius: "8px",
                   padding: "2px 10px 2px 10px",
                   width: "245px",
@@ -238,54 +240,37 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               >
                 <Typography
                   variant="body2"
-                  color="textSecondary"
+                  color="text.secondary"
                   marginRight={1}
                   sx={{ color: (theme) => theme.palette.common.black }}
                 >
                   Matched by {partnerName}
                 </Typography>
               </Box>
-              <Typography variant="body2" color="textSecondary">
-                <span style={{ color: "#0000000" }}>
-                  ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)}{" "}
-                </span>{" "}
-                <span style={{ color: "#828282" }}>
-                  raised of $
-                  {Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
-                </span>
-                <Typography
-                  variant="body2"
-                  component="span"
-                  color="success.main"
-                  sx={{
-                    ...ItalicizedStyle,
-                    color:
-                      hospital.status === "active"
-                        ? OPEN_MARKER_COLOR
-                        : CLOSED_MARKER_COLOR,
-                  }}
-                >
+              <Typography variant="body2" color="text.secondary">
+                ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)}{" "}
+                {" "}
+                raised of $
+                {Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
+                <EmphasizedText
+                  sx={{ color: getStatusColor(hospital?.status === "past" ? "past" : "active") }}>
                   {hospital?.status}
-                </Typography>
+                </EmphasizedText>
               </Typography>
 
-              <Typography variant="body2" color="textSecondary">
+              <Typography variant="body2" color={theme.palette.text.secondary}>
                 {hospital.year}+ kids impacted
               </Typography>
-
-              <Typography
-                variant="body2"
-                color="textSecondary"
+              <EmphasizedText
                 align="center"
                 sx={{
                   marginTop: 5,
                   fontWeight: "bold",
-                  fontStyle: "italic",
                   color: (theme: Theme) => theme.palette.grey[500],
                 }}
               >
                 {hospitalService.getDonationMessage(hospital)}
-              </Typography>
+              </EmphasizedText>
             </CardContent>
           </Stack>
         </CardActionArea>
