@@ -74,7 +74,7 @@ export const SearchAndSort = () => {
         }}
       >
         <TextField
-          placeholder="Search hospital name"
+          placeholder="Search"
           onChange={changeSearch}
           InputProps={{
             endAdornment: (
