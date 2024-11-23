@@ -41,7 +41,7 @@ const RadioOption = (props: { label: string, value: string }) => {
         <Radio
           sx={{
             "& .MuiSvgIcon-root": {
-              color: "#000",
+              color: "black",
             },
           }}
         />
@@ -53,7 +53,6 @@ const RadioOption = (props: { label: string, value: string }) => {
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
     width: "400px",
-    height: "730px",
     maxWidth: "none",
     margin: "auto",
     borderRadius: "15px",
@@ -61,6 +60,7 @@ const CustomDialog = styled(Dialog)(() => ({
 }));
 
 const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
+
   const { setOriginals } = useContext(HospitalsContext);
   const { filters, setFilters } = useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
@@ -157,7 +157,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
       <DialogContent>
         <Box sx={{ mt: 2, mb: 0.8 }}>
           <Typography
-            sx={{ fontSize: "20px", color: "#000", fontWeight: "bold" }}
+            sx={{ fontSize: "20px", fontWeight: "bold" }}
           >
             Location
           </Typography>
@@ -170,7 +170,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
               mt: 0,
               p: 0,
               "& .MuiInputBase-root": {
-                backgroundColor: "#ededed",
+                backgroundColor: (theme) => theme.palette.grey[200],
                 borderRadius: "10px",
                 height: "36px",
                 marginLeft: "0px",
@@ -204,14 +204,10 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
             <Chip
               label={chip}
               key={index}
+              color="primary"
               onDelete={() => handleDeleteChip(chip)}
               sx={{
                 m: 0.3,
-                backgroundColor: "#000",
-                color: "#fff",
-                ".MuiChip-deleteIcon": {
-                  color: "#fff",
-                },
               }}
             />
           ))}
@@ -222,7 +218,6 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
               component="legend"
               sx={{
                 fontSize: "20px",
-                color: "text.primary",
                 fontWeight: "bold",
                 "&.Mui-focused": {
                   color: "text.primary",

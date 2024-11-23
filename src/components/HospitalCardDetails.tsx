@@ -266,7 +266,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 sx={{
                   marginTop: 5,
                   fontWeight: "bold",
-                  color: (theme: Theme) => theme.palette.grey[500],
+                  color: (theme: Theme) => theme.palette.text.secondary,
                 }}
               >
                 {hospitalService.getDonationMessage(hospital)}

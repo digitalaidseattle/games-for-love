@@ -1,7 +1,6 @@
 .chip {
     top: 15px;
     left: 15px;
-    background-color: #FFFFFF !important;
     position: absolute;
     z-index: 2;
   }
