@@ -34,7 +34,7 @@ const CustomDialog = styled(Dialog)(() => ({
 
 const DonationDialog = () => {
   const { hospital: donationHospital, setHospital: setDonationHospital } = useContext(DonationHospitalContext);
-  const [amounts, setAmounts] = useState<string[]>(['$200', '$130', '$55', '$35', '$10', '$5']);
+  const [amounts] = useState<string[]>(['$200', '$130', '$55', '$35', '$10', '$5']);
 
   const handleDonate = () => {
     alert('Donate action')
@@ -75,7 +75,7 @@ const DonationDialog = () => {
     const [currency] = useState<string>("$")
     return (
       <Stack sx={{ width: '100%' }}>
-        <FormControl sx={{ m: 1, width: '100%', marginLeft:0 }} variant="outlined">
+        <FormControl sx={{ m: 1, width: '100%', marginLeft: 0 }} variant="outlined">
           <OutlinedInput
             id="outlined-adornment-password"
             type={'text'}
@@ -107,12 +107,10 @@ const DonationDialog = () => {
             type={'number'}
             size="small"
             sx={{ textAlign: 'right' }}
-            inputProps={{ style: { textAlign: 'right' } }} 
+            inputProps={{ style: { textAlign: 'right' } }}
             startAdornment={<InputAdornment position="start">{hospital}</InputAdornment>}
             endAdornment={
-              <InputAdornment position="end">
-                <Button onClick={() => alert('show menu')}>%</Button>
-              </InputAdornment>
+              <InputAdornment position="end">%</InputAdornment>
             }
             value={hospitalPercent}
           />
@@ -124,11 +122,9 @@ const DonationDialog = () => {
             size="small"
             sx={{ textAlign: 'right' }}
             startAdornment={<InputAdornment position="start">GeneralFund</InputAdornment>}
-            inputProps={{ style: { textAlign: 'right' } }} 
+            inputProps={{ style: { textAlign: 'right' } }}
             endAdornment={
-              <InputAdornment position="end">
-                <Button onClick={() => alert('show menu')}>%</Button>
-              </InputAdornment>
+              <InputAdornment position="end">%</InputAdornment>
             }
             value={generalPercent}
           />
