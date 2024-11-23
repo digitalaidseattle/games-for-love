@@ -15,13 +15,12 @@ import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
 
 import { Room } from "@mui/icons-material";
-import { Box } from "@mui/material";
+import { Box, Theme } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
 import { HospitalsContext } from "../context/HospitalContext";
 import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import { Hospital } from "../models/hospital";
 import { siteService } from "../services/siteUtils";
-import { getStatusColor } from "../styles/theme";
 
 const HospitalMarker = (props: {
   hospital: Hospital;
@@ -48,7 +47,7 @@ const HospitalMarker = (props: {
       >
         <Room
           sx={{
-            color: getStatusColor(props.selected ? "selected" : hospital.status === "past" ? "past" : "active"),
+            color: (theme: Theme) => props.selected ? theme.palette.hospital.selected : hospital.status === "past" ? theme.palette.hospital.closed : theme.palette.hospital.open,
             strokeWidth: "0.2px",
             stroke: "black",
             fontSize: "3rem",

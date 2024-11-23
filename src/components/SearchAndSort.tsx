@@ -13,7 +13,8 @@ import {
   Button,
   IconButton,
   InputAdornment,
-  TextField
+  TextField,
+  Theme
 } from "@mui/material";
 import { ChangeEvent, useContext, useState } from "react";
 
@@ -22,7 +23,6 @@ import FilterDialog from "./FilterDialog";
 import { FilterContext } from "../context/FilterContext";
 import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
-import { BORDER_COLOR } from "../styles/theme";
 import { sortDirection } from "../types/fillterType";
 
 export const SearchAndSort = () => {
@@ -113,7 +113,7 @@ export const SearchAndSort = () => {
           sx={{
             padding: "10px",
             borderRadius: "12px",
-            border: "1px solid " + BORDER_COLOR,
+            border: (theme: Theme) => "1px solid " + theme.palette.grey[400],
             height: "36px",
             width: "64px",
           }}
@@ -138,10 +138,10 @@ export const SearchAndSort = () => {
             alignItems: "center",
             justifyContent: "center",
             borderRadius: "12px",
-            border: "1px solid " + BORDER_COLOR,
+            border: (theme: Theme) => "1px solid " + theme.palette.grey[400],
             backgroundColor: "white",
             "&:hover": {
-              border: "1px solid " + BORDER_COLOR,
+              border: (theme: Theme) => "1px solid " + theme.palette.grey[400]
             },
           }}
         >
