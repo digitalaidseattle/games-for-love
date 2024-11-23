@@ -128,7 +128,6 @@ export const SearchAndSort = () => {
             isDisabled || filters.sortDirection === sortDirection.UNDEFINED
           }
           sx={{
-            color: "black",
             textTransform: "capitalize",
             padding: "0px",
             margin: "0px",
@@ -139,7 +138,6 @@ export const SearchAndSort = () => {
             justifyContent: "center",
             borderRadius: "12px",
             border: (theme: Theme) => "1px solid " + theme.palette.grey[400],
-            backgroundColor: "white",
             "&:hover": {
               border: (theme: Theme) => "1px solid " + theme.palette.grey[400]
             },

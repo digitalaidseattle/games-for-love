@@ -36,13 +36,7 @@ import EmphasizedText from "../../styles/EmphasizedText";
 const CustomCancelIconButton = styled(IconButton)({
   opacity: 0.9,
   border: "none",
-  boxShadow: "none",
-  "& .MuiSvgIcon-root": {
-    color: "white",
-  },
-  "&:focus": {
-    outline: "none",
-  },
+  boxShadow: "none"
 });
 
 // const CustomAvatar = styled(Avatar)({

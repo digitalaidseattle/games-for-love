@@ -49,7 +49,6 @@ const HospitalMarker = (props: {
           sx={{
             color: (theme: Theme) => props.selected ? theme.palette.hospital.selected : hospital.status === "past" ? theme.palette.hospital.closed : theme.palette.hospital.open,
             strokeWidth: "0.2px",
-            stroke: "black",
             fontSize: "3rem",
             "& .MuiSvgIcon-root": {
               outline: "1px solid red",

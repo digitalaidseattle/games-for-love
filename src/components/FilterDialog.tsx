@@ -38,13 +38,7 @@ const RadioOption = (props: { label: string, value: string }) => {
     <FormControlLabel
       value={props.value}
       control={
-        <Radio
-          sx={{
-            "& .MuiSvgIcon-root": {
-              color: "black",
-            },
-          }}
-        />
+        <Radio />
       }
       label={props.label}
     />);

@@ -15,7 +15,6 @@ const EmphasizedText = (props: any) => {
         sx={Object.assign(
             {
                 fontStyle: "italic",
-                color: (theme: Theme) => theme.palette.common.black
             },
             props.sx
         )}

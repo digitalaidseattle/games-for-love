@@ -174,7 +174,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   sx={{
                     color: pinColor,
                     strokeWidth: "0.2px",
-                    stroke: "black",
                     fontSize: "1rem",
                     "& .MuiSvgIcon-root": {
                       outline: "1px solid red",
