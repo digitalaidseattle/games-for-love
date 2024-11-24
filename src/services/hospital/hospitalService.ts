@@ -39,7 +39,7 @@ class HospitalService {
     } as Hospital;
     hospital.status = this.calcStatus(hospital, currentDate);
     hospital.fundingLevel = this.calcFundingLevel(hospital);
-    hospital.searchTerm = `${hospital.state?.toLowerCase()}.${hospital.city?.toLowerCase()}.${hospital.zip?.toLowerCase()}.${hospital.name?.toLowerCase()}`;
+    hospital.searchTerm = `${hospital.state?.toLowerCase()}.${hospital.city?.toLowerCase()}.${hospital.country?.toLowerCase()}.${hospital.name?.toLowerCase()}`;
     return hospital;
   }
 
@@ -124,7 +124,7 @@ class HospitalService {
       .split(" ")
       .filter((t) => t);
     return hospitals.filter((h: Hospital) =>
-      terms.find((term) => h.searchTerm.includes(term))
+      terms.length === 0 || terms.find((term) => h.searchTerm.includes(term)) !==undefined
     );
   };
 
