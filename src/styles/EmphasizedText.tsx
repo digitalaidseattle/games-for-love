@@ -8,6 +8,7 @@ import { Theme, Typography } from "@mui/material"
 
 const EmphasizedText = (props: any) => {
     return <Typography
+        textAlign={props.textAlign ?? "inherit"}
         variant="body2"
         component="span"
         align={props.align ?? "inherit"}
