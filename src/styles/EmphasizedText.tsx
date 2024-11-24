@@ -4,7 +4,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { Theme, Typography } from "@mui/material"
+import { Typography } from "@mui/material"
 
 const EmphasizedText = (props: any) => {
     return <Typography
