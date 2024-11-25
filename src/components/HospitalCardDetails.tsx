@@ -5,14 +5,15 @@
  *
  */
 import {
-  Avatar,
   Box,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
   Stack,
+  Theme,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -23,9 +24,18 @@ import {
   LearnMoreHospitalContext,
   SelectedHospitalContext,
 } from "../context/SelectedHospitalContext";
+import { GeneralInfo } from "../models/generalInfo";
 import { Hospital } from "../models/hospital";
-import ActionButton from "../styles/ActionButton";
+import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { hospitalService } from "../services/hospital/hospitalService";
+import ActionButton from "../styles/ActionButton";
+import EmphasizedText from "../styles/EmphasizedText";
+import {
+  BORDER_COLOR,
+  getStatusColor,
+  HIGHLIGHT_BACKGROUD_COLOR,
+  SELECTED_BACKGROUD_COLOR
+} from "../styles/theme";
 
 export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   hospital,
@@ -42,23 +52,24 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [generalInfo, setGeneralInfo] = useState<GeneralInfo | null>(null);
+
+  const theme = useTheme();
 
   useEffect(() => {
     if (hospital) {
       setBackgroundColor(
-        selectedHospital
-          ? hospital.id === selectedHospital.id
-            ? "#F0F5FA"
-            : ""
+        hospitalService.isEqual(hospital, selectedHospital)
+          ? SELECTED_BACKGROUD_COLOR
           : ""
       );
-      setPinColor(
-        selectedHospital && hospital.id === selectedHospital.id
-          ? "#FFFF00"
+      setPinColor(getStatusColor(
+        hospitalService.isEqual(hospital, selectedHospital)
+          ? "selected"
           : hospital.status === "past"
-          ? "#DB5757"
-          : "#92C65E"
-      );
+            ? "past"
+            : "active"
+      ));
       setIsOpen(hospitalService.isHospitalOpen(hospital));
     }
   }, [hospital, selectedHospital]);
@@ -96,6 +107,15 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
     evt.stopPropagation();
     setDonationHospital(hospital);
   };
+  useEffect(() => {
+    const fetchGeneralInfo = async () => {
+      const [info] = await generalInfoService.getGeneralInfo();
+      setGeneralInfo(info);
+    };
+    fetchGeneralInfo();
+  }, []);
+
+  const partnerName = generalInfo?.corpPartner1Name || "Unknown Partner";
 
   return (
     <div data-testid="hospital-detail-card">
@@ -153,10 +173,10 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               sx={{
                 flex: 2,
                 padding: "0 16px",
-                borderRight: "1px solid #d9d9d9",
+                borderRight: "1px solid " + BORDER_COLOR,
               }}
             >
-              <Typography variant="subtitle2" color="textSecondary">
+              <Typography variant="subtitle2" color="text.secondary">
                 <Room
                   sx={{
                     color: pinColor,
@@ -169,27 +189,27 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                     },
                   }}
                 />{" "}
-                {hospital?.city}, {hospital?.state}
+                {
+                  [hospital?.city, hospital?.state]
+                    .filter(s => s)
+                    .join(', ')
+                }
               </Typography>
 
               <Typography variant="h6" component="div">
                 {hospital?.name}
               </Typography>
-
-              <Typography
-                variant="body2"
+              <EmphasizedText
                 sx={{
-                  fontStyle: "italic",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
                   WebkitLineClamp: "4",
-                  WebkitBoxOrient: "vertical",
-                }}
-              >
+                  WebkitBoxOrient: "vertical"
+                }}>
                 {hospital?.description}
-              </Typography>
 
+              </EmphasizedText>
               <Stack direction={"row"} gap={1} marginTop={2}>
                 <ActionButton onClick={handleLearnMore}>
                   Learn more
@@ -199,51 +219,58 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 </ActionButton>
               </Stack>
             </CardContent>
-            <CardContent sx={{ flex: 1 }}>
-              <Typography variant="body2" color="textSecondary">
-                <span style={{ color: "black" }}>25k </span> raised of 100k -{" "}
-                <Typography
-                  variant="body2"
-                  component="span"
-                  color="success.main"
-                  sx={{ fontStyle: "italic", color: "#92c65e" }}
-                >
-                  {hospital?.status}
-                </Typography>
-              </Typography>
-
-              <Typography variant="body2" color="textSecondary">
-                400+ kids impacted
-              </Typography>
-
-              <Box display="flex" alignItems="center" marginTop={1}>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  marginRight={1}
-                >
-                  Matched by
-                </Typography>
-                <Avatar
-                  alt="Organization Logo"
-                  src="/path/to/profile1.jpg"
-                  sx={{ width: 20, height: 20, marginLeft: 1 }}
-                />
-                <Avatar
-                  alt="Organization Logo"
-                  src="/path/to/profile2.jpg"
-                  sx={{ width: 20, height: 20, marginLeft: 1 }}
-                />
-                +
-              </Box>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                align="center"
-                sx={{ marginTop: 1 }}
+            <CardContent
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: 0.8,
+              }}
+            >
+              <Box
+                display="flex"
+                alignItems="center"
+                marginTop={1}
+                sx={{
+                  backgroundColor: HIGHLIGHT_BACKGROUD_COLOR,
+                  borderRadius: "8px",
+                  padding: "2px 10px 2px 10px",
+                  width: "245px",
+                }}
               >
-                15 days left to donate!
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  marginRight={1}
+                  sx={{ color: (theme) => theme.palette.common.black }}
+                >
+                  Matched by {partnerName}
+                </Typography>
+              </Box>
+              <Typography variant="body2" color="text.secondary">
+                ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)}{" "}
+                {" "}
+                raised of $
+                {Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
+                <EmphasizedText
+                  sx={{ color: getStatusColor(hospital?.status === "past" ? "past" : "active") }}>
+                  {hospital?.status}
+                </EmphasizedText>
               </Typography>
+
+              <Typography variant="body2" color={theme.palette.text.secondary}>
+                {hospital.year}+ kids impacted
+              </Typography>
+              <EmphasizedText
+                align="center"
+                sx={{
+                  marginTop: 5,
+                  fontWeight: "bold",
+                  color: (theme: Theme) => theme.palette.grey[500],
+                }}
+              >
+                {hospitalService.getDonationMessage(hospital)}
+              </EmphasizedText>
             </CardContent>
           </Stack>
         </CardActionArea>

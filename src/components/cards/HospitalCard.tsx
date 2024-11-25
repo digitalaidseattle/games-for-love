@@ -14,7 +14,7 @@ import { PopupInfo } from "../../models/popupInfo";
 import "./HospitalCard.style.css";
 
 import ActionButton from "../../styles/ActionButton";
-import { CLOSED_MARKER_COLOR, OPEN_MARKER_COLOR } from "../../styles/theme";
+import { CLOSED_MARKER_COLOR, HIGHLIGHT_BACKGROUD_COLOR, OPEN_MARKER_COLOR } from "../../styles/theme";
 import {
   DonationHospitalContext,
   LearnMoreHospitalContext,
@@ -30,6 +30,7 @@ import { differenceInDays } from "date-fns";
 import { generalInfoService } from "../../services/generalInfo/generalInfoService";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import EmphasizedText from "../../styles/EmphasizedText";
 
 const CustomCancelIconButton = styled(IconButton)({
   opacity: 0.9,
@@ -80,7 +81,9 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
       popupInfo.hospital.matchedRequest.fundingDeadline
     ) {
       const currentDate = new Date();
-      const deadlineDate = new Date(popupInfo.hospital.matchedRequest.fundingDeadline);
+      const deadlineDate = new Date(
+        popupInfo.hospital.matchedRequest.fundingDeadline
+      );
       const daysLeft = differenceInDays(deadlineDate, currentDate);
       return daysLeft > 0
         ? `${daysLeft} days left to donate!`
@@ -107,6 +110,12 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
         background: none !important; 
         box-shadow: none !important; 
       }
+      .carousel .control-prev.control-arrow {
+        left: 30px;
+        }
+      .carousel .control-next.control-arrow {
+        right: 30px;
+        }
     `}
       </style>
       <Card
@@ -129,7 +138,6 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
                     color: markerColor,
                     fontSize: "15px",
                   },
-                  color: "#454545",
                   fontSize: "8px",
                   height: "auto",
                 }}
@@ -172,7 +180,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
               alignItems="center"
               justifyContent="center"
               sx={{
-                backgroundColor: "#FFFCD8",
+                backgroundColor: HIGHLIGHT_BACKGROUD_COLOR,
                 width: "265px",
                 height: "20px",
                 visibility:
@@ -201,11 +209,15 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
           </Typography>
 
           <Typography color="text.secondary" sx={{ fontSize: "10px" }}>
-            <span style={{ color: "#828282" }}>25K </span>
-            raised of 100k -{" "}
-            <span style={{ color: "#92c65e", fontStyle: "italic" }}>
+            ${popupInfo?.hospital.matchedFunded?.fundingCompleted || 0}{" "}
+            raised of ${popupInfo?.hospital.matchedRequest?.requested} -{" "}
+            <EmphasizedText
+              sx={{
+                color: OPEN_MARKER_COLOR,
+                fontSize: "10px"
+              }}>
               {popupInfo?.hospital.status === "active" && "Actively Funding"}
-            </span>
+            </EmphasizedText>
           </Typography>
           <Typography sx={{ fontSize: "10px" }}>
             {popupInfo?.hospital.year}+ kids impacted
@@ -248,71 +260,6 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
               Donate
             </ActionButton>
           </Stack>
-
-          {/* <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              width: "100%",
-              paddingTop:
-                popupInfo?.hospital.status === "active" ? "0px" : "19px",
-              boxSizing: "border-box",
-            }}
-          >
-            <Button
-              variant="contained"
-              href="#"
-              disableRipple
-              sx={{
-                backgroundColor: "black",
-                marginTop: "8px",
-                width: "112px",
-                height: "26px",
-                borderRadius: "10px",
-                textTransform: "none",
-                fontSize: "10px",
-                marginRight: "2px",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  color: "#000",
-                },
-              }}
-            >
-              Learn more
-            </Button>
-
-            <Button
-              variant="contained"
-              href="#"
-              disableRipple
-              disabled={popupInfo?.hospital.status !== "active"}
-              sx={{
-                backgroundColor:
-                  popupInfo?.hospital.status === "active" ? "black" : "grey",
-                marginTop: "8px",
-                width: "112px",
-                height: "26px",
-                borderRadius: "10px",
-                textTransform: "none",
-                fontSize: "10px",
-                marginLeft: "2px",
-                color:
-                  popupInfo?.hospital.status === "active" ? "white" : "grey",
-                "&:hover": {
-                  backgroundColor:
-                    popupInfo?.hospital.status === "active"
-                      ? "transparent"
-                      : "grey",
-                  color:
-                    popupInfo?.hospital.status === "active" ? "#000" : "white",
-                },
-              }}
-            >
-              Donate
-            </Button>
-          </Box> */}
-
           <Box sx={{ marginBottom: "5px" }}>
             <Typography
               textAlign={"center"}

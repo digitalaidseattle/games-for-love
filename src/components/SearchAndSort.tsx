@@ -23,10 +23,11 @@ import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
 import { FilterContext } from "../context/FilterContext";
 import { sortDirection } from "../types/fillterType";
+import { BORDER_COLOR } from "../styles/theme";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const { hospitals, setHospitals } = useContext(HospitalsContext);
+  const { originals, hospitals, setHospitals } = useContext(HospitalsContext);
   const { filters, setFilters } = useContext(FilterContext);
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -40,7 +41,7 @@ export const SearchAndSort = () => {
 
   const changeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     //searching through originals
-    setHospitals(hospitalService.filterHospitals(hospitals, e.target.value));
+    setHospitals(hospitalService.filterHospitals(originals, e.target.value));
     if (e.target.value !== "") {
       setIsDisabled(true);
     } else {
@@ -49,8 +50,16 @@ export const SearchAndSort = () => {
   };
 
   const handelOrderButton = () => {
-    const updated = ({...filters, sortDirection: filters.sortDirection === sortDirection.DESCENDING? sortDirection.ASCENDING :  sortDirection.DESCENDING})
-    setHospitals(hospitals.sort(hospitalService.getSortComparator(updated.sortBy, updated.sortDirection)).slice());
+    const updated = {
+      ...filters,
+      sortDirection:
+        filters.sortDirection === sortDirection.DESCENDING
+          ? sortDirection.ASCENDING
+          : sortDirection.DESCENDING,
+    };
+    setHospitals(
+      hospitals.sort(hospitalService.getSortComparator(updated)).slice()
+    );
     setFilters(updated);
   };
 
@@ -105,7 +114,7 @@ export const SearchAndSort = () => {
             padding: "10px",
             backgroundColor: "#ffffff",
             borderRadius: "12px",
-            border: "1px solid #d9d9d9",
+            border: "1px solid " + BORDER_COLOR,
             height: "36px",
             width: "64px",
           }}
@@ -130,10 +139,10 @@ export const SearchAndSort = () => {
             alignItems: "center",
             justifyContent: "center",
             borderRadius: "12px",
-            border: "1px solid #d9d9d9",
+            border: "1px solid " + BORDER_COLOR,
             backgroundColor: "white",
             "&:hover": {
-              border: "1px solid #d9d9d9",
+              border: "1px solid " + BORDER_COLOR,
             },
           }}
         >

@@ -3,7 +3,6 @@ import { HospitalRequest } from "./hospitalRequest";
 
 export type Hospital = {
   id: string;
-  hospitalInfoRecordId: string;
   name: string;
   type: string;
   description: string;
@@ -20,4 +19,5 @@ export type Hospital = {
   matchedFunded: HospitalFunded | undefined;
   status: string;
   fundingLevel: number;
+  searchTerm: string;
 };

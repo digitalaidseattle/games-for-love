@@ -12,7 +12,7 @@ import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 import { hospitalService } from "./hospitalService";
-import { sortDirection } from "../../types/fillterType";
+import { FilterType, sortDirection } from "../../types/fillterType";
 
 describe("HospitalService tests", () => {
     it("findAll", async () => {
@@ -67,6 +67,7 @@ describe("HospitalService tests", () => {
                 matchedRequest: undefined,
                 matchedFunded: undefined,
                 fundingLevel: 0,
+                searchTerm: "wa.seattle.us.may hospital",
             },
         ]);
     });
@@ -87,10 +88,10 @@ describe("HospitalService tests", () => {
             longitude: 1,
             latitude: 1,
             hospitalPictures: ["pic1.com"],
-            hospitalInfoRecordId: "",
             matchedFunded: undefined,
             matchedRequest: undefined,
             fundingLevel: 0,
+            searchTerm: "wa.seattle.US.may hospital"
         };
 
         const result = hospitalService.isHospitalOpen(mockHospitalInfo);
@@ -113,10 +114,10 @@ describe("HospitalService tests", () => {
             longitude: 1,
             latitude: 1,
             hospitalPictures: ["pic1.com"],
-            hospitalInfoRecordId: "",
             matchedRequest: undefined,
             matchedFunded: undefined,
             fundingLevel: 0,
+            searchTerm: "wa.seattle.zip12345"
         };
         const result = hospitalService.isHospitalOpen(hospital);
         expect(result).toBeFalsy();
@@ -190,7 +191,32 @@ describe("HospitalService tests", () => {
                 fundingDeadline: new Date("2023-01-31"),
             }
         } as Hospital;
-        expect([hospitalA, hospitalB].sort(hospitalService.getSortComparator("hospitalName", sortDirection.DESCENDING))).toEqual([hospitalA, hospitalB]);
-        expect([hospitalA, hospitalB].sort(hospitalService.getSortComparator("hospitalName", sortDirection.ASCENDING))).toEqual([hospitalB, hospitalA]);
+        expect([hospitalA, hospitalB].sort(hospitalService.getSortComparator({ sortBy: "hospitalName", sortDirection: sortDirection.DESCENDING } as FilterType))).toEqual([hospitalA, hospitalB]);
+        expect([hospitalA, hospitalB].sort(hospitalService.getSortComparator({ sortBy: "hospitalName", sortDirection: sortDirection.ASCENDING } as FilterType))).toEqual([hospitalB, hospitalA]);
     });
+
+
+    it("filtering", () => {
+        const hospitalA: Hospital = {
+            id: "Hopsital_1",
+            name: "May Hospital",
+            matchedRequest: {
+                fundingDeadline: new Date("2024-01-31"),
+            },
+            searchTerm: 'state.city.kor.May Hospital'
+        } as Hospital;
+        const hospitalB: Hospital = {
+            id: "Hopsital_2",
+            name: "Jeff Hospital",
+            matchedRequest: {
+                fundingDeadline: new Date("2023-01-31"),
+            },
+            searchTerm: 'state.city.us.jeff hospital'
+        } as Hospital;
+        expect(hospitalService.filterHospitals([hospitalA, hospitalB], "")).toEqual([hospitalA, hospitalB]);
+        expect(hospitalService.filterHospitals([hospitalA, hospitalB], "jeff")).toEqual([hospitalB]);
+        expect(hospitalService.filterHospitals([hospitalA, hospitalB], "jeff kor")).toEqual([hospitalA, hospitalB]);
+        expect(hospitalService.filterHospitals([hospitalA, hospitalB], "may kor")).toEqual([hospitalA]);
+    });
+
 });

@@ -222,10 +222,10 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
               component="legend"
               sx={{
                 fontSize: "20px",
-                color: "#000",
+                color: "text.primary",
                 fontWeight: "bold",
                 "&.Mui-focused": {
-                  color: "#000",
+                  color: "text.primary",
                 },
               }}
             >
@@ -247,10 +247,10 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
               component="legend"
               sx={{
                 fontSize: "20px",
-                color: "#000",
+                color: "text.primary",
                 fontWeight: "bold",
                 "&.Mui-focused": {
-                  color: "#000",
+                  color: "text.primary",
                 },
               }}
             >
@@ -285,13 +285,13 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
             width: "20%",
             margin: "0 10px",
             backgroundColor: "transparent",
-            color: "#000",
+            color: "text.primary",
             textTransform: "none",
             fontWeight: "bold",
             border: "none",
             "&:hover": {
               backgroundColor: "transparent",
-              color: "#000",
+              color: "text.",
             },
             "&:focus": {
               outline: "none",
