@@ -27,7 +27,7 @@ const HospitalPageContent = () => {
 
       {/* Impact Section */}
       <HospitalPageBaseComponent
-        image={hospital?.matchedFunded?.impactPicture1[0]?.url}
+        image="https://via.placeholder.com/345x180"
         header={hospital?.matchedFunded?.impactTitle}
         shortParagraph={"This is a short paragraph about the impact."}
         paragraph={`This is the positive impact made possible with your donations!

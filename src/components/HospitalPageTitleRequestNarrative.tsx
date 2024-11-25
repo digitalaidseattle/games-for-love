@@ -72,10 +72,10 @@ const HospitalPageTitleRequestNarrative = () => {
             </Box>
             {/* Brand Partners Section */}
             <Box mt={4}>
-              <Typography variant="h5" fontWeight="bold">
+              <Typography variant="h6" gutterBottom>
                 Brand Partners
               </Typography>
-              <Grid container spacing={4} alignItems="center" mt={2}>
+              <Grid container spacing={4} alignItems="center">
                 <Grid item xs={3}>
                   <img
                     src="https://via.placeholder.com/100" // Replace with actual image
