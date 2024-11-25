@@ -1,47 +1,42 @@
-import { useEffect, useState } from "react";
 import {
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
   Box,
+  Card,
+  CardContent,
+  CardMedia,
   // Avatar,
   Chip,
   IconButton,
   Stack,
+  styled,
+  Theme,
+  Typography,
+  useTheme,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import { PopupInfo } from "../../models/popupInfo";
 import "./HospitalCard.style.css";
 
-import ActionButton from "../../styles/ActionButton";
-import { CLOSED_MARKER_COLOR, HIGHLIGHT_BACKGROUD_COLOR, OPEN_MARKER_COLOR } from "../../styles/theme";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { useContext } from "react";
 import {
   DonationHospitalContext,
   LearnMoreHospitalContext,
 } from "../../context/SelectedHospitalContext";
-import { useContext } from "react";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
-import { styled } from "@mui/material/styles";
 import { GeneralInfo } from "../../models/generalInfo";
+import ActionButton from "../../styles/ActionButton";
 
-import { hospitalService } from "../../services/hospital/hospitalService";
 import { differenceInDays } from "date-fns";
-import { generalInfoService } from "../../services/generalInfo/generalInfoService";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { generalInfoService } from "../../services/generalInfo/generalInfoService";
+import { hospitalService } from "../../services/hospital/hospitalService";
 import EmphasizedText from "../../styles/EmphasizedText";
 
 const CustomCancelIconButton = styled(IconButton)({
   opacity: 0.9,
   border: "none",
-  boxShadow: "none",
-  "& .MuiSvgIcon-root": {
-    color: "white",
-  },
-  "&:focus": {
-    outline: "none",
-  },
+  boxShadow: "none"
 });
 
 // const CustomAvatar = styled(Avatar)({
@@ -62,6 +57,8 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
   popupInfo,
   onClose,
 }) => {
+  const theme = useTheme();
+
   const { setHospital: setDonationHospital } = useContext(
     DonationHospitalContext
   );
@@ -72,7 +69,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
   const [generalInfo, setGeneralInfo] = useState<GeneralInfo | null>(null);
 
   const isOpen = hospitalService.isHospitalOpen(popupInfo?.hospital);
-  const markerColor = isOpen ? OPEN_MARKER_COLOR : CLOSED_MARKER_COLOR;
+  const markerColor = isOpen ? theme.palette.hospital.open : theme.palette.hospital.closed;
 
   const getDonationMessage = () => {
     if (
@@ -180,7 +177,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
               alignItems="center"
               justifyContent="center"
               sx={{
-                backgroundColor: HIGHLIGHT_BACKGROUD_COLOR,
+                backgroundColor: (theme:Theme) => theme.palette.background.highlighted,
                 width: "265px",
                 height: "20px",
                 visibility:
@@ -213,7 +210,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
             raised of ${popupInfo?.hospital.matchedRequest?.requested} -{" "}
             <EmphasizedText
               sx={{
-                color: OPEN_MARKER_COLOR,
+                color: theme.palette.hospital.open,
                 fontSize: "10px"
               }}>
               {popupInfo?.hospital.status === "active" && "Actively Funding"}

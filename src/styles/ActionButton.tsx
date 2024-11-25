@@ -4,23 +4,17 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { Button, useTheme } from "@mui/material"
+import { Button } from "@mui/material"
 
 const ActionButton = (props: any) => {
-    const theme = useTheme();
     return <Button
         disabled={props.disabled}
         variant="contained"
         href="#"
         sx={Object.assign({
-            backgroundColor: props.disabled ? "gray" : "black",
             width: "100%",
             borderRadius: "40px",
-            textTransform: "none",
-            "&:hover": {
-                backgroundColor: "transparent",
-                color: theme.palette.common.white,
-            },
+            textTransform: "none"
         }, props.sx)}
         onClick={props.onClick}
     >

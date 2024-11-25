@@ -27,7 +27,7 @@ const LearnMoreOverlay = () => {
 
     return (hospital &&
         <Backdrop
-            sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+            sx={(theme) => ({ zIndex: theme.zIndex.drawer + 1 })}
             open={hospital !== undefined}
             onClick={handleClose}
         >
