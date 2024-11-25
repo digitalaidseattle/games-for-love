@@ -4,101 +4,134 @@ import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
+import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 
 const HospitalPageFooter = () => {
   return (
     <React.Fragment>
       <Divider />
-      <Box sx={{ backgroundColor: "#333", color: "#fff", padding: 4 }}>
+      <Box sx={{ padding: 4 }}>
         <Grid container spacing={4}>
           {/* Section 1 */}
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
-              About Us
-            </Typography>
-            <Typography variant="body2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam.
-            </Typography>
+          <Grid container xs={12} sm={5} md={5}>
+            <Grid item xs={12}>
+              <Typography
+                variant="h6"
+                sx={{ marginBottom: 2, paddingTop: 2, paddingBottom: 2 }}
+              >
+                Games For Love
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Link href="#" color="inherit" underline="hover">
+                <FacebookRoundedIcon
+                  fontSize="large"
+                  sx={{ color: "#828282" }}
+                />
+              </Link>
+              <Link href="#" color="inherit" underline="hover">
+                <FacebookRoundedIcon
+                  fontSize="large"
+                  sx={{ color: "#828282" }}
+                />
+              </Link>
+
+              <Link href="#" color="inherit" underline="hover">
+                <FacebookRoundedIcon
+                  fontSize="large"
+                  sx={{ color: "#828282" }}
+                />
+              </Link>
+              <Link href="#" color="inherit" underline="hover">
+                <FacebookRoundedIcon
+                  fontSize="large"
+                  sx={{ color: "#828282" }}
+                />
+              </Link>
+            </Grid>
           </Grid>
 
           {/* Section 2 */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={2} md={2}>
             <Typography variant="h6" sx={{ marginBottom: 2 }}>
-              Quick Links
+              Topic
             </Typography>
             <Typography variant="body2">
               <Link href="#" color="inherit" underline="hover">
-                Home
+                Page
               </Link>
               <br />
               <Link href="#" color="inherit" underline="hover">
-                About
+                Page
               </Link>
               <br />
               <Link href="#" color="inherit" underline="hover">
-                Services
+                Page
               </Link>
               <br />
               <Link href="#" color="inherit" underline="hover">
-                Contact
+                Page
               </Link>
+              <br />
             </Typography>
           </Grid>
 
           {/* Section 3 */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={2} md={2}>
             <Typography variant="h6" sx={{ marginBottom: 2 }}>
-              Contact Us
+              Topic
             </Typography>
             <Typography variant="body2">
-              Email: info@example.com
+              <Link href="#" color="inherit" underline="hover">
+                Page
+              </Link>
               <br />
-              Phone: +123 456 7890
+              <Link href="#" color="inherit" underline="hover">
+                Page
+              </Link>
               <br />
-              Address: 123 Main Street, City, Country
+              <Link href="#" color="inherit" underline="hover">
+                Page
+              </Link>
+              <br />
+              <Link href="#" color="inherit" underline="hover">
+                Page
+              </Link>
+              <br />
             </Typography>
           </Grid>
 
           {/* Section 4 */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={2} md={2}>
             <Typography variant="h6" sx={{ marginBottom: 2 }}>
-              Follow Us
+              Topic
             </Typography>
             <Typography variant="body2">
               <Link href="#" color="inherit" underline="hover">
-                Facebook
+                Page
               </Link>
               <br />
               <Link href="#" color="inherit" underline="hover">
-                Twitter
+                Page
               </Link>
               <br />
               <Link href="#" color="inherit" underline="hover">
-                LinkedIn
+                Page
               </Link>
               <br />
               <Link href="#" color="inherit" underline="hover">
-                Instagram
+                Page
               </Link>
+              <br />
             </Typography>
           </Grid>
         </Grid>
-
-        {/* Footer Bottom */}
-        <Box
-          sx={{
-            textAlign: "center",
-            marginTop: 4,
-            borderTop: "1px solid #444",
-            paddingTop: 2,
-          }}
-        >
-          <Typography variant="body2">
-            &copy; {new Date().getFullYear()} Your Company. All rights reserved.
-          </Typography>
-        </Box>
       </Box>
     </React.Fragment>
   );

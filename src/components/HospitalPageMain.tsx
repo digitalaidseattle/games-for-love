@@ -5,6 +5,7 @@ import HospitalPageCarausel from "./HospitalPageCarausel";
 
 const HospitalPageMain = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
+  console.log(hospital);
   return (
     <Grid
       container

@@ -1,9 +1,37 @@
 import Slider from "react-slick";
 import { Box, Grid } from "@mui/material";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 // Import slick-carousel CSS
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useContext } from "react";
+import { LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
+
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <ArrowForwardIosIcon
+      className={className}
+      style={{ ...style, color: "black" }}
+      onClick={onClick}
+      fontSize="large"
+    />
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <ArrowBackIosIcon
+      className={className}
+      style={{ ...style, color: "black" }}
+      onClick={onClick}
+      fontSize="large"
+    />
+  );
+}
 
 const HospitalPageCarausel = () => {
   // Settings for the slider
@@ -13,20 +41,37 @@ const HospitalPageCarausel = () => {
     speed: 500, // Transition speed
     slidesToShow: 3,
     slidesToScroll: 3,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
-  // Slides data: 6 slides, each containing 3 images
-  const slides = [
-    ["https://via.placeholder.com/150?text=Image+1"],
-    ["https://via.placeholder.com/150?text=Image+4"],
-    ["https://via.placeholder.com/150?text=Image+7"],
-    ["https://via.placeholder.com/150?text=Image+10"],
-    ["https://via.placeholder.com/150?text=Image+13"],
-    ["https://via.placeholder.com/150?text=Image+16"],
-    ["https://via.placeholder.com/150?text=Image+10"],
-    ["https://via.placeholder.com/150?text=Image+13"],
-    ["https://via.placeholder.com/150?text=Image+16"],
-  ];
+  const { hospital } = useContext(LearnMoreHospitalContext);
 
   return (
     <Box
@@ -34,37 +79,38 @@ const HospitalPageCarausel = () => {
         width: "100%",
         margin: "40px auto",
         padding: "20px 0",
-        // border: "1px solid black",
       }}
     >
       <Slider {...settings}>
-        {slides.map((slide, index) => (
-          <Box
-            key={index}
+        {hospital?.hospitalPictures.map((slide, index) => (
+          <Grid
+            container
+            spacing={2}
             sx={{
-              display: "flex",
+              alignItems: "center",
               justifyContent: "center",
-              padding: "40px",
             }}
           >
-            <Grid container spacing={2} sx={{ alignItems: "center" }}>
-              {slide.map((image, idx) => (
-                <Grid item xs={4} key={idx}>
-                  <Box
-                    component="img"
-                    src={image}
-                    alt={`Slide ${index + 1} - Image ${idx + 1}`}
-                    sx={{
-                      width: "300px",
-                      height: "auto",
-                      borderRadius: "8px",
-                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                    }}
-                  />
-                </Grid>
-              ))}
+            <Grid
+              item
+              key={index}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Box
+                component="img"
+                src={slide}
+                alt={`Slide ${index + 1} - Image ${index + 1}`}
+                sx={{
+                  width: "300px",
+                  height: "200px",
+                  borderRadius: "8px",
+                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                }}
+              />
             </Grid>
-          </Box>
+          </Grid>
         ))}
       </Slider>
     </Box>
