@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
 import { Box, Grid, Typography } from "@mui/material";
 import HospitalPageCarausel from "./HospitalPageCarousel";
+import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 
 const HospitalPageMain = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);

@@ -17,7 +17,7 @@ import { useContext } from "react";
 import { LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
 import DialogCloseButton from "../styles/DialogCloseButton";
 import GamesForLoveLogo from "../assets/488c5a7cd5735fe0aa7ca0e7a31867e1.png";
-import HospitalDetailsPageModal from "./HospitalDetailsPageModal";
+import HospitalDetailsPageModal from "./HospitalPage/HospitalDetailsPageModal";
 
 const LearnMoreContent = () => {
   return (

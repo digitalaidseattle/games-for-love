@@ -7,7 +7,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useContext } from "react";
-import { LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
+import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;

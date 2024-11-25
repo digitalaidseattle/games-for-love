@@ -2,10 +2,10 @@ import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
 const PurpleProgressBar = styled(LinearProgress)({
-  height: 10,
-  borderRadius: 0,
+  height: 40,
+  borderRadius: 5,
   "& .MuiLinearProgress-bar": {
-    backgroundColor: "#6a1b9a", // Purple color
+    backgroundColor: "#4A24E7", // Purple color
   },
 });
 
@@ -67,7 +67,7 @@ const HospitalPageTitleRequestNarrative = () => {
               </Typography>
 
               <Box mt={2}>
-                <PurpleProgressBar variant="determinate" value={150} />
+                <PurpleProgressBar variant="determinate" value={100} />
               </Box>
             </Box>
             {/* Brand Partners Section */}

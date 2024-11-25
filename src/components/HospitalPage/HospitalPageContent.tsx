@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
+import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 import HospitalPageBaseComponent from "./HospitalPageBaseComponent";
 
 const HospitalPageContent = () => {
