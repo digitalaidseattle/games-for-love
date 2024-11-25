@@ -13,12 +13,22 @@ export type HospitalFunded = {
   fundedPicture3: string;
   fundedPicture4: string;
   fundedPicture5: string;
-  impactPicture1: string;
-  impactPicture2: string;
-  impactPicture3: string;
-  impactPicture4: string;
-  impactPicture5: string;
+  impactPicture1: ImpactPictureType;
+  impactPicture2: ImpactPictureType;
+  impactPicture3: ImpactPictureType;
+  impactPicture4: ImpactPictureType;
+  impactPicture5: ImpactPictureType;
   shortThankYou: string;
   thankYouNoteTitle: string;
   impactTitle: string;
 };
+
+
+type ImpactPictureType = Array<{
+  fileName: string;
+  url: string;
+  type: string;
+  height: number;
+  id: string;
+  width: number;
+}>

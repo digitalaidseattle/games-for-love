@@ -1,6 +1,14 @@
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
 
-const HospitalPageInfoCard = ({ image, title, description }: any) => {
+const HospitalPageInfoCard = ({
+  image,
+  title,
+  description,
+}: {
+  image: string;
+  title: string;
+  description: string;
+}) => {
   return (
     <Card sx={{ maxWidth: 345, borderRadius: 2, boxShadow: 3 }}>
       {/* Image */}

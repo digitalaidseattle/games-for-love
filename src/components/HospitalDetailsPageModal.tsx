@@ -8,7 +8,7 @@ import HospitalPageTitleRequestNarrative from "./HospitalPageTitleRequestNarrati
 
 const HospitalDetailsPageModal = () => {
   return (
-    <Box>
+    <Box sx={{ padding: "20px" }}>
       <HospitalPageMain />
       <HospitalPageTitleRequestNarrative />
       <HospitalPageStatsSection />

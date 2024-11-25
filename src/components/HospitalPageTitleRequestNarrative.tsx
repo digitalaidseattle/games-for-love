@@ -1,13 +1,13 @@
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
-const PurpleProgressBar = styled(LinearProgress)(({ theme }) => ({
+const PurpleProgressBar = styled(LinearProgress)({
   height: 10,
   borderRadius: 0,
   "& .MuiLinearProgress-bar": {
     backgroundColor: "#6a1b9a", // Purple color
   },
-}));
+});
 
 const HospitalPageTitleRequestNarrative = () => {
   return (
@@ -32,17 +32,17 @@ const HospitalPageTitleRequestNarrative = () => {
           }}
         >
           <Grid item>
-            <Typography variant="h5" fontWeight="bold">
+            <Typography variant="h6" gutterBottom sx={{ color: "#8A8A8A" }}>
               Title Request Narrative
             </Typography>
-            <Typography variant="body1" mt={2}>
+            <Typography variant="body1" gutterBottom>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </Typography>
           </Grid>
 
           <Grid item>
-            <Typography variant="h5" fontWeight="bold">
+            <Typography variant="h6" gutterBottom sx={{ color: "#8A8A8A" }}>
               Request Narrative
             </Typography>
             <Typography variant="body1" mt={2}>

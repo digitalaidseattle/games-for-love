@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { useContext } from "react";
 import { LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
 
-function SampleNextArrow(props) {
+function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
   return (
     <ArrowForwardIosIcon
@@ -21,7 +21,7 @@ function SampleNextArrow(props) {
   );
 }
 
-function SamplePrevArrow(props) {
+function SamplePrevArrow(props: any) {
   const { className, style, onClick } = props;
   return (
     <ArrowBackIosIcon
@@ -33,7 +33,7 @@ function SamplePrevArrow(props) {
   );
 }
 
-const HospitalPageCarausel = () => {
+const HospitalPageCarousel = () => {
   // Settings for the slider
   const settings = {
     dots: true, // Enable dots for navigation
@@ -117,4 +117,4 @@ const HospitalPageCarausel = () => {
   );
 };
 
-export default HospitalPageCarausel;
+export default HospitalPageCarousel;

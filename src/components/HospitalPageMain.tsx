@@ -1,11 +1,10 @@
 import { useContext } from "react";
 import { LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
 import { Box, Grid, Typography } from "@mui/material";
-import HospitalPageCarausel from "./HospitalPageCarausel";
+import HospitalPageCarausel from "./HospitalPageCarousel";
 
 const HospitalPageMain = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
-  console.log(hospital);
   return (
     <Grid
       container

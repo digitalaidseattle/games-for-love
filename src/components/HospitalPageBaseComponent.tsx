@@ -4,21 +4,25 @@ export interface HospitalPageBaseComponentProps {
   image?: string | JSX.Element;
   header?: string;
   paragraph?: string;
+  shortParagraph?: string;
   styles?: {
-    container?: {};
-    imageContainer?: {};
-    header?: {};
-    paragraph?: {};
+    container?: any;
+    imageContainer?: any;
+    header?: any;
+    paragraph?: any;
+    shortParagraph?: any;
   };
 }
 const HospitalPageBaseComponent = ({
   image,
   header,
   paragraph,
+  shortParagraph,
   styles = {
     container: {},
     imageContainer: {},
     header: {},
+    shortParagraph: {},
     paragraph: {},
   },
 }: HospitalPageBaseComponentProps) => {
@@ -53,9 +57,17 @@ const HospitalPageBaseComponent = ({
         )}
 
         {/* Text Content */}
-        <Grid item xs={12} md={image ? 6 : 12}>
+        <Grid item xs={12} md={image ? 6 : 12} sx={{ textAlign: "center" }}>
           <Typography variant="h5" gutterBottom sx={{ ...styles.header }}>
             {header}
+          </Typography>
+          <Typography
+            gutterBottom
+            variant="body1"
+            color="textSecondary"
+            sx={{ ...styles.shortParagraph }}
+          >
+            {shortParagraph}
           </Typography>
           <Typography
             variant="body1"

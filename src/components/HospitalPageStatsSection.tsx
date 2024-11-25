@@ -1,5 +1,4 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { endOfDay } from "date-fns";
 
 const HospitalPageStatsSection = () => {
   const stats = [
