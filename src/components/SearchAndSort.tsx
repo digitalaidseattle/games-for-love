@@ -4,26 +4,26 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ChangeEvent, useContext, useState } from "react";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
-  TextField,
-  IconButton,
   Button,
+  IconButton,
   InputAdornment,
+  TextField,
+  Theme
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import { ChangeEvent, useContext, useState } from "react";
 
 import FilterDialog from "./FilterDialog";
 
+import { FilterContext } from "../context/FilterContext";
 import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
-import { FilterContext } from "../context/FilterContext";
 import { sortDirection } from "../types/fillterType";
-import { BORDER_COLOR } from "../styles/theme";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -86,7 +86,7 @@ export const SearchAndSort = () => {
             ),
           }}
           sx={{
-            backgroundColor: "#ededed",
+            backgroundColor: (theme) => theme.palette.grey[200],
             flex: 1,
             height: "40px",
             border: "none",
@@ -112,9 +112,8 @@ export const SearchAndSort = () => {
           disabled={isDisabled}
           sx={{
             padding: "10px",
-            backgroundColor: "#ffffff",
             borderRadius: "12px",
-            border: "1px solid " + BORDER_COLOR,
+            border: (theme: Theme) => "1px solid " + theme.palette.grey[400],
             height: "36px",
             width: "64px",
           }}
@@ -129,7 +128,6 @@ export const SearchAndSort = () => {
             isDisabled || filters.sortDirection === sortDirection.UNDEFINED
           }
           sx={{
-            color: "#000",
             textTransform: "capitalize",
             padding: "0px",
             margin: "0px",
@@ -139,10 +137,9 @@ export const SearchAndSort = () => {
             alignItems: "center",
             justifyContent: "center",
             borderRadius: "12px",
-            border: "1px solid " + BORDER_COLOR,
-            backgroundColor: "white",
+            border: (theme: Theme) => "1px solid " + theme.palette.grey[400],
             "&:hover": {
-              border: "1px solid " + BORDER_COLOR,
+              border: (theme: Theme) => "1px solid " + theme.palette.grey[400]
             },
           }}
         >

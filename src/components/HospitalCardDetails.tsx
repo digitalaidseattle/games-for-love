@@ -30,12 +30,6 @@ import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { hospitalService } from "../services/hospital/hospitalService";
 import ActionButton from "../styles/ActionButton";
 import EmphasizedText from "../styles/EmphasizedText";
-import {
-  BORDER_COLOR,
-  getStatusColor,
-  HIGHLIGHT_BACKGROUD_COLOR,
-  SELECTED_BACKGROUD_COLOR
-} from "../styles/theme";
 
 export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   hospital,
@@ -60,16 +54,15 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
     if (hospital) {
       setBackgroundColor(
         hospitalService.isEqual(hospital, selectedHospital)
-          ? SELECTED_BACKGROUD_COLOR
+          ? theme.palette.action.selected
           : ""
       );
-      setPinColor(getStatusColor(
+      setPinColor(
         hospitalService.isEqual(hospital, selectedHospital)
-          ? "selected"
+          ? theme.palette.hospital.selected
           : hospital.status === "past"
-            ? "past"
-            : "active"
-      ));
+            ? theme.palette.hospital.closed
+            : theme.palette.hospital.open);
       setIsOpen(hospitalService.isHospitalOpen(hospital));
     }
   }, [hospital, selectedHospital]);
@@ -173,7 +166,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               sx={{
                 flex: 2,
                 padding: "0 16px",
-                borderRight: "1px solid " + BORDER_COLOR,
+                borderRight: (theme: Theme) => "1px solid " + theme.palette.grey[400]
               }}
             >
               <Typography variant="subtitle2" color="text.secondary">
@@ -181,7 +174,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   sx={{
                     color: pinColor,
                     strokeWidth: "0.2px",
-                    stroke: "black",
                     fontSize: "1rem",
                     "& .MuiSvgIcon-root": {
                       outline: "1px solid red",
@@ -232,7 +224,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 alignItems="center"
                 marginTop={1}
                 sx={{
-                  backgroundColor: HIGHLIGHT_BACKGROUD_COLOR,
+                  backgroundColor: (theme: Theme) => theme.palette.background.highlighted,
                   borderRadius: "8px",
                   padding: "2px 10px 2px 10px",
                   width: "245px",
@@ -240,9 +232,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               >
                 <Typography
                   variant="body2"
-                  color="text.secondary"
                   marginRight={1}
-                  sx={{ color: (theme) => theme.palette.common.black }}
+                  color="textSecondary"
                 >
                   Matched by {partnerName}
                 </Typography>
@@ -253,7 +244,9 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 raised of $
                 {Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
                 <EmphasizedText
-                  sx={{ color: getStatusColor(hospital?.status === "past" ? "past" : "active") }}>
+                  sx={{
+                    color: (theme: Theme) => hospital?.status === "past" ? theme.palette.hospital.closed : theme.palette.hospital.open
+                  }}>
                   {hospital?.status}
                 </EmphasizedText>
               </Typography>
@@ -266,7 +259,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 sx={{
                   marginTop: 5,
                   fontWeight: "bold",
-                  color: (theme: Theme) => theme.palette.grey[500],
+                  color: (theme: Theme) => theme.palette.text.secondary,
                 }}
               >
                 {hospitalService.getDonationMessage(hospital)}

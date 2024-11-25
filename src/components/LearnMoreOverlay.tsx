@@ -82,12 +82,12 @@ const LearnMoreOverlay = () => {
   return (
     hospital && (
       <Backdrop
-        sx={{
-          zIndex: (theme) => theme.zIndex.drawer + 1,
+        sx={(theme) => ({
+          zIndex: theme.zIndex.drawer + 1,
           background: "#fff",
           overflowY: "auto",
           display: "block",
-        }}
+        })}
         open={hospital !== undefined}
       >
         <DialogCloseButton
