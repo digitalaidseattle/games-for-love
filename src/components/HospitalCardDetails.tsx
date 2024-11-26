@@ -24,7 +24,6 @@ import {
   LearnMoreHospitalContext,
   SelectedHospitalContext,
 } from "../context/SelectedHospitalContext";
-import { GeneralInfo } from "../models/generalInfo";
 import { Hospital } from "../models/hospital";
 import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { hospitalService } from "../services/hospital/hospitalService";
