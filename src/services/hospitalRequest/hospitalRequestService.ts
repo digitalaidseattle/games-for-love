@@ -7,6 +7,7 @@
 import { FieldSet, Record } from "airtable";
 import { airtableService } from "../../mapping/airtableService";
 import { HospitalRequest } from "../../models/hospitalRequest";
+import { extractUrls } from "../siteUtils";
 
 class HospitalRequestService {
 
@@ -27,17 +28,25 @@ class HospitalRequestService {
       play3Y: record.fields["Play 3Y"],
       collected: record.fields["$ Collected"],
       funders: record.fields["# Funders"],
-      requestPicture1: record.fields["Request Picture 1"],
-      requestPicture2: record.fields["Request Picture 2"],
-      requestPicture3: record.fields["Request Picture 3"],
-      requestPicture4: record.fields["Request Picture 4"],
-      requestPicture5: record.fields["Request Picture 5"],
-      corpPartner1Name: record.fields["Corp Partner 1 Name"],
-      corpPartner1Logo: record.fields["Corp Partner 1 Logo"],
-      corpPartner1Type: record.fields["Corp Partner 1 Type"],
-      corpPartner2Name: record.fields["Corp Partner 2 Name"],
-      corpPartner2Logo: record.fields["Corp Partner 2 Logo"],
-      corpPartner2Type: record.fields["Corp Partner 2 Type"],
+      requestPictures: [
+        extractUrls(record.fields["Request Picture 1"])[0],
+        extractUrls(record.fields["Request Picture 2"])[0],
+        extractUrls(record.fields["Request Picture 3"])[0],
+        extractUrls(record.fields["Request Picture 4"])[0],
+        extractUrls(record.fields["Request Picture 5"])[0],
+      ].filter((u) => u !== undefined),
+      corpPartners: [
+        {
+          name: record.fields["Corp Partner 1 Name"],
+          logo: record.fields["Corp Partner 1 Logo"],
+          type: record.fields["Corp Partner 1 Type"]
+        },
+        {
+          name: record.fields["Corp Partner 2 Name"],
+          logo: record.fields["Corp Partner 2 Logo"],
+          type: record.fields["Corp Partner 2 Type"]
+        }
+      ].filter((u) => u.name !== undefined),
     } as HospitalRequest;
   }
 

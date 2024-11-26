@@ -97,7 +97,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
     fetchGeneralInfo();
   }, []);
 
-  const partnerName = generalInfo?.corpPartner1Name || "Unknown Partner"; //GeneralDatabase is empty
+  const partnerName = generalInfo?.corpPartners[0].name || "Unknown Partner"; //GeneralDatabase is empty
 
   return (
     <>
