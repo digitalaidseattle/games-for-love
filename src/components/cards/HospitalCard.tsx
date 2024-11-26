@@ -66,7 +66,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
     LearnMoreHospitalContext
   );
 
-  const [generalInfo, setGeneralInfo] = useState<GeneralInfo | null>(null);
+  const [partnerName, setPartnerName] = useState<string>("Unknown Partner");
 
   const isOpen = hospitalService.isHospitalOpen(popupInfo?.hospital);
   const markerColor = isOpen ? theme.palette.hospital.open : theme.palette.hospital.closed;
@@ -92,12 +92,12 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
   useEffect(() => {
     const fetchGeneralInfo = async () => {
       const [info] = await generalInfoService.getGeneralInfo();
-      setGeneralInfo(info);
+      if (info.corpPartners.length > 0) {
+        setPartnerName(info.corpPartners[0].name || "Unknown Partner");
+      }
     };
     fetchGeneralInfo();
   }, []);
-
-  const partnerName = generalInfo?.corpPartners[0].name || "Unknown Partner"; //GeneralDatabase is empty
 
   return (
     <>
@@ -177,7 +177,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
               alignItems="center"
               justifyContent="center"
               sx={{
-                backgroundColor: (theme:Theme) => theme.palette.background.highlighted,
+                backgroundColor: (theme: Theme) => theme.palette.background.highlighted,
                 width: "265px",
                 height: "20px",
                 visibility:

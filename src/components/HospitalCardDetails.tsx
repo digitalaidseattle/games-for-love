@@ -46,7 +46,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [generalInfo, setGeneralInfo] = useState<GeneralInfo | null>(null);
   const [partnerName, setPartnerName] = useState<string>("Unknown Partner");
 
   const theme = useTheme();
@@ -101,10 +100,10 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
     evt.stopPropagation();
     setDonationHospital(hospital);
   };
+
   useEffect(() => {
     const fetchGeneralInfo = async () => {
       const [info] = await generalInfoService.getGeneralInfo();
-      setGeneralInfo(info);
       if (info.corpPartners.length > 0) {
         setPartnerName(info.corpPartners[0].name || "Unknown Partner");
       }
