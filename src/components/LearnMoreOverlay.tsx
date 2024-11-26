@@ -10,13 +10,13 @@ import {
   Box,
   Button,
   Container,
+  Theme,
   Toolbar,
-  useTheme,
 } from "@mui/material";
 import { useContext } from "react";
 import { LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
 import DialogCloseButton from "../styles/DialogCloseButton";
-import GamesForLoveLogo from "../assets/488c5a7cd5735fe0aa7ca0e7a31867e1.png";
+import GamesForLoveLogo from "../assets/games-for-love-logo.png";
 import HospitalDetailsPageModal from "./HospitalPage/HospitalDetailsPageModal";
 
 const LearnMoreContent = () => {
@@ -72,7 +72,6 @@ const LearnMoreContent = () => {
 };
 
 const LearnMoreOverlay = () => {
-  const theme = useTheme();
   const { hospital, setHospital } = useContext(LearnMoreHospitalContext);
 
   const handleClose = (): void => {
@@ -92,7 +91,10 @@ const LearnMoreOverlay = () => {
       >
         <DialogCloseButton
           onClick={handleClose}
-          sx={{ color: theme.palette.primary.main }}
+          sx={(theme: Theme) => ({
+            zIndex: theme.zIndex.drawer + 1,
+            color: theme.palette.primary.main,
+          })}
         />
         <Box sx={{ width: "100%" }}>
           <LearnMoreContent />
