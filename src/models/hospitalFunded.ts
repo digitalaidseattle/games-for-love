@@ -22,3 +22,4 @@ export type HospitalFunded = {
   thankYouNoteTitle: string;
   impactTitle: string;
 };
+
