@@ -23,7 +23,6 @@ import {
   DonationHospitalContext,
   LearnMoreHospitalContext,
 } from "../../context/SelectedHospitalContext";
-import { GeneralInfo } from "../../models/generalInfo";
 import ActionButton from "../../styles/ActionButton";
 
 import { differenceInDays } from "date-fns";
