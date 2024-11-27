@@ -5,6 +5,10 @@
  *
  */
 
+export const extractUrls = (attachments: any) => {
+  return attachments ? attachments.map((att: any) => att.url) : [];
+};
+
 class SiteService {
   prodUrls = JSON.parse(import.meta.env.VITE_APP_URLS);
 

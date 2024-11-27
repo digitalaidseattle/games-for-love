@@ -1,7 +1,12 @@
-import { useEffect, useState } from "react";
+/**
+ *  GFLPopup.tsx
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
+import { Popup } from "react-map-gl";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { PopupInfo } from "../models/popupInfo";
-import { Popup } from "react-map-gl";
 import { HospitalCard } from "./cards/HospitalCard";
 import "./GFLPopup.style.css";
 interface GFLPopupProps {
@@ -12,24 +17,18 @@ export const GFLPopup: React.FC<GFLPopupProps> = ({
   popupInfo = null,
   onClose,
 }) => {
-  const [images, setImages] = useState<string[]>([]);
-  useEffect(() => {
-    if (popupInfo) {
-      setImages(popupInfo.hospitalInfo.hospitalPicture1);
-    }
-  }, [popupInfo]);
   return (
     popupInfo && (
       <Popup
-        longitude={popupInfo.hospitalInfo.longitude}
-        latitude={popupInfo.hospitalInfo.latitude}
+        longitude={popupInfo.hospital.longitude}
+        latitude={popupInfo.hospital.latitude}
         closeButton={false}
         closeOnClick={false}
         onClose={onClose}
         anchor="top"
         className="popup-style"
       >
-        <HospitalCard popupInfo={popupInfo} images={images} onClose={onClose} />
+        <HospitalCard popupInfo={popupInfo} onClose={onClose} />
       </Popup>
     )
   );

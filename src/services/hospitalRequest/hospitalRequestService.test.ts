@@ -1,12 +1,20 @@
+/**
+ *  HospitalRequestService.test.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { describe, expect, it, vi } from "vitest";
 import { airtableService } from "../../mapping/airtableService";
 import { hospitalRequestService } from "./hospitalRequestService";
 
 describe("HospitalRequestService tests", () => {
-  it("getHospitalRequest", async () => {
+  it("findAll", async () => {
     const mockRecords = [
       {
+        id: "12345",
         fields: {
+          "Hospital Request ID": "REQ12345",
           "Opportunities/Requests ID": "REQ12345",
           "Hospital Name (LInked)": "May's Hospital",
           "Request Narrative": "Request for new equipment",
@@ -16,17 +24,18 @@ describe("HospitalRequestService tests", () => {
           "Play 3Y": 200,
           "$ Collected": 4000,
           "# Funders": 5,
-          "Request Picture 1": "pic1.jpg",
-          "Request Picture 2": "pic2.jpg",
-          "Request Picture 3": "pic3.jpg",
-          "Request Picture 4": "pic4.jpg",
-          "Request Picture 5": "pic5.jpg",
+          "Request Picture 1": [{ url: "pic1.jpg" }],
+          "Request Picture 2": [{ url: "pic2.jpg" }],
+          "Request Picture 3": [{ url: "pic3.jpg" }],
+          "Request Picture 4": [{ url: "pic4.jpg" }],
+          "Request Picture 5": [{ url: "pic5.jpg" }],
           "Corp Partner 1 Name": "Partner 1",
           "Corp Partner 1 Logo": "logo1.png",
           "Corp Partner 1 Type": "Type 1",
           "Corp Partner 2 Name": "Partner 2",
           "Corp Partner 2 Logo": "logo2.png",
           "Corp Partner 2 Type": "Type 2",
+          "Funding Deadline": "2024/12/31"
         },
       },
     ];
@@ -34,12 +43,14 @@ describe("HospitalRequestService tests", () => {
       .spyOn(airtableService, "getTableRecords")
       .mockResolvedValue(mockRecords as any);
 
-    const result = await hospitalRequestService.getHospitalRequest();
+    const result = await hospitalRequestService.findAll();
 
     expect(getTableRecordsSpy).toHaveBeenCalled();
 
     expect(result).toEqual([
       {
+        id: "12345",
+        recordId: "12345",
         oppReqId: "REQ12345",
         name: "May's Hospital",
         requestNarrative: "Request for new equipment",
@@ -49,17 +60,18 @@ describe("HospitalRequestService tests", () => {
         play3Y: 200,
         collected: 4000,
         funders: 5,
-        requestPicture1: "pic1.jpg",
-        requestPicture2: "pic2.jpg",
-        requestPicture3: "pic3.jpg",
-        requestPicture4: "pic4.jpg",
-        requestPicture5: "pic5.jpg",
-        corpPartner1Name: "Partner 1",
-        corpPartner1Logo: "logo1.png",
-        corpPartner1Type: "Type 1",
-        corpPartner2Name: "Partner 2",
-        corpPartner2Logo: "logo2.png",
-        corpPartner2Type: "Type 2",
+        requestPictures: ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg"],
+        corpPartners: [{
+          name: "Partner 1",
+          logo: "logo1.png",
+          type: "Type 1"
+        },
+        {
+          name: "Partner 2",
+          logo: "logo2.png",
+          type: "Type 2"
+        }],
+        fundingDeadline: new Date("2024/12/31"),
       },
     ]);
   });

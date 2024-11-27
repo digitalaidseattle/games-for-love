@@ -1,7 +1,7 @@
 export type HospitalInfo = {
-  id: number;
+  recordId: string;
+  id: string;
   name: string;
-  status: "active" | "past";
   type: string;
   description: string;
   year: number;
@@ -12,5 +12,5 @@ export type HospitalInfo = {
   address: string;
   longitude: number;
   latitude: number;
-  hospitalPicture1: string[];
+  hospitalPictures: string[];
 };

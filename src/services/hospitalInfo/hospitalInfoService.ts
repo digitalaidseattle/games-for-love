@@ -1,70 +1,47 @@
+/**
+ *  HospitalInfoService.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
+
+import { FieldSet, Record } from "airtable";
 import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
-
-import { FilterType } from "../../types/fillterType";
-
-const extractUrls = (attachments: any) => {
-  return attachments ? attachments.map((att: any) => att.url) : [];
-};
+import { extractUrls } from "../siteUtils";
 
 class HospitalInfoService {
-  isHospitalOpen = (hospitalInfo: HospitalInfo | undefined) => {
-    if (hospitalInfo === undefined) {
-      throw new Error("hospitalInfo is undefined");
-    } else {
-      return hospitalInfo.status !== "past";
-    }
-  };
 
-  filterHospitals = (hospitals: HospitalInfo[], searchTerm: string) => {
-    return hospitals.filter(
-      (h: HospitalInfo) =>
-        h.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-    );
-  };
+  transform = (record: Record<FieldSet>): HospitalInfo => {
+    return {
+      id: record.id,
+      recordId: record.id,
+      name: `${record.fields["Hospital Name"]}`,
+      type: record.fields["Type of Organization"],
+      description: record.fields["Organization Notes / Description"],
+      year: record.fields["Kids Served / Year"],
+      country: record.fields["Country"],
+      state: record.fields["State"],
+      zip: record.fields["ZIP"],
+      city: record.fields["City"],
+      address: record.fields["Address"],
+      longitude: record.fields["Long"],
+      latitude: record.fields["Lat"],
+      hospitalPictures: [
+        extractUrls(record.fields["Hospital Picture 1"])[0],
+        extractUrls(record.fields["Hospital Picture 2"])[0],
+        extractUrls(record.fields["Hospital Picture 3"])[0],
+      ].filter((u) => u !== undefined),
+    } as HospitalInfo;
+  }
 
-  async getHospitalInfo(filter?: FilterType): Promise<HospitalInfo[]> {
+  async findAll(): Promise<HospitalInfo[]> {
     const TABLE = import.meta.env.VITE_AIRTABLE_TABLE_HOSPITAL_REFERENCE;
     const MAX_RECORDS = 100;
 
-    const hospitals = airtableService
+    return airtableService
       .getTableRecords(TABLE, MAX_RECORDS)
-      .then((records) =>
-        records.map((r) => {
-          console.log(r.fields)
-          return {
-            name: `${r.fields["Hospital Name"]}`,
-            status: r.fields["Status"],
-            type: r.fields["Type of Organization"],
-            description: r.fields["Organization Notes / Description"],
-            year: r.fields["Kids Served / Year"],
-            country: r.fields["Country"],
-            state: r.fields["State"],
-            zip: r.fields["ZIP"],
-            city: r.fields["City"],
-            address: r.fields["Address"],
-            longitude: r.fields["Long"],
-            latitude: r.fields["Lat"],
-            hospitalPicture1: extractUrls(r.fields["Hospital Picture 1"]),
-            hospitalPicture2: extractUrls(r.fields["Hospital Picture 2"]),
-            hospitalPicture3: extractUrls(r.fields["Hospital Picture 3"]),
-            id: r.fields["ID"],
-          } as HospitalInfo;
-        })
-      );
-
-    if (filter) {
-      const filtered_hospitals = (await hospitals).filter(
-        (hospital) =>
-          (filter.location.includes(hospital.state.toLowerCase()) ||
-            filter.location.includes(hospital.city.toLowerCase()) ||
-            filter.location.includes(hospital.zip.toLowerCase())) &&
-          filter.status.includes(hospital.status.toLowerCase())
-      );
-      return filtered_hospitals;
-    } else {
-      return hospitals;
-    }
+      .then((records) => records.map((r) => this.transform(r)));
   }
 }
 
@@ -86,16 +63,16 @@ class HospitalInfoService {
 //         address: data["Address"],
 //         longitude: data["Longitude"],
 //         latitude: data["Latitude"],
-//         hospitalPicture1: extractUrls(data["Hospital Picture 1"]),
+//         hospitalPictures: extractUrls(data["Hospital Picture 1"]),
 //       } as HospitalInfo;
 //     });
 //     if (filter) {
 //       const filtered_hospitals = hospitals.filter(
 //         (hospital) =>
-//           (filter.location.includes(hospital.state.toLowerCase()) ||
-//             filter.location.includes(hospital.city.toLowerCase()) ||
-//             filter.location.includes(hospital.zip.toLowerCase())) &&
-//           filter.status.includes(hospital.status.toLowerCase())
+//           (filterecord.location.includes(hospital.state.toLowerCase()) ||
+//             filterecord.location.includes(hospital.city.toLowerCase()) ||
+//             filterecord.location.includes(hospital.zip.toLowerCase())) &&
+//           filterecord.status.includes(hospital.status.toLowerCase())
 //       );
 //       return filtered_hospitals;
 //     } else {

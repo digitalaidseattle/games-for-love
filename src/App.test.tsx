@@ -3,6 +3,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
+import Providers from "./providers/Providers";
+import { ThemeProvider } from "@mui/material";
+import Palette from "./styles/theme.ts";
+
+const themes = Palette();
 
 vi.mock("./services/hospitalInfo/hospitalInfoService");
 
@@ -12,19 +17,25 @@ beforeEach(() => {
 
 describe("App component", () => {
   it("renders the SearchAndSort component and HospitalDetailCard component, when hospitalInfoService returns hospitals", async () => {
-    hospitalInfoService.getHospitalInfo = vi.fn().mockResolvedValue([
+    hospitalInfoService.findAll = vi.fn().mockResolvedValue([
       {
         id: 1,
         name: "hospital 1",
         city: "seattle",
         state: "wa",
         description: "This is a test hospital",
-        hospitalPicture1: ["/path/to/image.jpg"],
+        hospitalPictures: ["/path/to/image.jpg"],
         status: "active",
       },
     ]);
 
-    render(<App />);
+    render(
+      <ThemeProvider theme={themes}>
+        <Providers>
+          <App />
+        </Providers>
+      </ThemeProvider>
+    );
 
     const searchAndSortElement = screen.getByTestId("search-and-sort-box");
     expect(searchAndSortElement).toBeInTheDocument();
@@ -32,11 +43,17 @@ describe("App component", () => {
     await waitFor(() => {
       const hospitalDetailCard = screen.getByTestId("hospital-detail-card");
       expect(hospitalDetailCard).toBeInTheDocument();
+
+      const hopitalList = screen.getByTestId("hospital-list");
+      expect(hopitalList).toBeInTheDocument();
+
+      const gflMap = screen.getByTestId("gfl-map-box");
+      expect(gflMap).toBeInTheDocument();
     });
   });
 
   it("renders no HospitalDetailCard component, when hospitalInfoService returns no hospitals", async () => {
-    hospitalInfoService.getHospitalInfo = vi.fn().mockResolvedValue([]);
+    hospitalInfoService.findAll = vi.fn().mockResolvedValue([]);
     render(<App />);
     await waitFor(() => {
       const hospitalDetailCard = screen.queryByTestId("hospital-detail-card");
@@ -46,14 +63,14 @@ describe("App component", () => {
   //   it done
 
   it("renders as many HospitalCards as the number of hospitals returned by getHospitalInfo", async () => {
-    hospitalInfoService.getHospitalInfo = vi.fn().mockResolvedValue([
+    hospitalInfoService.findAll = vi.fn().mockResolvedValue([
       {
         id: 1,
         name: "hospital 1",
         city: "seattle",
         state: "wa",
         description: "This is a test hospital",
-        hospitalPicture1: ["/path/to/image.jpg"],
+        hospitalPictures: ["/path/to/image.jpg"],
         status: "active",
       },
       {
@@ -62,11 +79,17 @@ describe("App component", () => {
         city: "seattle",
         state: "wa",
         description: "This is a test hospital2",
-        hospitalPicture1: ["/path/to/image2.jpg"],
+        hospitalPictures: ["/path/to/image2.jpg"],
         status: "past",
       },
     ]);
-    render(<App />);
+    render(
+      <ThemeProvider theme={themes}>
+        <Providers>
+          <App />
+        </Providers>
+      </ThemeProvider>
+    );
     await waitFor(() => {
       const hospitalDetailCards = screen.getAllByTestId("hospital-detail-card");
       expect(hospitalDetailCards.length).toEqual(2);
@@ -75,14 +98,14 @@ describe("App component", () => {
   //it done
 
   it("updates windowHeight on window resize", () => {
-    hospitalInfoService.getHospitalInfo = vi.fn().mockResolvedValue([
+    hospitalInfoService.findAll = vi.fn().mockResolvedValue([
       {
         id: 1,
         name: "hospital 1",
         city: "seattle",
         state: "wa",
         description: "This is a test hospital",
-        hospitalPicture1: ["/path/to/image.jpg"],
+        hospitalPictures: ["/path/to/image.jpg"],
         status: "active",
       },
     ]);

@@ -1,28 +1,38 @@
+/**
+ *  HospitalFundedService.test.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 import { describe, expect, it, vi } from 'vitest'
 import { airtableService } from '../../mapping/airtableService'
 import { hospitalFundedService } from "./hospitalFundedService";
 
-describe("HospitalFundedService tests",()=>{
-    it("getHospitalFunded", async()=>{
+describe("HospitalFundedService tests", () => {
+    it("findAll", async () => {
         const mockRecords = [
             {
                 fields: {
+                    "Hospital Request ID (Linked)": "54321",
+            
                     "Order ID": "12345",
                     "# Equipment Shipped": 10,
-                    "$ Funding Completed": 5000,
+                    "$ Funding": 5000,
                     "# Funders": 5,
                     "$ Corporate Funding": 2000,
+                    "Thank You Note Title" : "Thank You Note Title",
                     "Thank You Note": "Thank you for your support!",
-                    "Funded Picture 1": "pic1.jpg",
-                    "Funded Picture 2": "pic2.jpg",
-                    "Funded Picture 3": "pic3.jpg",
-                    "Funded Picture 4": "pic4.jpg",
-                    "Funded Picture 5": "pic5.jpg",
+                    "Thank You Picture 1": [{url: "pic1.jpg"}],
+                    "Thank You Picture 2": [{url: "pic2.jpg"}],
+                    "Thank You Picture 3": [{url: "pic3.jpg"}],
+                    "Thank You Picture 4": [{url: "pic4.jpg"}],
+                    "Thank You Picture 5": [{url: "pic5.jpg"}],
+                    "Map Short Thank You": "Map Short Thank You",
                 },
             }
         ];
         const getTableRecordsSpy = vi.spyOn(airtableService, "getTableRecords").mockResolvedValue(mockRecords as any);
-        const result = await hospitalFundedService.getHospitalFunded();
+        const result = await hospitalFundedService.findAll();
         expect(getTableRecordsSpy).toHaveBeenCalledWith(import.meta.env.VITE_AIRTABLE_TABLE_HOSPITAL_FUNDED_REFERENCE, 100);
         expect(result).toEqual([
             {
@@ -32,11 +42,13 @@ describe("HospitalFundedService tests",()=>{
                 funders: 5,
                 corporateFunding: 2000,
                 thankYouNote: "Thank you for your support!",
-                fundedPicture1: "pic1.jpg",
-                fundedPicture2: "pic2.jpg",
-                fundedPicture3: "pic3.jpg",
-                fundedPicture4: "pic4.jpg",
-                fundedPicture5: "pic5.jpg",
+                fundedPictures:[ "pic1.jpg", "pic2.jpg", "pic3.jpg","pic4.jpg","pic5.jpg"],
+                hospital: "undefined",
+                id: undefined,
+                impactPictures: [],
+                shortThankYou: "Map Short Thank You",
+                thankYouNoteTitle: "Thank You Note Title",
+                hospitalRequestId: "54321",
             }
         ]);
     })
