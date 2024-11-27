@@ -1,23 +1,21 @@
+/**
+ *  HospitalFunded.ts
+ *
+ *  @copyright 2024 Digital Aid Seattle
+ *
+ */
 export type HospitalFunded = {
   id: string;
   hospitalRequestId: string;
   hospital: string;
   orderID: string;
-  equipmentShipped: boolean;
+  equipmentShipped: number;
   fundingCompleted: number;
   funders: string;
   corporateFunding: string;
   thankYouNote: string;
-  fundedPicture1: string;
-  fundedPicture2: string;
-  fundedPicture3: string;
-  fundedPicture4: string;
-  fundedPicture5: string;
-  impactPicture1: string;
-  impactPicture2: string;
-  impactPicture3: string;
-  impactPicture4: string;
-  impactPicture5: string;
+  fundedPictures: string[];
+  impactPictures: string[];
   shortThankYou: string;
   thankYouNoteTitle: string;
   impactTitle: string;

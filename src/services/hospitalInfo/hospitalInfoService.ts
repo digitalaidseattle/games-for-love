@@ -8,10 +8,7 @@
 import { FieldSet, Record } from "airtable";
 import { airtableService } from "../../mapping/airtableService";
 import { HospitalInfo } from "../../models/hospitalInfo";
-
-const extractUrls = (attachments: any) => {
-  return attachments ? attachments.map((att: any) => att.url) : [];
-};
+import { extractUrls } from "../siteUtils";
 
 class HospitalInfoService {
 

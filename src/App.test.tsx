@@ -4,6 +4,10 @@ import App from "./App";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import { hospitalInfoService } from "./services/hospitalInfo/hospitalInfoService";
 import Providers from "./providers/Providers";
+import { ThemeProvider } from "@mui/material";
+import Palette from "./styles/theme.ts";
+
+const themes = Palette();
 
 vi.mock("./services/hospitalInfo/hospitalInfoService");
 
@@ -26,9 +30,11 @@ describe("App component", () => {
     ]);
 
     render(
-      <Providers>
-        <App />
-      </Providers>
+      <ThemeProvider theme={themes}>
+        <Providers>
+          <App />
+        </Providers>
+      </ThemeProvider>
     );
 
     const searchAndSortElement = screen.getByTestId("search-and-sort-box");
@@ -78,9 +84,11 @@ describe("App component", () => {
       },
     ]);
     render(
-      <Providers>
-        <App />
-      </Providers>
+      <ThemeProvider theme={themes}>
+        <Providers>
+          <App />
+        </Providers>
+      </ThemeProvider>
     );
     await waitFor(() => {
       const hospitalDetailCards = screen.getAllByTestId("hospital-detail-card");

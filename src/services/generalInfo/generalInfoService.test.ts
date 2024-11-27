@@ -2,8 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { airtableService } from '../../mapping/airtableService'
 import { generalInfoService } from "./generalInfoService";
 
-describe("generalInfoService tests",()=>{
-    it("getGeneralInfo", async()=>{
+describe("generalInfoService tests", () => {
+    it("getGeneralInfo", async () => {
         const mockRecords = [
             {
                 fields: {
@@ -32,15 +32,23 @@ describe("generalInfoService tests",()=>{
                 status: "Open",
                 totalOpen: 1000,
                 totalFunded: 500,
-                corpPartner1Name: "Partner 1",
-                corpPartner1Logo: "logo1.png",
-                corpPartner1Type: "Type 1",
-                corpPartner2Name: "Partner 2",
-                corpPartner2Logo: "logo2.png",
-                corpPartner2Type: "Type 2",
-                corpPartner3Name: "Partner 3",
-                corpPartner3Logo: "logo3.png",
-                corpPartner3Type: "Type 3",
+                corpPartners: [
+                    {
+                        name: "Partner 1",
+                        logo: "logo1.png",
+                        type: "Type 1"
+                    },
+                    {
+                        name: "Partner 2",
+                        logo: "logo2.png",
+                        type: "Type 2"
+                    },
+                    {
+                        name: "Partner 3",
+                        logo: "logo3.png",
+                        type: "Type 3"
+                    }
+                ]
             }
         ]);
     })
