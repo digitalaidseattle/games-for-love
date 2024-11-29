@@ -64,8 +64,9 @@ export const SearchAndSort = () => {
   };
 
   return (
-    <Box data-testid="search-and-sort-box">
+    < >
       <Box
+        data-testid="search-and-sort-box"
         sx={{
           display: "flex",
           alignItems: "center",
@@ -153,6 +154,6 @@ export const SearchAndSort = () => {
       {showFilters && (
         <FilterDialog open={showFilters} handleClose={handleCloseFilters} />
       )}
-    </Box>
+    </>
   );
 };

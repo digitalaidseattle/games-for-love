@@ -83,7 +83,6 @@ const LearnMoreOverlay = () => {
       <Backdrop
         sx={(theme) => ({
           zIndex: theme.zIndex.drawer + 1,
-          background: "#fff",
           overflowY: "auto",
           display: "block",
         })}
@@ -96,8 +95,10 @@ const LearnMoreOverlay = () => {
             color: theme.palette.primary.main,
           })}
         />
-        <Box sx={{ width: "100%" }}>
-          <LearnMoreContent />
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{ width: "80%" , marginTop: 2, backgroundColor: 'white'}}>
+            <LearnMoreContent />
+          </Box>
         </Box>
       </Backdrop>
     )

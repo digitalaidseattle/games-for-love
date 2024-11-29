@@ -4,7 +4,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useContext, useEffect, useState } from "react";
 import { GFLMap } from "./components/GFLMap";
@@ -17,6 +17,7 @@ import DonationDialog from "./components/DonationDialog";
 import LearnMoreOverlay from "./components/LearnMoreOverlay";
 import { HospitalsContext } from "./context/HospitalContext";
 import { hospitalService } from "./services/hospital/hospitalService";
+import GamesForLoveLogo from "./assets/games-for-love-logo.png";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -51,9 +52,14 @@ function App() {
       <Grid container>
         <Grid item xs={12} lg={7}>
           <Box sx={{ height: windowHeight, overflowY: "auto" }}>
-            <Box padding={1}>
-              <SearchAndSort />
-            </Box>
+            <img
+              src={GamesForLoveLogo}
+              alt="Games For Love Logo"
+              width={74}
+              height={30}
+              style={{ marginRight: "10px" }}
+            />
+            <SearchAndSort />
             <Box padding={1} data-testid="hospital-list">
               <HospitalList />
             </Box>
