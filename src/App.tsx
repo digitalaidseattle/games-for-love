@@ -4,7 +4,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { Box, Grid, Stack } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useContext, useEffect, useState } from "react";
 import { GFLMap } from "./components/GFLMap";
@@ -13,11 +13,11 @@ import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
 
+import GamesForLoveLogo from "./assets/games-for-love-logo.png";
 import DonationDialog from "./components/DonationDialog";
 import LearnMoreOverlay from "./components/LearnMoreOverlay";
 import { HospitalsContext } from "./context/HospitalContext";
 import { hospitalService } from "./services/hospital/hospitalService";
-import GamesForLoveLogo from "./assets/games-for-love-logo.png";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
