@@ -13,7 +13,6 @@ import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
 
-import GamesForLoveLogo from "./assets/games-for-love-logo.png";
 import DonationDialog from "./components/DonationDialog";
 import LearnMoreOverlay from "./components/LearnMoreOverlay";
 import { HospitalsContext } from "./context/HospitalContext";
