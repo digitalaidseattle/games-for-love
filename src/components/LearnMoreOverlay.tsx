@@ -83,7 +83,6 @@ const LearnMoreOverlay = () => {
       <Backdrop
         sx={(theme) => ({
           zIndex: theme.zIndex.drawer + 1,
-          background: "#fff",
           overflowY: "auto",
           display: "block",
         })}
@@ -91,13 +90,15 @@ const LearnMoreOverlay = () => {
       >
         <DialogCloseButton
           onClick={handleClose}
-          sx={(theme: Theme) => ({
-            zIndex: theme.zIndex.drawer + 1,
-            color: theme.palette.primary.main,
-          })}
+          sx={{
+            backgroundColor: (theme: Theme) => theme.palette.grey[700],
+            color:  'white'
+          }}
         />
-        <Box sx={{ width: "100%" }}>
-          <LearnMoreContent />
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{ width: "80%", marginTop: 2, backgroundColor: 'white' }}>
+            <LearnMoreContent />
+          </Box>
         </Box>
       </Backdrop>
     )

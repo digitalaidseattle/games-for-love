@@ -24,7 +24,7 @@ describe("generalInfoService tests", () => {
             }
         ];
         const getTableRecordsSpy = vi.spyOn(airtableService, "getTableRecords").mockResolvedValue(mockRecords as any)
-        const result = await generalInfoService.getGeneralInfo()
+        const result = await generalInfoService.findAll()
         expect(getTableRecordsSpy).toHaveBeenCalled();
         expect(result).toEqual([
             {
