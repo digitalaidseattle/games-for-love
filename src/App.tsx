@@ -52,13 +52,13 @@ function App() {
       <Grid container>
         <Grid item xs={12} lg={7}>
           <Box sx={{ height: windowHeight, overflowY: "auto" }}>
-            <img
+            {/* <img
               src={GamesForLoveLogo}
               alt="Games For Love Logo"
               width={74}
               height={30}
               style={{ marginRight: "10px" }}
-            />
+            /> */}
             <SearchAndSort />
             <Box padding={1} data-testid="hospital-list">
               <HospitalList />
