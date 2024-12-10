@@ -90,7 +90,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
 
   useEffect(() => {
     const fetchGeneralInfo = async () => {
-      const [info] = await generalInfoService.getGeneralInfo();
+      const [info] = await generalInfoService.findAll();
       if (info.corpPartners.length > 0) {
         setPartnerName(info.corpPartners[0].name || "Unknown Partner");
       }
