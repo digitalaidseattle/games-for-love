@@ -4,7 +4,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { Button, Theme } from "@mui/material"
+import { Button } from "@mui/material";
 
 const ToolbarButton = (props: any) => {
     return (
