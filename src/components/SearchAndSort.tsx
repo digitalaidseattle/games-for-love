@@ -10,19 +10,19 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
-  Button,
   IconButton,
   InputAdornment,
-  TextField,
-  Theme
+  TextField
 } from "@mui/material";
 import { ChangeEvent, useContext, useState } from "react";
+import GamesForLoveLogo from "../assets/games-for-love-logo.png";
 
 import FilterDialog from "./FilterDialog";
 
 import { FilterContext } from "../context/FilterContext";
 import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
+import ToolbarButton from "../styles/ToolbarButton";
 import { sortDirection } from "../types/fillterType";
 
 export const SearchAndSort = () => {
@@ -71,9 +71,18 @@ export const SearchAndSort = () => {
           display: "flex",
           alignItems: "center",
           gap: "8px",
-          marginTop: "20px",
+          margin: "20px 5px 0px 5px ",
         }}
       >
+        <a href="https://gamesforlove.org" >
+          <img
+            src={GamesForLoveLogo}
+            alt="Games For Love Logo"
+            width={96}
+            height={40}
+          />
+        </a>
+
         <TextField
           placeholder="Search"
           onChange={changeSearch}
@@ -108,52 +117,29 @@ export const SearchAndSort = () => {
             },
           }}
         />
-        <IconButton
-          onClick={handleOpenFilters}
-          disabled={isDisabled}
-          sx={{
-            padding: "10px",
-            borderRadius: "12px",
-            border: (theme: Theme) => "1px solid " + theme.palette.grey[400],
-            height: "36px",
-            width: "64px",
-          }}
-        >
+        <ToolbarButton
+          onClick={handleOpenFilters}>
           <FilterListIcon />
-        </IconButton>
-
-        <Button
-          variant="outlined"
+        </ToolbarButton>
+        <ToolbarButton
           onClick={handelOrderButton}
-          disabled={
-            isDisabled || filters.sortDirection === sortDirection.UNDEFINED
-          }
-          sx={{
-            textTransform: "capitalize",
-            padding: "0px",
-            margin: "0px",
-            width: "40px",
-            height: "36px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: "12px",
-            border: (theme: Theme) => "1px solid " + theme.palette.grey[400],
-            "&:hover": {
-              border: (theme: Theme) => "1px solid " + theme.palette.grey[400]
-            },
-          }}
-        >
+          disabled={isDisabled || filters.sortDirection === sortDirection.UNDEFINED}>
           {filters.sortDirection === sortDirection.DESCENDING ? (
             <ArrowDownwardIcon />
           ) : (
             <ArrowUpwardIcon />
           )}
-        </Button>
+        </ToolbarButton>
+        <ToolbarButton
+          sx={{
+            outline: "1px solid",
+          }}
+          onClick={() => alert('Display FundRaiseUp donate popup with general campaigh id')}
+        >
+          Donate
+        </ToolbarButton>
       </Box>
-      {showFilters && (
-        <FilterDialog open={showFilters} handleClose={handleCloseFilters} />
-      )}
+      <FilterDialog open={showFilters} handleClose={handleCloseFilters} />
     </>
   );
 };
