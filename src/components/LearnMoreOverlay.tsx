@@ -95,6 +95,7 @@ const LearnMoreOverlay = () => {
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Box sx={{
             width: "80%",
+            maxWidth: "1280px",
             marginTop: 2,
             backgroundColor: 'white',
             borderRadius: "15px"
