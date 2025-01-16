@@ -26,7 +26,7 @@ const LearnMoreContent = () => {
       sx={{
         margin: 0,
         overflow: "auto",
-        height: "100%",
+        height: "100%"
       }}
     >
       <AppBar
@@ -54,9 +54,6 @@ const LearnMoreContent = () => {
 
           {/* Desktop Navigation Buttons */}
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <Button color="inherit">Page</Button>
-            <Button color="inherit">Page</Button>
-            <Button color="inherit">Page</Button>
             <Button
               sx={{ color: "#4A24E7", outline: "1px solid #4A24E7" }}
               variant="outlined"
@@ -83,7 +80,6 @@ const LearnMoreOverlay = () => {
       <Backdrop
         sx={(theme) => ({
           zIndex: theme.zIndex.drawer + 1,
-          background: "#fff",
           overflowY: "auto",
           display: "block",
         })}
@@ -91,13 +87,20 @@ const LearnMoreOverlay = () => {
       >
         <DialogCloseButton
           onClick={handleClose}
-          sx={(theme: Theme) => ({
-            zIndex: theme.zIndex.drawer + 1,
-            color: theme.palette.primary.main,
-          })}
+          sx={{
+            backgroundColor: (theme: Theme) => theme.palette.grey[700],
+            color: 'white'
+          }}
         />
-        <Box sx={{ width: "100%" }}>
-          <LearnMoreContent />
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{
+            width: "80%",
+            marginTop: 2,
+            backgroundColor: 'white',
+            borderRadius: "15px"
+          }}>
+            <LearnMoreContent />
+          </Box>
         </Box>
       </Backdrop>
     )

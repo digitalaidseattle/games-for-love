@@ -21,6 +21,7 @@ import { HospitalsContext } from "../context/HospitalContext";
 import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import { Hospital } from "../models/hospital";
 import { siteService } from "../services/siteUtils";
+import SponsorPanel from "./SponsorPanel";
 
 const HospitalMarker = (props: {
   hospital: Hospital;
@@ -130,6 +131,8 @@ export const GFLMap = () => {
           <GFLPopup popupInfo={popupInfo} onClose={() => setPopupInfo(null)} />
         </Box>
       )}
+                  <SponsorPanel />
+
     </Map>
   );
 };
