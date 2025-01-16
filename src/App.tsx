@@ -13,8 +13,6 @@ import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
 
-import DonationDialog from "./components/DonationDialog";
-import LearnMoreOverlay from "./components/LearnMoreOverlay";
 import { HospitalsContext } from "./context/HospitalContext";
 import { hospitalService } from "./services/hospital/hospitalService";
 
@@ -70,8 +68,6 @@ function App() {
           </Box>
         </Grid>
       </Grid>
-      <LearnMoreOverlay />
-      <DonationDialog />
     </>
   );
 }
