@@ -1,77 +1,19 @@
-import Slider from "react-slick";
-import { Box, Grid } from "@mui/material";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-
-// Import slick-carousel CSS
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { Box } from "@mui/material";
 import { useContext } from "react";
 import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
-
-function SampleNextArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <ArrowForwardIosIcon
-      className={className}
-      style={{ ...style, color: "black" }}
-      onClick={onClick}
-      fontSize="large"
-    />
-  );
-}
-
-function SamplePrevArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <ArrowBackIosIcon
-      className={className}
-      style={{ ...style, color: "black" }}
-      onClick={onClick}
-      fontSize="large"
-    />
-  );
-}
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const HospitalPageCarousel = () => {
-  // Settings for the slider
-  const settings = {
-    dots: true, // Enable dots for navigation
-    infinite: true, // Infinite looping
-    speed: 500, // Transition speed
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
-
   const { hospital } = useContext(LearnMoreHospitalContext);
+
+  // 3 images per slide
+  const slides = [];
+  if (hospital?.hospitalPictures) {
+    for (let i = 0; i < hospital.hospitalPictures.length; i += 3) {
+      slides.push(hospital.hospitalPictures.slice(i, i + 3));
+    }
+  }
 
   return (
     <Box
@@ -81,38 +23,56 @@ const HospitalPageCarousel = () => {
         padding: "20px 0",
       }}
     >
-      <Slider {...settings}>
-        {hospital?.hospitalPictures.map((slide, index) => (
-          <Grid
-            container
-            spacing={2}
+      <Carousel
+        showArrows={true}
+        showThumbs={false}
+        showStatus={false}
+        infiniteLoop={true}
+        autoPlay={true}
+        interval={3000}
+        swipeable={true}
+        emulateTouch={true}
+        dynamicHeight={false}
+        centerMode={false}
+      >
+        {slides.map((slide, slideIndex) => (
+          <Box
+            key={slideIndex}
             sx={{
+              display: "flex",
+              justifyContent: "space-between",
               alignItems: "center",
-              justifyContent: "center",
+              padding: "20px",
             }}
           >
-            <Grid
-              item
-              key={index}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
+            {slide.map((image, index) => (
               <Box
-                component="img"
-                src={slide}
-                alt={`Slide ${index + 1} - Image ${index + 1}`}
+                key={index}
                 sx={{
-                  width: "300px",
-                  height: "200px",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  flex: "1",
+                  margin: "0 10px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-              />
-            </Grid>
-          </Grid>
+              >
+                <Box
+                  component="img"
+                  src={image}
+                  alt={`Slide ${slideIndex + 1} - Image ${index + 1}`}
+                  sx={{
+                    width: "100%",
+                    maxWidth: "300px",
+                    height: "200px",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  }}
+                />
+              </Box>
+            ))}
+          </Box>
         ))}
-      </Slider>
+      </Carousel>
     </Box>
   );
 };
