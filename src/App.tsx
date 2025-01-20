@@ -4,13 +4,13 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import {
   ReflexContainer,
-  ReflexSplitter,
-  ReflexElement
-} from 'react-reflex'
+  ReflexElement,
+  ReflexSplitter
+} from 'react-reflex';
 
 import { GFLMap } from "./components/GFLMap";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
@@ -20,8 +20,8 @@ import { HospitalsContext } from "./context/HospitalContext";
 import { hospitalService } from "./services/hospital/hospitalService";
 
 import "maplibre-gl/dist/maplibre-gl.css";
+import 'react-reflex/styles.css';
 import "./App.css";
-import 'react-reflex/styles.css'
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -65,7 +65,7 @@ function App() {
         </ReflexElement>
 
         <ReflexSplitter >
-          <Box height={windowHeight} width={5}></Box>
+          <Box height={windowHeight} width={5} ></Box>
         </ReflexSplitter>
 
         <ReflexElement>
