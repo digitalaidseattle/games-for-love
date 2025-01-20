@@ -28,9 +28,7 @@ function App() {
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
   const getCombinedHospital = async () => {
-    hospitalService
-      .findAll()
-      .then((res) => setOriginals(res));
+    hospitalService.findAll().then((res) => setOriginals(res));
   };
 
   useEffect(() => {
@@ -46,24 +44,48 @@ function App() {
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} lg={7}>
-          <Box sx={{ height: windowHeight, overflowY: "auto" }}>
-            {/* <img
-              src={GamesForLoveLogo}
-              alt="Games For Love Logo"
-              width={74}
-              height={30}
-              style={{ marginRight: "10px" }}
-            /> */}
+      <Grid container spacing={2}>
+        {/* Hospital List Section */}
+        <Grid
+          item
+          xs={12}
+          sm={6} // sm: 600px 이상에서 50% 사용
+          md={5} // md: 900px 이상에서 41.67% 사용
+          lg={4} // lg: 1200px 이상에서 33.33% 사용
+          xl={4} // xl: 1536px 이상에서 33.33% 사용
+        >
+          <Box
+            sx={{
+              height: "100vh", // 화면 높이를 꽉 채움
+              overflowY: "auto", // 스크롤 가능
+              padding: "16px", // 여백 추가
+            }}
+          >
             <SearchAndSort />
-            <Box padding={1} data-testid="hospital-list">
+            <Box data-testid="hospital-list">
               <HospitalList />
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={12} lg={5}>
-          <Box height={windowHeight} data-testid="gfl-map-box">
+
+        {/* Map Section */}
+        <Grid
+          item
+          xs={12}
+          sm={6} // sm: 600px 이상에서 50% 사용
+          md={7} // md: 900px 이상에서 58.33% 사용
+          lg={8} // lg: 1200px 이상에서 66.67% 사용
+          xl={8} // xl: 1536px 이상에서 66.67% 사용
+        >
+          <Box
+            sx={{
+              height: "100vh", // 화면 높이를 꽉 채움
+              overflow: "hidden", // 넘침 방지
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <GFLMap />
           </Box>
         </Grid>

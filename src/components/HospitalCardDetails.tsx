@@ -54,221 +54,219 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
       setBackgroundColor(
         hospitalService.isEqual(hospital, selectedHospital)
           ? theme.palette.action.selected
-          : ""
+          : theme.palette.background.paper
       );
       setPinColor(
         hospitalService.isEqual(hospital, selectedHospital)
           ? theme.palette.hospital.selected
           : hospital.status === "past"
-            ? theme.palette.hospital.closed
-            : theme.palette.hospital.open);
+          ? theme.palette.hospital.closed
+          : theme.palette.hospital.open
+      );
       setIsOpen(hospitalService.isHospitalOpen(hospital));
     }
   }, [hospital, selectedHospital]);
 
   const changeSelectedHospital = () => {
-    if (selectedHospital) {
-      if (hospital.id === selectedHospital.id) {
-        setSelectedHospital(undefined);
-      } else {
-        setSelectedHospital(hospital);
-      }
+    if (selectedHospital?.id === hospital.id) {
+      setSelectedHospital(undefined);
     } else {
       setSelectedHospital(hospital);
     }
-  };
-
-  const handleCarousel = (evt: any) => {
-    if (selectedHospital) {
-      if (hospital.id === selectedHospital.id) {
-        evt.stopPropagation();
-      } else {
-        setSelectedHospital(hospital);
-      }
-    } else {
-      setSelectedHospital(hospital);
-    }
-  };
-
-  const handleLearnMore = (evt: any) => {
-    evt.stopPropagation();
-    setLearnMoreHospital(hospital);
-  };
-
-  const handleDonate = (evt: any) => {
-    evt.stopPropagation();
-    setDonationHospital(hospital);
   };
 
   useEffect(() => {
     const fetchGeneralInfo = async () => {
       const [info] = await generalInfoService.findAll();
-      if (info.corpPartners.length > 0) {
+      if (info?.corpPartners?.length > 0) {
         setPartnerName(info.corpPartners[0].name || "Unknown Partner");
       }
     };
     fetchGeneralInfo();
   }, []);
 
-
   return (
-    <div data-testid="hospital-detail-card">
+    <Box
+      data-testid="hospital-detail-card"
+      sx={{
+        width: "100%",
+        maxWidth: "100%",
+        marginBottom: "16px",
+        padding: "8px",
+        display: "flex",
+      }}
+    >
       <Card
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
           alignItems: "center",
-          margin: "10px 0",
           cursor: "pointer",
           backgroundColor: backgroundColor,
+          transition: "transform 0.3s ease-in-out",
+          "&:hover": {
+            transform: "scale(1.02)",
+          },
+          width: "100%",
+          overflow: "hidden",
         }}
         onClick={changeSelectedHospital}
       >
-        <CardActionArea
+        {/* 이미지 섹션 */}
+        <Box
           sx={{
+            flex: 1,
+            minWidth: "150px",
+            maxWidth: "35%",
+            height: "150px",
             display: "flex",
-            padding: 2,
             alignItems: "center",
             justifyContent: "center",
-            width: "100%",
-            height: "100%",
-            "&:focus": {
-              outline: "none",
-            },
-            "&:focus-visible": {
-              outline: "none",
-            },
-            "& .MuiCardActionArea-focusHighlight": {
-              background: "transparent",
-            },
           }}
         >
-          <Stack direction={"row"}>
-            <CardContent
-              sx={{
-                flex: 1,
-              }}
-            >
-              <Box onClick={handleCarousel}>
-                <Carousel showStatus={false} showThumbs={false}>
-                  {hospital.hospitalPictures.map((url, idx) => (
-                    <CardMedia
-                      key={"p" + idx}
-                      component="img"
-                      sx={{ width: 135, height: 150, borderRadius: 2 }}
-                      image={url}
-                      alt="Hospital Image"
-                    />
-                  ))}
-                </Carousel>
-              </Box>
-            </CardContent>
-
-            <CardContent
-              sx={{
-                flex: 2,
-                padding: "0 16px",
-                borderRight: (theme: Theme) => "1px solid " + theme.palette.grey[400]
-              }}
-            >
-              <Typography variant="subtitle2" color="text.secondary">
-                <Room
-                  sx={{
-                    color: pinColor,
-                    strokeWidth: "0.2px",
-                    fontSize: "1rem",
-                    "& .MuiSvgIcon-root": {
-                      outline: "1px solid red",
-                      outlineOffset: "2px",
-                    },
-                  }}
-                />{" "}
-                {
-                  [hospital?.city, hospital?.state]
-                    .filter(s => s)
-                    .join(', ')
-                }
-              </Typography>
-
-              <Typography variant="h6" component="div">
-                {hospital?.name}
-              </Typography>
-              <EmphasizedText
+          <Carousel
+            showStatus={false}
+            showThumbs={false}
+            infiniteLoop
+            emulateTouch
+          >
+            {hospital.hospitalPictures.map((url, idx) => (
+              <CardMedia
+                key={idx}
+                component="img"
                 sx={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: "4",
-                  WebkitBoxOrient: "vertical"
-                }}>
-                {hospital?.description}
-
-              </EmphasizedText>
-              <Stack direction={"row"} gap={1} marginTop={2}>
-                <ActionButton onClick={handleLearnMore}>
-                  Learn more
-                </ActionButton>
-                <ActionButton disabled={!isOpen} onClick={handleDonate}>
-                  Donate
-                </ActionButton>
-              </Stack>
-            </CardContent>
-            <CardContent
-              sx={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                gap: 0.8,
-              }}
-            >
-              <Box
-                display="flex"
-                alignItems="center"
-                marginTop={1}
-                sx={{
-                  backgroundColor: (theme: Theme) => theme.palette.background.highlighted,
+                  width: "100%",
+                  height: "150px",
+                  objectFit: "cover",
                   borderRadius: "8px",
-                  padding: "2px 10px 2px 10px",
-                  width: "245px",
                 }}
-              >
-                <Typography
-                  variant="body2"
-                  marginRight={1}
-                  color="textSecondary"
-                >
-                  Matched by {partnerName}
-                </Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary">
-                ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)}{" "}
-                {" "}
-                raised of $
-                {Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
-                <EmphasizedText
-                  sx={{
-                    color: (theme: Theme) => hospital?.status === "past" ? theme.palette.hospital.closed : theme.palette.hospital.open
-                  }}>
-                  {hospital?.status}
-                </EmphasizedText>
-              </Typography>
+                image={url}
+                alt="Hospital Image"
+              />
+            ))}
+          </Carousel>
+        </Box>
 
-              <Typography variant="body2" color={theme.palette.text.secondary}>
-                {hospital.year}+ kids impacted
-              </Typography>
-              <EmphasizedText
-                align="center"
-                sx={{
-                  marginTop: 5,
-                  fontWeight: "bold",
-                  color: (theme: Theme) => theme.palette.text.secondary,
-                }}
-              >
-                {hospitalService.getDonationMessage(hospital)}
-              </EmphasizedText>
-            </CardContent>
+        {/* 텍스트 섹션 */}
+        <CardContent
+          sx={{
+            flex: 2,
+            padding: "16px",
+          }}
+        >
+          <Typography variant="subtitle2" color="text.secondary">
+            <Room sx={{ color: pinColor, fontSize: "1rem" }} />{" "}
+            {[hospital.city, hospital.state].filter(Boolean).join(", ")}
+          </Typography>
+          <Typography variant="h6" noWrap>
+            {hospital.name}
+          </Typography>
+          <EmphasizedText
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            {hospital.description}
+          </EmphasizedText>
+          <Stack
+            direction={{
+              xs: "column", // 작은 화면에서는 세로 정렬
+              sm: "column", // 작은 화면에서는 세로 정렬
+              md: "column", // 중간 화면에서도 세로 정렬
+              lg: "column", // 큰 화면에서는 가로 정렬
+              xl: "row", // 아주 큰 화면에서도 가로 정렬
+            }}
+            gap={{
+              xs: 1, // 작은 화면에서 버튼 간 간격
+              sm: 1, // 작은 화면에서 버튼 간 간격
+              md: 1.5, // 중간 화면에서 버튼 간 간격
+              lg: 2, // 큰 화면에서 버튼 간 간격
+              xl: 2, // 아주 큰 화면에서 버튼 간 간격
+            }}
+            marginTop={2}
+            sx={{
+              flexWrap: "nowrap", // 가로 정렬 시 버튼이 한 줄에 유지되도록 설정
+              justifyContent: {
+                xs: "center", // 작은 화면에서는 버튼 중앙 정렬
+                sm: "center",
+                md: "center",
+                lg: "center", // 큰 화면에서는 왼쪽 정렬
+                xl: "flex-start",
+              },
+              alignItems: {
+                xs: "center", // 세로 정렬 시 중앙 정렬
+                sm: "center",
+                md: "center",
+                lg: "center", // 큰 화면에서는 동일 선상에 정렬
+                xl: "center",
+              },
+            }}
+          >
+            <ActionButton
+              onClick={() => setLearnMoreHospital(hospital)}
+              sx={{
+                fontSize: {
+                  xs: "0.7rem", // 가장 작은 화면에서 폰트 크기
+                  sm: "0.8rem", // 작은 화면에서 폰트 크기
+                  md: "0.9rem", // 중간 화면에서 폰트 크기
+                  lg: "1rem", // 큰 화면에서 폰트 크기
+                  xl: "1rem", // 아주 큰 화면에서 폰트 크기
+                },
+                padding: {
+                  xs: "4px 6px", // 가장 작은 화면에서 패딩
+                  sm: "4px 8px", // 작은 화면에서 패딩
+                  md: "6px 10px", // 중간 화면에서 패딩
+                  lg: "8px 16px", // 큰 화면에서 패딩
+                  xl: "8px 16px", // 아주 큰 화면에서 패딩
+                },
+                minWidth: {
+                  xs: "60px", // 가장 작은 화면에서 버튼 최소 너비
+                  sm: "70px", // 작은 화면에서 버튼 최소 너비
+                  md: "80px", // 중간 화면에서 버튼 최소 너비
+                  lg: "100px", // 큰 화면에서 버튼 최소 너비
+                  xl: "100px", // 아주 큰 화면에서 버튼 최소 너비
+                },
+                whiteSpace: "nowrap",
+              }}
+            >
+              Learn more
+            </ActionButton>
+            <ActionButton
+              disabled={!isOpen}
+              onClick={() => setDonationHospital(hospital)}
+              sx={{
+                fontSize: {
+                  xs: "0.7rem", // 가장 작은 화면에서 폰트 크기
+                  sm: "0.8rem", // 작은 화면에서 폰트 크기
+                  md: "0.9rem", // 중간 화면에서 폰트 크기
+                  lg: "1rem", // 큰 화면에서 폰트 크기
+                  xl: "1rem", // 아주 큰 화면에서 폰트 크기
+                },
+                padding: {
+                  xs: "4px 6px", // 가장 작은 화면에서 패딩
+                  sm: "4px 8px", // 작은 화면에서 패딩
+                  md: "6px 10px", // 중간 화면에서 패딩
+                  lg: "8px 16px", // 큰 화면에서 패딩
+                  xl: "8px 16px", // 아주 큰 화면에서 패딩
+                },
+                minWidth: {
+                  xs: "60px", // 가장 작은 화면에서 버튼 최소 너비
+                  sm: "70px", // 작은 화면에서 버튼 최소 너비
+                  md: "80px", // 중간 화면에서 버튼 최소 너비
+                  lg: "100px", // 큰 화면에서 버튼 최소 너비
+                  xl: "100px", // 아주 큰 화면에서 버튼 최소 너비
+                },
+              }}
+            >
+              Donate
+            </ActionButton>
           </Stack>
-        </CardActionArea>
+        </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 };
