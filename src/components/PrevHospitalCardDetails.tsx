@@ -1,5 +1,5 @@
 /**
- *  HospitalCardDetails.tsx
+ *  PrevHospitalCardDetails.tsx
  *
  *  @copyright 2024 Digital Aid Seattle
  *
@@ -30,7 +30,7 @@ import { hospitalService } from "../services/hospital/hospitalService";
 import ActionButton from "../styles/ActionButton";
 import EmphasizedText from "../styles/EmphasizedText";
 
-export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
+export const PrevHospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   hospital,
 }) => {
   const { hospital: selectedHospital, setHospital: setSelectedHospital } =
@@ -54,7 +54,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
       setBackgroundColor(
         hospitalService.isEqual(hospital, selectedHospital)
           ? theme.palette.action.selected
-          : theme.palette.background.paper
+          : ""
       );
       setPinColor(
         hospitalService.isEqual(hospital, selectedHospital)
@@ -68,17 +68,43 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   }, [hospital, selectedHospital]);
 
   const changeSelectedHospital = () => {
-    if (selectedHospital?.id === hospital.id) {
-      setSelectedHospital(undefined);
+    if (selectedHospital) {
+      if (hospital.id === selectedHospital.id) {
+        setSelectedHospital(undefined);
+      } else {
+        setSelectedHospital(hospital);
+      }
     } else {
       setSelectedHospital(hospital);
     }
   };
 
+  const handleCarousel = (evt: any) => {
+    if (selectedHospital) {
+      if (hospital.id === selectedHospital.id) {
+        evt.stopPropagation();
+      } else {
+        setSelectedHospital(hospital);
+      }
+    } else {
+      setSelectedHospital(hospital);
+    }
+  };
+
+  const handleLearnMore = (evt: any) => {
+    evt.stopPropagation();
+    setLearnMoreHospital(hospital);
+  };
+
+  const handleDonate = (evt: any) => {
+    evt.stopPropagation();
+    setDonationHospital(hospital);
+  };
+
   useEffect(() => {
     const fetchGeneralInfo = async () => {
       const [info] = await generalInfoService.findAll();
-      if (info?.corpPartners?.length > 0) {
+      if (info.corpPartners.length > 0) {
         setPartnerName(info.corpPartners[0].name || "Unknown Partner");
       }
     };
@@ -86,147 +112,107 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   }, []);
 
   return (
-    <Box
-      data-testid="hospital-detail-card"
-      sx={{
-        // width: "100%",
-        width: {
-          xs: "100%",
-          sm: "100%",
-          md: "100%",
-          lg: "100%",
-          xl: "100%",
-        },
-        maxWidth: "100%",
-        marginBottom: "16px",
-        // padding: "8px",
-        display: "flex",
-      }}
-    >
+    <div data-testid="hospital-detail-card">
       <Card
         sx={{
           display: "flex",
-          flexDirection: { xs: "row", sm: "row" },
           alignItems: "center",
+          margin: "10px 0",
           cursor: "pointer",
           backgroundColor: backgroundColor,
-          transition: "transform 0.3s ease-in-out",
-          "&:hover": {
-            transform: "scale(1.02)",
-          },
-          width: "100%",
-          overflow: "hidden",
         }}
         onClick={changeSelectedHospital}
       >
-        <Stack
-          direction="row"
+        <CardActionArea
           sx={{
+            display: "flex",
+            padding: 2,
+            alignItems: "center",
+            justifyContent: "center",
             width: "100%",
-            gap: 2,
+            height: "100%",
+            "&:focus": {
+              outline: "none",
+            },
+            "&:focus-visible": {
+              outline: "none",
+            },
+            "& .MuiCardActionArea-focusHighlight": {
+              background: "transparent",
+            },
           }}
         >
-          <Box
-            sx={{
-              flex: 7,
-              display: "flex",
-              flexDirection: "row",
-            }}
-          >
-            {/* 이미지 섹션 */}
-            <Box
-              sx={{
-                flex: 4,
-                height: "150px",
-                width: "70%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Carousel
-                showStatus={false}
-                showThumbs={false}
-                infiniteLoop
-                emulateTouch
-              >
-                {hospital.hospitalPictures.map((url, idx) => (
-                  <CardMedia
-                    key={idx}
-                    component="img"
-                    sx={{
-                      width: {
-                        xs: "0rem",
-                        sm: "3rem",
-                        md: "4rem",
-                        lg: "5rem",
-                        xl: "7rem",
-                      },
-                      height: {
-                        xs: "0rem",
-                        sm: "3rem",
-                        md: "4rem",
-                        lg: "5rem",
-                        xl: "7rem",
-                      },
-                      objectFit: "cover", // 이미지를 박스 크기에 맞게 자름
-                      borderRadius: "8px", // 둥근 모서리 설정
-                    }}
-                    image={url}
-                    alt="Hospital Image"
-                  />
-                ))}
-              </Carousel>
-            </Box>
-
-            {/* 텍스트 섹션 */}
+          <Stack direction={"row"}>
             <CardContent
               sx={{
-                flex: 6,
-                padding: "9px !important",
-                overflow: "hidden",
+                flex: 1,
+              }}
+            >
+              <Box onClick={handleCarousel}>
+                <Carousel showStatus={false} showThumbs={false}>
+                  {hospital.hospitalPictures.map((url, idx) => (
+                    <CardMedia
+                      key={"p" + idx}
+                      component="img"
+                      sx={{ width: 135, height: 150, borderRadius: 2 }}
+                      image={url}
+                      alt="Hospital Image"
+                    />
+                  ))}
+                </Carousel>
+              </Box>
+            </CardContent>
+
+            <CardContent
+              sx={{
+                flex: 2,
+                padding: "0 16px",
+                borderRight: (theme: Theme) =>
+                  "1px solid " + theme.palette.grey[400],
               }}
             >
               <Typography variant="subtitle2" color="text.secondary">
-                <Room sx={{ color: pinColor, fontSize: "1rem" }} />{" "}
-                {[hospital.city, hospital.state].filter(Boolean).join(", ")}
+                <Room
+                  sx={{
+                    color: pinColor,
+                    strokeWidth: "0.2px",
+                    fontSize: "1rem",
+                    "& .MuiSvgIcon-root": {
+                      outline: "1px solid red",
+                      outlineOffset: "2px",
+                    },
+                  }}
+                />{" "}
+                {[hospital?.city, hospital?.state].filter((s) => s).join(", ")}
               </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {hospital.name}
+
+              <Typography variant="h6" component="div">
+                {hospital?.name}
               </Typography>
               <EmphasizedText
                 sx={{
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
-                  WebkitLineClamp: 3,
+                  WebkitLineClamp: "4",
                   WebkitBoxOrient: "vertical",
                 }}
               >
-                {hospital.description}
+                {hospital?.description}
               </EmphasizedText>
+              <Stack direction={"row"} gap={1} marginTop={2}>
+                <ActionButton onClick={handleLearnMore}>
+                  Learn more
+                </ActionButton>
+                <ActionButton disabled={!isOpen} onClick={handleDonate}>
+                  Donate
+                </ActionButton>
+              </Stack>
             </CardContent>
-          </Box>
-
-          <Box
-            sx={{
-              flex: 3,
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
             <CardContent
               sx={{
                 flex: 1,
                 display: "flex",
-                padding: "0px 10px 7px 1px !important",
                 flexDirection: "column",
                 gap: 0.8,
               }}
@@ -240,32 +226,18 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                     theme.palette.background.highlighted,
                   borderRadius: "8px",
                   padding: "2px 10px 2px 10px",
+                  width: "245px",
                 }}
               >
                 <Typography
                   variant="body2"
                   marginRight={1}
                   color="textSecondary"
-                  sx={{
-                    fontSize: "0.75rem",
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                  }}
                 >
                   Matched by {partnerName}
                 </Typography>
               </Box>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{
-                  fontSize: "0.75rem",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                }}
-              >
+              <Typography variant="body2" color="text.secondary">
                 ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)}{" "}
                 raised of ${Math.round(hospital.matchedRequest?.requested || 0)}{" "}
                 -{" "}
@@ -280,6 +252,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   {hospital?.status}
                 </EmphasizedText>
               </Typography>
+
               <Typography variant="body2" color={theme.palette.text.secondary}>
                 {hospital.year}+ kids impacted
               </Typography>
@@ -294,9 +267,9 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 {hospitalService.getDonationMessage(hospital)}
               </EmphasizedText>
             </CardContent>
-          </Box>
-        </Stack>
+          </Stack>
+        </CardActionArea>
       </Card>
-    </Box>
+    </div>
   );
 };

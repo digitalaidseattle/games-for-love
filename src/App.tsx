@@ -9,6 +9,8 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useContext, useEffect, useState } from "react";
 import { GFLMap } from "./components/GFLMap";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
+import { PrevHospitalCardDetails } from "./components/PrevHospitalCardDetails";
+
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import "./App.css";
@@ -20,6 +22,7 @@ const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
   return hospitals?.map((hospital, idx: number) => (
     <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
+    // <PrevHospitalCardDetails key={`h-${idx})`} hospital={hospital} />
   ));
 };
 
