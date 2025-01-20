@@ -85,6 +85,16 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
     fetchGeneralInfo();
   }, []);
 
+  const handleLearnMore = (evt: any) => {
+    evt.stopPropagation();
+    setLearnMoreHospital(hospital);
+  };
+
+  const handleDonate = (evt: any) => {
+    evt.stopPropagation();
+    setDonationHospital(hospital);
+  };
+
   return (
     <Box
       data-testid="hospital-detail-card"
@@ -130,6 +140,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
             sx={{
               flex: 7,
               display: "flex",
+              maxWidth: "70%",
+              height: "100%",
               flexDirection: "row",
             }}
           >
@@ -137,14 +149,15 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
             <Box
               sx={{
                 flex: 4,
-                height: "150px",
-                width: "70%",
-                display: "flex",
+                // width: "50%",
+                minWidth: "120px",
+                maxWidth: "200px",
                 alignItems: "center",
                 justifyContent: "center",
+                backgroundColor: "blue",
               }}
             >
-              <Carousel
+              {/* <Carousel
                 showStatus={false}
                 showThumbs={false}
                 infiniteLoop
@@ -176,7 +189,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                     alt="Hospital Image"
                   />
                 ))}
-              </Carousel>
+              </Carousel> */}
             </Box>
 
             {/* 텍스트 섹션 */}
@@ -212,6 +225,14 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               >
                 {hospital.description}
               </EmphasizedText>
+              <Stack direction={"row"} gap={1} marginTop={2}>
+                <ActionButton onClick={handleLearnMore}>
+                  Learn more
+                </ActionButton>
+                <ActionButton disabled={!isOpen} onClick={handleDonate}>
+                  Donate
+                </ActionButton>
+              </Stack>
             </CardContent>
           </Box>
 
