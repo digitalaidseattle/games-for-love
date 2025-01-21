@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { PopupInfo } from "../../models/popupInfo";
-import "./HospitalCard.style.css";
 
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -27,10 +26,12 @@ import ActionButton from "../../styles/ActionButton";
 
 import { differenceInDays } from "date-fns";
 import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { generalInfoService } from "../../services/generalInfo/generalInfoService";
 import { hospitalService } from "../../services/hospital/hospitalService";
 import EmphasizedText from "../../styles/EmphasizedText";
+
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import "./HospitalCard.style.css";
 
 const CustomCancelIconButton = styled(IconButton)({
   opacity: 0.9,

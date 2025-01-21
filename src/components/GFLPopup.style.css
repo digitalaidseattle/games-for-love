@@ -3,15 +3,3 @@
   border-radius: 10px !important;
 }
 
-.carousel .control-arrow:hover {
-  background: none !important;
-  box-shadow: none !important;
-}
-
-.carousel .control-prev.control-arrow {
-  left: 30px;
-}
-
-.carousel .control-next.control-arrow {
-  right: 30px;
-}
