@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
-import { Room } from "@mui/icons-material";
+import { Directions, Room } from "@mui/icons-material";
 import { Carousel } from "react-responsive-carousel";
 import {
   DonationHospitalContext,
@@ -111,6 +111,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
         marginBottom: "16px",
         // padding: "8px",
         display: "flex",
+        // overflow: "hidden",
       }}
     >
       <Card
@@ -124,199 +125,270 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
           "&:hover": {
             transform: "scale(1.02)",
           },
-          width: "100%",
+          // width: "100%",
           overflow: "hidden",
         }}
         onClick={changeSelectedHospital}
       >
-        <Stack
-          direction="row"
+        <Box
           sx={{
-            width: "100%",
-            gap: 2,
+            flex: 7,
+            display: "flex",
+            maxWidth: "70%",
+            height: "100%",
+            flexDirection: "row",
           }}
         >
+          {/* 이미지 섹션 */}
           <Box
             sx={{
-              flex: 7,
+              flex: 4,
               display: "flex",
-              maxWidth: "70%",
-              height: "100%",
-              flexDirection: "row",
+              // width: "50%",
+              minWidth: "120px",
+              maxWidth: "200px",
+              height: "200px",
+              alignItems: "center",
+              justifyContent: "center",
+              // backgroundColor: "blue",
             }}
           >
-            {/* 이미지 섹션 */}
-            <Box
-              sx={{
-                flex: 4,
-                // width: "50%",
-                minWidth: "120px",
-                maxWidth: "200px",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "blue",
-              }}
+            <Carousel
+              showStatus={false}
+              showThumbs={false}
+              infiniteLoop
+              emulateTouch
             >
-              {/* <Carousel
-                showStatus={false}
-                showThumbs={false}
-                infiniteLoop
-                emulateTouch
-              >
-                {hospital.hospitalPictures.map((url, idx) => (
-                  <CardMedia
-                    key={idx}
-                    component="img"
-                    sx={{
-                      width: {
-                        xs: "0rem",
-                        sm: "3rem",
-                        md: "4rem",
-                        lg: "5rem",
-                        xl: "7rem",
-                      },
-                      height: {
-                        xs: "0rem",
-                        sm: "3rem",
-                        md: "4rem",
-                        lg: "5rem",
-                        xl: "7rem",
-                      },
-                      objectFit: "cover", // 이미지를 박스 크기에 맞게 자름
-                      borderRadius: "8px", // 둥근 모서리 설정
-                    }}
-                    image={url}
-                    alt="Hospital Image"
-                  />
-                ))}
-              </Carousel> */}
-            </Box>
+              {hospital.hospitalPictures.map((url, idx) => (
+                <CardMedia
+                  key={idx}
+                  component="img"
+                  className="cardWrapper"
+                  sx={{
+                    width: {
+                      xs: "100%",
+                      sm: "3rem",
+                      md: "4rem",
+                      lg: "5rem",
+                      xl: "100%",
+                    },
+                    height: {
+                      xs: "0rem",
+                      sm: "3rem",
+                      md: "4rem",
+                      lg: "5rem",
+                      xl: "100%",
+                    },
+                    objectFit: "cover", // 이미지를 박스 크기에 맞게 자름
+                    borderRadius: "8px", // 둥근 모서리 설정
+                  }}
+                  image={url}
+                  alt="Hospital Image"
+                />
+              ))}
+            </Carousel>
+          </Box>
 
-            {/* 텍스트 섹션 */}
-            <CardContent
+          {/* 텍스트 섹션 */}
+          <CardContent
+            sx={{
+              flex: 6,
+              padding: "3px 3px 3px 8px !important",
+              overflow: "hidden",
+            }}
+          >
+            <Typography
+              variant="subtitle2"
+              color="text.secondary"
               sx={{
-                flex: 6,
-                padding: "9px !important",
+                fontSize: {
+                  xs: "0.85rem",
+                  sm: "0.85rem",
+                  md: "0.85rem",
+                  lg: "0.95rem",
+                  xl: "1rem",
+                },
                 overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "noWrap",
               }}
             >
-              <Typography variant="subtitle2" color="text.secondary">
-                <Room sx={{ color: pinColor, fontSize: "1rem" }} />{" "}
-                {[hospital.city, hospital.state].filter(Boolean).join(", ")}
-              </Typography>
-              <Typography
-                variant="h6"
+              <Room
                 sx={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
+                  color: pinColor,
+                  fontSize: {
+                    xs: "0.85rem",
+                    sm: "0.85rem",
+                    md: "0.85rem",
+                    lg: "0.95rem",
+                    xl: "1rem",
+                  },
+                  whiteSpace: "noWrap",
+                }}
+              />{" "}
+              {[hospital.city, hospital.state].filter(Boolean).join(", ")}
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {hospital.name}
+            </Typography>
+            <EmphasizedText
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "-webkit-box",
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: "vertical",
+              }}
+            >
+              {hospital.description}
+            </EmphasizedText>
+            <Stack
+              direction={{
+                xs: "column",
+                sm: "column",
+                md: "column",
+                lg: "row",
+              }}
+              gap={1}
+              marginTop={2}
+            >
+              <ActionButton
+                onClick={handleLearnMore}
+                sx={{
+                  fontSize: {
+                    xs: "0.6rem",
+                    sm: "0.75rem",
+                    md: "0.75rem",
+                    lg: "0.65rem",
+                    xl: "0.75rem",
+                  },
+                  whiteSpace: "noWrap",
                 }}
               >
-                {hospital.name}
-              </Typography>
-              <EmphasizedText
+                Learn more
+              </ActionButton>
+              <ActionButton
+                disabled={!isOpen}
+                onClick={handleDonate}
                 sx={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: 3,
-                  WebkitBoxOrient: "vertical",
+                  fontSize: {
+                    xs: "0.6rem",
+                    sm: "0.75rem",
+                    md: "0.75rem",
+                    lg: "0.65rem",
+                    xl: "0.75rem",
+                  },
+                  whiteSpace: "noWrap",
                 }}
               >
-                {hospital.description}
-              </EmphasizedText>
-              <Stack direction={"row"} gap={1} marginTop={2}>
-                <ActionButton onClick={handleLearnMore}>
-                  Learn more
-                </ActionButton>
-                <ActionButton disabled={!isOpen} onClick={handleDonate}>
-                  Donate
-                </ActionButton>
-              </Stack>
-            </CardContent>
-          </Box>
+                Donate
+              </ActionButton>
+            </Stack>
+          </CardContent>
+        </Box>
 
-          <Box
+        <Box
+          sx={{
+            flex: 3,
+            display: "flex",
+            flexDirection: "column",
+            maxWidth: "30%",
+            // backgroundColor: "red",
+          }}
+        >
+          {/* <CardContent
             sx={{
-              flex: 3,
+              flex: 1,
               display: "flex",
+              width: "100%",
+              padding: "0px 0px 10px 1px !important",
               flexDirection: "column",
+              gap: 0.5,
+            }}
+          > */}
+          <Box
+            display="flex"
+            alignItems="center"
+            marginTop={1}
+            sx={{
+              backgroundColor: (theme: Theme) =>
+                theme.palette.background.highlighted,
+              borderRadius: "8px",
+              padding: "2px 2px 2px 2px",
+              margin: "1px 3px 1px 3px",
             }}
           >
-            <CardContent
+            <Typography
+              variant="body2"
+              marginRight={1}
+              color="textSecondary"
               sx={{
-                flex: 1,
-                display: "flex",
-                padding: "0px 10px 7px 1px !important",
-                flexDirection: "column",
-                gap: 0.8,
+                fontSize: {
+                  xs: "0.65rem",
+                  sm: "0.75rem",
+                  md: "0.75rem",
+                  lg: "0.75rem",
+                  xl: "0.75rem",
+                },
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "noWrap",
               }}
             >
-              <Box
-                display="flex"
-                alignItems="center"
-                marginTop={1}
-                sx={{
-                  backgroundColor: (theme: Theme) =>
-                    theme.palette.background.highlighted,
-                  borderRadius: "8px",
-                  padding: "2px 10px 2px 10px",
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  marginRight={1}
-                  color="textSecondary"
-                  sx={{
-                    fontSize: "0.75rem",
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  Matched by {partnerName}
-                </Typography>
-              </Box>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{
-                  fontSize: "0.75rem",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)}{" "}
-                raised of ${Math.round(hospital.matchedRequest?.requested || 0)}{" "}
-                -{" "}
-                <EmphasizedText
-                  sx={{
-                    color: (theme: Theme) =>
-                      hospital?.status === "past"
-                        ? theme.palette.hospital.closed
-                        : theme.palette.hospital.open,
-                  }}
-                >
-                  {hospital?.status}
-                </EmphasizedText>
-              </Typography>
-              <Typography variant="body2" color={theme.palette.text.secondary}>
-                {hospital.year}+ kids impacted
-              </Typography>
-              <EmphasizedText
-                align="center"
-                sx={{
-                  marginTop: 5,
-                  fontWeight: "bold",
-                  color: (theme: Theme) => theme.palette.text.secondary,
-                }}
-              >
-                {hospitalService.getDonationMessage(hospital)}
-              </EmphasizedText>
-            </CardContent>
+              Matched by {partnerName}
+            </Typography>
           </Box>
-        </Stack>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              fontSize: {
+                xs: "0.65rem",
+                sm: "0.75rem",
+                md: "0.75rem",
+                lg: "0.75rem",
+                xl: "0.75rem",
+              },
+              overflow: "hidden",
+              // whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
+            }}
+          >
+            ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)} raised
+            of ${Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
+            <EmphasizedText
+              sx={{
+                color: (theme: Theme) =>
+                  hospital?.status === "past"
+                    ? theme.palette.hospital.closed
+                    : theme.palette.hospital.open,
+              }}
+            >
+              {hospital?.status}
+            </EmphasizedText>
+          </Typography>
+          <Typography variant="body2" color={theme.palette.text.secondary}>
+            {hospital.year}+ kids impacted
+          </Typography>
+          <EmphasizedText
+            align="center"
+            sx={{
+              marginTop: 5,
+              fontWeight: "bold",
+              color: (theme: Theme) => theme.palette.text.secondary,
+            }}
+          >
+            {hospitalService.getDonationMessage(hospital)}
+          </EmphasizedText>
+          {/* </CardContent> */}
+        </Box>
       </Card>
     </Box>
   );
