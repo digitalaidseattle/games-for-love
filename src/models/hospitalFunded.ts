@@ -19,5 +19,5 @@ export type HospitalFunded = {
   shortThankYou: string;
   thankYouNoteTitle: string;
   impactTitle: string;
+  impactText: string;
 };
-

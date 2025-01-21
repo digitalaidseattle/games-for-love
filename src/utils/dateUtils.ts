@@ -11,7 +11,6 @@
  */
 export const daysRemaining = (date: string | Date): number => {
   let date1 = new Date();
-  console.log(date1, date);
 
   // if date is undefined, throw error
   if (!date) {
