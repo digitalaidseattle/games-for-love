@@ -6,9 +6,13 @@
 
 /**
  * The below function returns the number of days between two dates
- * @param date
- * @returns
+ * @param date - the date to compare
+ * @returns the number of days between two dates
+ *
  */
+
+import { differenceInDays } from "date-fns";
+
 export const daysRemaining = (date: string | Date): number => {
   const date1 = new Date();
 
@@ -18,13 +22,9 @@ export const daysRemaining = (date: string | Date): number => {
   }
 
   const date2 = typeof date === "string" ? new Date(date) : date;
-  // One day Time in ms (milliseconds)
-  const oneDay = 1000 * 60 * 60 * 24;
 
   // Calculate the number of days between two dates
-  const differenceInDays = Math.floor(
-    (date2.getTime() - date1.getTime()) / oneDay
-  );
+  const numberOfDays = differenceInDays(date2, date1);
 
-  return differenceInDays;
+  return numberOfDays;
 };
