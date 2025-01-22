@@ -12,6 +12,7 @@ export type HospitalRequest = {
   oppReqId: string;
   name: string;
   requestNarrative: string;
+  titleRequestNarrative: string;
   equipReq: string;
   requested: number;
   fundingDeadline: Date | undefined;

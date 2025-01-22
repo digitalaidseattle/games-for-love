@@ -18,6 +18,7 @@ class HospitalRequestService {
       oppReqId: `${record.fields["Hospital Request ID"]}`,
       name: record.fields["Hospital Name (LInked)"],
       requestNarrative: record.fields["Request Narrative"],
+      titleRequestNarrative: record.fields["Title Request Narrative"],
       equipReq:
         record.fields[
         "# Equipment Requested (TBD if we show single brands + extras)"

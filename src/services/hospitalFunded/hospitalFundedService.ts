@@ -10,7 +10,6 @@ import { HospitalFunded } from "../../models/hospitalFunded";
 import { extractUrls } from "../siteUtils";
 
 class HospitalFundedService {
-
   transform = (record: Record<FieldSet>): HospitalFunded => {
     return {
       id: record.id,
@@ -19,6 +18,7 @@ class HospitalFundedService {
       orderID: `${record.fields["Order ID"]}`,
       equipmentShipped: record.fields["# Equipment Shipped"],
       fundingCompleted: record.fields["$ Funding"],
+      fundingDeadline: record.fields["Funding Deadline"],
       funders: record.fields["# Funders"],
       corporateFunding: record.fields["$ Corporate Funding"],
       thankYouNote: record.fields["Thank You Note"],
@@ -39,8 +39,9 @@ class HospitalFundedService {
       shortThankYou: record.fields["Map Short Thank You"],
       thankYouNoteTitle: record.fields["Thank You Note Title"],
       impactTitle: record.fields["Impact Title"],
+      impactText: record.fields["Impact Text"],
     } as HospitalFunded;
-  }
+  };
 
   async findAll(): Promise<HospitalFunded[]> {
     const TABLE = import.meta.env.VITE_AIRTABLE_TABLE_HOSPITAL_FUNDED_REFERENCE;
