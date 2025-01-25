@@ -8,11 +8,6 @@ export const DonateOverlay = () => {
     GeneralDonationContext
   );
 
-  const handleDonateClick = () => {
-    const link = document.getElementById("fundraise-link") as HTMLAnchorElement;
-    if (link) link.click();
-  };
-
   const handleClose = () => {
     setDonateOverlayOpen(false);
   };

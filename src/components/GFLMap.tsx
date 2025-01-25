@@ -23,7 +23,6 @@ import { Hospital } from "../models/hospital";
 import { siteService } from "../services/siteUtils";
 import SponsorPanel from "./SponsorPanel";
 import LearnMoreOverlay from "./LearnMoreOverlay";
-import DonationDialog from "./DonationDialog";
 import { DonateOverlay } from "./DonateOverlay";
 
 const HospitalMarker = (props: {
@@ -78,16 +77,6 @@ export const GFLMap = () => {
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const { hospital: selectedHospital, setHospital: setSelectedHospital } =
     useContext(SelectedHospitalContext);
-
-  const [donateOverlayOpen, setDonateOverlayOpen] = useState(false);
-
-  const handleDonateOverlayOpen = () => {
-    setDonateOverlayOpen(true);
-  };
-
-  const handleDonateOverlayClose = () => {
-    setDonateOverlayOpen(false);
-  };
 
   useEffect(() => {
     if (selectedHospital) {

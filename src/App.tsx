@@ -2,7 +2,7 @@
  * App.tsx
  */
 
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 

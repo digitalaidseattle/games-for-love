@@ -19,7 +19,6 @@ import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
 import ToolbarButton from "../styles/ToolbarButton";
 import { sortDirection } from "../types/fillterType";
-import { DonateOverlay } from "./DonateOverlay";
 import { GeneralDonationContext } from "../context/GeneralDonationContext";
 
 export const SearchAndSort = () => {
@@ -146,10 +145,6 @@ export const SearchAndSort = () => {
         </ToolbarButton>
       </Box>
       <FilterDialog open={showFilters} handleClose={handleCloseFilters} />
-
-      {/* {donateOverlayOpen && (
-        <DonateOverlay onClose={handleDonateOverlayClose} />
-      )} */}
     </>
   );
 };
