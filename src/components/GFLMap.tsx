@@ -141,7 +141,6 @@ export const GFLMap = () => {
       )}
       <SponsorPanel />
       <LearnMoreOverlay />
-      {/* <DonationDialog /> */}
       <DonateOverlay />
     </Map>
   );

@@ -17,6 +17,8 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "react-reflex/styles.css";
 import "./App.css";
 
+const FUNDRAISEUP_WIDGET_URL = "https://cdn.fundraiseup.com/widget/AWALQQAB";
+
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
   return hospitals?.map((hospital, idx: number) => (
@@ -42,18 +44,18 @@ function App() {
     }
     window.addEventListener("resize", handleResize);
 
-    // Fundraise Up 설치 스크립트 동적으로 추가
-    const script = document.createElement("script");
-    script.src = "https://cdn.fundraiseup.com/widget/AWALQQAB";
-    script.async = true;
-    script.onload = () =>
-      console.log("Fundraise Up script loaded successfully");
-    script.onerror = () => console.error("Failed to load Fundraise Up script");
-    document.head.appendChild(script);
-
+    if (!document.querySelector(`script[src="${FUNDRAISEUP_WIDGET_URL}"]`)) {
+      const script = document.createElement("script");
+      script.src = FUNDRAISEUP_WIDGET_URL;
+      script.async = true;
+      script.onload = () =>
+        console.log("Fundraise Up script loaded successfully");
+      script.onerror = () =>
+        console.error("Failed to load Fundraise Up script");
+      document.head.appendChild(script);
+    }
     return () => {
       window.removeEventListener("resize", handleResize);
-      document.head.removeChild(script);
     };
   }, []);
 

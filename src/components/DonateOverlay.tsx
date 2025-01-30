@@ -3,6 +3,8 @@ import { GeneralDonationContext } from "../context/GeneralDonationContext";
 import { Backdrop, Theme } from "@mui/material";
 import DialogCloseButton from "../styles/DialogCloseButton";
 
+const FUNDRAISEUP_GENERAL_CAMPAIGN_CODE =
+  import.meta.env.VITE_FUNDRAISEUP_CAMPAIGN_CODE || "#XWQCRFLJ";
 export const DonateOverlay = () => {
   const { donateOverlayOpen, setDonateOverlayOpen } = useContext(
     GeneralDonationContext
@@ -32,7 +34,11 @@ export const DonateOverlay = () => {
           }}
         />
 
-        <a href="#XWQCRFLJ" style={{ display: "none" }} id="fundraise-link"></a>
+        <a
+          href={FUNDRAISEUP_GENERAL_CAMPAIGN_CODE}
+          style={{ display: "none" }}
+          id="fundraise-link"
+        ></a>
       </Backdrop>
     )
   );
