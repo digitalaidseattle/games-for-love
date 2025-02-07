@@ -8,13 +8,13 @@ import {
   LearnMoreHospitalContextProvider,
   SelectedHospitalContextProvider,
 } from "../context/SelectedHospitalContext.tsx";
-import { GeneralDonationContextProvider } from "../context/GeneralDonationContext.tsx";
+import { DonationContextProvider } from "../context/DonationContext.tsx";
 
 type ProvidersProps = { children: ReactNode };
 
 const Providers = ({ children }: ProvidersProps) => {
   return (
-    <GeneralDonationContextProvider>
+    <DonationContextProvider>
       <HospitalsContextProvider>
         <SelectedHospitalContextProvider>
           <DonationHospitalContextProvider>
@@ -24,7 +24,7 @@ const Providers = ({ children }: ProvidersProps) => {
           </DonationHospitalContextProvider>
         </SelectedHospitalContextProvider>
       </HospitalsContextProvider>
-    </GeneralDonationContextProvider>
+    </DonationContextProvider>
   );
 };
 export default Providers;
