@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { DonationContext } from "../context/DonationContext";
 import { Backdrop, Box, Theme } from "@mui/material";
 import DialogCloseButton from "../styles/DialogCloseButton";
