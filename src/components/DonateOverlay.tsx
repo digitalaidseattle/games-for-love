@@ -4,11 +4,23 @@ import { Backdrop, Box, Theme } from "@mui/material";
 import DialogCloseButton from "../styles/DialogCloseButton";
 import { DonationHospitalContext } from "../context/SelectedHospitalContext";
 
-const FUNDRAISEUP_GENERAL_CAMPAIGN_CODE =
-  import.meta.env.VITE_FUNDRAISEUP_CAMPAIGN_CODE || "#XWQCRFLJ";
+const FUNDRAISEUP_CAMPAIGN_CODE = import.meta.env
+  .VITE_FUNDRAISEUP_CAMPAIGN_CODE;
 
-const FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE =
-  import.meta.env.VITE_FUNDRAISEUP_CAMPAIGN_CODE || "#XLGBZUGV";
+if (!FUNDRAISEUP_CAMPAIGN_CODE) {
+  throw new Error(
+    "FUNDRAISEUP_CAMPAIGN_CODE is not set. Application cannot start."
+  );
+}
+
+const FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE = import.meta.env
+  .VITE_FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE;
+
+if (!FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE) {
+  throw new Error(
+    "FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODEE is not set. Application cannot start."
+  );
+}
 
 export const DonateOverlay = () => {
   const { donateOverlayOpen, setDonateOverlayOpen } =
@@ -57,7 +69,7 @@ export const DonateOverlay = () => {
           </Box>
         ) : (
           <a
-            href={FUNDRAISEUP_GENERAL_CAMPAIGN_CODE}
+            href={FUNDRAISEUP_CAMPAIGN_CODE}
             style={{ display: "none" }}
             id="fundraise-link"
           ></a>

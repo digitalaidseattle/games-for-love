@@ -17,7 +17,10 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "react-reflex/styles.css";
 import "./App.css";
 
-const FUNDRAISEUP_WIDGET_URL = "https://cdn.fundraiseup.com/widget/AWALQQAB";
+const FUNDRAISEUP_OVERALL_WIDGET_URL = import.meta.env
+  .VITE_FUNDRAISEUP_OVERALL_WIDGET_URL;
+// const FUNDRAISEUP_HOSPITAL_WIDGET_URL = import.meta.env
+//   .VITE_FUNDRAISEUP_HOSPITAL_WIDGET_URL;
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -39,14 +42,11 @@ function App() {
 
     setWindowHeight(window.innerHeight);
 
-    function handleResize() {
-      setWindowHeight(window.innerHeight);
-    }
-    window.addEventListener("resize", handleResize);
-
-    if (!document.querySelector(`script[src="${FUNDRAISEUP_WIDGET_URL}"]`)) {
+    if (
+      !document.querySelector(`script[src="${FUNDRAISEUP_OVERALL_WIDGET_URL}"]`)
+    ) {
       const script = document.createElement("script");
-      script.src = FUNDRAISEUP_WIDGET_URL;
+      script.src = FUNDRAISEUP_OVERALL_WIDGET_URL;
       script.async = true;
       script.onload = () =>
         console.log("Fundraise Up script loaded successfully");
@@ -54,9 +54,6 @@ function App() {
         console.error("Failed to load Fundraise Up script");
       document.head.appendChild(script);
     }
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, []);
 
   return (
