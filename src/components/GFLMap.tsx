@@ -23,7 +23,7 @@ import { Hospital } from "../models/hospital";
 import { siteService } from "../services/siteUtils";
 import SponsorPanel from "./SponsorPanel";
 import LearnMoreOverlay from "./LearnMoreOverlay";
-import DonationDialog from "./DonationDialog";
+import { DonateOverlay } from "./DonateOverlay";
 
 const HospitalMarker = (props: {
   hospital: Hospital;
@@ -50,7 +50,12 @@ const HospitalMarker = (props: {
       >
         <Room
           sx={{
-            color: (theme: Theme) => props.selected ? theme.palette.hospital.selected : hospital.status === "past" ? theme.palette.hospital.closed : theme.palette.hospital.open,
+            color: (theme: Theme) =>
+              props.selected
+                ? theme.palette.hospital.selected
+                : hospital.status === "past"
+                ? theme.palette.hospital.closed
+                : theme.palette.hospital.open,
             strokeWidth: "0.2px",
             fontSize: "3rem",
             "& .MuiSvgIcon-root": {
@@ -102,8 +107,9 @@ export const GFLMap = () => {
       {...viewState}
       ref={markerRef}
       onMove={(evt) => setViewState(evt.viewState)}
-      mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${import.meta.env.VITE_MAPTILER_API_KEY
-        }`}
+      mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${
+        import.meta.env.VITE_MAPTILER_API_KEY
+      }`}
     >
       <FullscreenControl position="top-left" />
       <NavigationControl position="top-left" />
@@ -135,7 +141,7 @@ export const GFLMap = () => {
       )}
       <SponsorPanel />
       <LearnMoreOverlay />
-      <DonationDialog />
+      <DonateOverlay />
     </Map>
   );
 };

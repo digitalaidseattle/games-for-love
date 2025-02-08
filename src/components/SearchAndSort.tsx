@@ -8,12 +8,7 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  Box,
-  IconButton,
-  InputAdornment,
-  TextField
-} from "@mui/material";
+import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
 import { ChangeEvent, useContext, useState } from "react";
 import GamesForLoveLogo from "../assets/games-for-love-logo.png";
 
@@ -24,12 +19,20 @@ import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
 import ToolbarButton from "../styles/ToolbarButton";
 import { sortDirection } from "../types/fillterType";
+import { GeneralDonationContext } from "../context/GeneralDonationContext";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
+
   const { originals, hospitals, setHospitals } = useContext(HospitalsContext);
   const { filters, setFilters } = useContext(FilterContext);
   const [isDisabled, setIsDisabled] = useState(false);
+
+  const { setDonateOverlayOpen } = useContext(GeneralDonationContext);
+
+  const handleDonateClick = () => {
+    setDonateOverlayOpen(true);
+  };
 
   const handleOpenFilters = () => {
     setShowFilters(true);
@@ -64,7 +67,7 @@ export const SearchAndSort = () => {
   };
 
   return (
-    < >
+    <>
       <Box
         data-testid="search-and-sort-box"
         sx={{
@@ -74,7 +77,7 @@ export const SearchAndSort = () => {
           margin: "20px 5px 0px 5px ",
         }}
       >
-        <a href="https://gamesforlove.org" >
+        <a href="https://gamesforlove.org">
           <img
             src={GamesForLoveLogo}
             alt="Games For Love Logo"
@@ -117,13 +120,15 @@ export const SearchAndSort = () => {
             },
           }}
         />
-        <ToolbarButton
-          onClick={handleOpenFilters}>
+        <ToolbarButton onClick={handleOpenFilters}>
           <FilterListIcon />
         </ToolbarButton>
         <ToolbarButton
           onClick={handelOrderButton}
-          disabled={isDisabled || filters.sortDirection === sortDirection.UNDEFINED}>
+          disabled={
+            isDisabled || filters.sortDirection === sortDirection.UNDEFINED
+          }
+        >
           {filters.sortDirection === sortDirection.DESCENDING ? (
             <ArrowDownwardIcon />
           ) : (
@@ -134,7 +139,7 @@ export const SearchAndSort = () => {
           sx={{
             outline: "1px solid",
           }}
-          onClick={() => alert('Display FundRaiseUp donate popup with general campaigh id')}
+          onClick={handleDonateClick}
         >
           Donate
         </ToolbarButton>
