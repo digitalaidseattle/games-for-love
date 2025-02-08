@@ -20,4 +20,5 @@ export type Hospital = {
   status: string;
   fundingLevel: number;
   searchTerm: string;
+  fundraiseUpCampaignId?: string;
 };

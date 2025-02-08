@@ -20,6 +20,7 @@ class HospitalService {
     matchedFund: HospitalFunded,
     currentDate: Date
   ): Hospital {
+    const DEFAULT_FUNDRAISEUP_CAMPAIGN_ID = "FUNTTHDCELT"; // default fundraiseup ID
     const hospital = {
       id: hi.id,
       name: hi.name,
@@ -36,6 +37,8 @@ class HospitalService {
       hospitalPictures: hi.hospitalPictures,
       matchedRequest: matchedRequest,
       matchedFunded: matchedFund,
+      fundraiseUpCampaignId:
+        hi.fundraiseUpCampaignId || DEFAULT_FUNDRAISEUP_CAMPAIGN_ID,
     } as Hospital;
     hospital.status = this.calcStatus(hospital, currentDate);
     hospital.fundingLevel = this.calcFundingLevel(hospital);
@@ -100,7 +103,7 @@ class HospitalService {
     if (hospital.matchedRequest && hospital.matchedFunded) {
       hospital.matchedRequest.requested
         ? (hospital.matchedFunded.fundingCompleted || 0) /
-        hospital.matchedRequest.requested
+          hospital.matchedRequest.requested
         : 0;
     }
     return 0;
@@ -114,17 +117,22 @@ class HospitalService {
     }
   };
 
-  isEqual = (test: Hospital, selectedHospital: Hospital | undefined): boolean => {
-    return selectedHospital !== undefined && test.id === selectedHospital.id
-  }
+  isEqual = (
+    test: Hospital,
+    selectedHospital: Hospital | undefined
+  ): boolean => {
+    return selectedHospital !== undefined && test.id === selectedHospital.id;
+  };
 
   filterHospitals = (hospitals: Hospital[], searchTerm: string) => {
     const terms: string[] = searchTerm
       .toLowerCase()
       .split(" ")
       .filter((t) => t);
-    return hospitals.filter((h: Hospital) =>
-      terms.length === 0 || terms.find((term) => h.searchTerm.includes(term)) !==undefined
+    return hospitals.filter(
+      (h: Hospital) =>
+        terms.length === 0 ||
+        terms.find((term) => h.searchTerm.includes(term)) !== undefined
     );
   };
 

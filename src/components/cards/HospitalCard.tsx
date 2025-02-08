@@ -32,11 +32,12 @@ import EmphasizedText from "../../styles/EmphasizedText";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./HospitalCard.style.css";
+import { DonationContext } from "../../context/DonationContext";
 
 const CustomCancelIconButton = styled(IconButton)({
   opacity: 0.9,
   border: "none",
-  boxShadow: "none"
+  boxShadow: "none",
 });
 
 // const CustomAvatar = styled(Avatar)({
@@ -68,8 +69,12 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
 
   const [partnerName, setPartnerName] = useState<string>("Unknown Partner");
 
+  const { setDonateOverlayOpen } = useContext(DonationContext);
+
   const isOpen = hospitalService.isHospitalOpen(popupInfo?.hospital);
-  const markerColor = isOpen ? theme.palette.hospital.open : theme.palette.hospital.closed;
+  const markerColor = isOpen
+    ? theme.palette.hospital.open
+    : theme.palette.hospital.closed;
 
   const getDonationMessage = () => {
     if (
@@ -160,13 +165,12 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
             alignItems="center"
             justifyContent="center"
             sx={{
-              backgroundColor: (theme: Theme) => theme.palette.background.highlighted,
+              backgroundColor: (theme: Theme) =>
+                theme.palette.background.highlighted,
               width: "265px",
               height: "20px",
               visibility:
-                popupInfo?.hospital.status === "active"
-                  ? "visible"
-                  : "hidden",
+                popupInfo?.hospital.status === "active" ? "visible" : "hidden",
             }}
           >
             Matched by {partnerName}
@@ -189,13 +193,14 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
         </Typography>
 
         <Typography color="text.secondary" sx={{ fontSize: "10px" }}>
-          ${popupInfo?.hospital.matchedFunded?.fundingCompleted || 0}{" "}
-          raised of ${popupInfo?.hospital.matchedRequest?.requested} -{" "}
+          ${popupInfo?.hospital.matchedFunded?.fundingCompleted || 0} raised of
+          ${popupInfo?.hospital.matchedRequest?.requested} -{" "}
           <EmphasizedText
             sx={{
               color: theme.palette.hospital.open,
-              fontSize: "10px"
-            }}>
+              fontSize: "10px",
+            }}
+          >
             {popupInfo?.hospital.status === "active" && "Actively Funding"}
           </EmphasizedText>
         </Typography>
@@ -207,9 +212,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
           direction="row"
           marginTop={"8px"}
           gap={1}
-          paddingTop={
-            popupInfo?.hospital.status === "active" ? "0px" : "19px"
-          }
+          paddingTop={popupInfo?.hospital.status === "active" ? "0px" : "19px"}
         >
           <ActionButton
             sx={{
@@ -221,7 +224,6 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
               evt.stopPropagation();
               setLearnMoreHospital(popupInfo?.hospital);
             }}
-            s
           >
             Learn more
           </ActionButton>
@@ -235,6 +237,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
             onClick={(evt: any) => {
               evt.stopPropagation();
               setDonationHospital(popupInfo?.hospital);
+              setDonateOverlayOpen(true);
             }}
           >
             Donate
