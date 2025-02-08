@@ -39,11 +39,6 @@ function App() {
 
     setWindowHeight(window.innerHeight);
 
-    function handleResize() {
-      setWindowHeight(window.innerHeight);
-    }
-    window.addEventListener("resize", handleResize);
-
     if (!document.querySelector(`script[src="${FUNDRAISEUP_WIDGET_URL}"]`)) {
       const script = document.createElement("script");
       script.src = FUNDRAISEUP_WIDGET_URL;
@@ -54,9 +49,6 @@ function App() {
         console.error("Failed to load Fundraise Up script");
       document.head.appendChild(script);
     }
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, []);
 
   return (
