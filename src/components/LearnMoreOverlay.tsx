@@ -84,26 +84,30 @@ const LearnMoreOverlay = () => {
           display: "block",
         })}
         open={hospital !== undefined}
+        onClick={() => handleClose()}
       >
-        <DialogCloseButton
-          onClick={handleClose}
-          sx={{
-            backgroundColor: (theme: Theme) => theme.palette.grey[700],
-            color: 'white'
-          }}
-        />
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{
-            width: "80%",
-            maxWidth: "1280px",
-            marginTop: 2,
-            backgroundColor: 'white',
-            borderRadius: "15px"
-          }}>
+        <Box
+          sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box
+            sx={{
+              width: "80%",
+              maxWidth: "1280px",
+              marginTop: 2,
+              backgroundColor: 'white',
+              borderRadius: "15px"
+            }}
+            onClick={(e) => e.stopPropagation()}>
             <LearnMoreContent />
           </Box>
+          <DialogCloseButton
+            onClick={handleClose}
+            sx={{
+              backgroundColor: (theme: Theme) => theme.palette.grey[700],
+              color: 'white'
+            }}
+          />
         </Box>
-      </Backdrop>
+      </Backdrop >
     )
   );
 };
