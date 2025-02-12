@@ -7,31 +7,27 @@
  *
  */
 import { ReactNode, createContext, useState } from "react";
-import { FilterType, sortDirection } from "../types/fillterType";
+import { FilterStatus, FilterType, SortBy, sortDirection } from "../types/fillterType";
 
 interface FilterContextType {
   filters: FilterType;
   setFilters: (filters: FilterType) => void;
 }
 
+export const DEFAULT_FILTER = {
+  location: [],
+  status: [FilterStatus.ACTIVE, FilterStatus.PAST],
+  sortBy: SortBy.FUNDING_DEADLINE,
+  sortDirection: sortDirection.DESCENDING,
+};
+
 export const FilterContext = createContext<FilterContextType>({
-  filters: {
-    location: [],
-    status: [],
-    sortBy: "fundingDeadline",
-    sortDirection: sortDirection.ASCENDING,
-  },
+  filters: DEFAULT_FILTER,
   setFilters: () => { },
 });
 
 export const FilterContextProvider = (props: { children: ReactNode }) => {
-  const [filters, setFilters] = useState<FilterType>({
-    location: [],
-    status: [],
-    sortBy: "fundingDeadline",
-    sortDirection: sortDirection.ASCENDING,
-  });
-
+  const [filters, setFilters] = useState<FilterType>(DEFAULT_FILTER);
 
   return (
     <FilterContext.Provider value={{ filters, setFilters }} >

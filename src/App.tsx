@@ -22,6 +22,7 @@ import { hospitalService } from "./services/hospital/hospitalService";
 import "maplibre-gl/dist/maplibre-gl.css";
 import 'react-reflex/styles.css';
 import "./App.css";
+import { FilterContext } from "./context/FilterContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -31,25 +32,26 @@ const HospitalList = () => {
 };
 
 function App() {
+  const { filters } = useContext(FilterContext);
   const { setOriginals } = useContext(HospitalsContext);
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
-  const getCombinedHospital = async () => {
-    hospitalService
-      .findAll()
-      .then((res) => setOriginals(res));
-  };
-
   useEffect(() => {
-    getCombinedHospital();
-
     setWindowHeight(window.innerHeight);
-
     function handleResize() {
       setWindowHeight(window.innerHeight);
     }
     window.addEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (filters) {
+      hospitalService
+        .findAll(filters)
+        .then((res) => setOriginals(res));
+    }
+  }, [filters]);
+
 
   return (
     <>
@@ -73,7 +75,7 @@ function App() {
             <GFLMap />
           </Box>
         </ReflexElement>
-        
+
       </ReflexContainer>
     </>
   );
