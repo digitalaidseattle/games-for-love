@@ -49,9 +49,6 @@ function App() {
         console.error("Failed to load Fundraise Up script");
       document.head.appendChild(script);
     }
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, []);
 
   useEffect(() => {
