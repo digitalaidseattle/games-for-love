@@ -63,11 +63,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
         hospitalService.isEqual(hospital, selectedHospital)
           ? theme.palette.hospital.selected
           : hospital.status === "past"
-          ? theme.palette.hospital.closed
-          : theme.palette.hospital.open
-      );
-          ? theme.palette.hospital.closed
-          : theme.palette.hospital.open
+            ? theme.palette.hospital.closed
+            : theme.palette.hospital.open
       );
       setIsOpen(hospitalService.isHospitalOpen(hospital));
     }
