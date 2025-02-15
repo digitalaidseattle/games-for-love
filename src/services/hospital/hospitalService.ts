@@ -9,7 +9,7 @@ import { Hospital } from "../../models/hospital";
 import { HospitalFunded } from "../../models/hospitalFunded";
 import { HospitalInfo } from "../../models/hospitalInfo";
 import { HospitalRequest } from "../../models/hospitalRequest";
-import { FilterType, sortDirection } from "../../types/fillterType";
+import { FilterStatus, FilterType, sortDirection } from "../../types/fillterType";
 import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
@@ -76,7 +76,7 @@ class HospitalService {
         return true;
       }
       if (filter.location.length === 0) {
-        return filter.status.includes(hospital.status.toLowerCase());
+        return filter.status.includes(hospital.status.toLowerCase() as FilterStatus);
       }
       const lowerLocations = filter.location.map((l) => l.toLowerCase());
       return (
@@ -85,7 +85,7 @@ class HospitalService {
         (lowerLocations.includes(hospital.state?.toLowerCase()) ||
           lowerLocations.includes(hospital.city.toLowerCase()) ||
           lowerLocations.includes(hospital.zip.toLowerCase())) &&
-        filter.status.includes(hospital.status.toLowerCase())
+        filter.status.includes(hospital.status.toLowerCase() as FilterStatus)
       );
     };
   }
@@ -129,10 +129,8 @@ class HospitalService {
       .toLowerCase()
       .split(" ")
       .filter((t) => t);
-    return hospitals.filter(
-      (h: Hospital) =>
-        terms.length === 0 ||
-        terms.find((term) => h.searchTerm.includes(term)) !== undefined
+    return hospitals.filter((h: Hospital) =>
+      terms.length === 0 || terms.find((term) => h.searchTerm.includes(term)) !== undefined
     );
   };
 

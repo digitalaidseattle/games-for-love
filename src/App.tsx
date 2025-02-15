@@ -18,6 +18,7 @@ import "react-reflex/styles.css";
 import "./App.css";
 
 const FUNDRAISEUP_WIDGET_URL = "https://cdn.fundraiseup.com/widget/AWALQQAB";
+import { FilterContext } from "./context/FilterContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -27,18 +28,12 @@ const HospitalList = () => {
 };
 
 function App() {
+  const { filters } = useContext(FilterContext);
   const { setOriginals } = useContext(HospitalsContext);
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
-  const getCombinedHospital = async () => {
-    hospitalService.findAll().then((res) => setOriginals(res));
-  };
-
   useEffect(() => {
-    getCombinedHospital();
-
     setWindowHeight(window.innerHeight);
-
     function handleResize() {
       setWindowHeight(window.innerHeight);
     }
@@ -54,10 +49,16 @@ function App() {
         console.error("Failed to load Fundraise Up script");
       document.head.appendChild(script);
     }
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, []);
+
+  useEffect(() => {
+    if (filters) {
+      hospitalService
+        .findAll(filters)
+        .then((res) => setOriginals(res));
+    }
+  }, [filters]);
+
 
   return (
     <>
@@ -80,6 +81,7 @@ function App() {
             <GFLMap />
           </Box>
         </ReflexElement>
+
       </ReflexContainer>
     </>
   );
