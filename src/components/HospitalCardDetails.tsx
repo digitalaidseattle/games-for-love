@@ -29,6 +29,7 @@ import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { hospitalService } from "../services/hospital/hospitalService";
 import ActionButton from "../styles/ActionButton";
 import EmphasizedText from "../styles/EmphasizedText";
+import { DonationContext } from "../context/DonationContext";
 
 export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   hospital,
@@ -49,6 +50,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
 
   const theme = useTheme();
 
+  const { setDonateOverlayOpen } = useContext(DonationContext);
+
   useEffect(() => {
     if (hospital) {
       setBackgroundColor(
@@ -60,8 +63,9 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
         hospitalService.isEqual(hospital, selectedHospital)
           ? theme.palette.hospital.selected
           : hospital.status === "past"
-            ? theme.palette.hospital.closed
-            : theme.palette.hospital.open);
+          ? theme.palette.hospital.closed
+          : theme.palette.hospital.open
+      );
       setIsOpen(hospitalService.isHospitalOpen(hospital));
     }
   }, [hospital, selectedHospital]);
@@ -98,6 +102,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const handleDonate = (evt: any) => {
     evt.stopPropagation();
     setDonationHospital(hospital);
+    setDonateOverlayOpen(true);
   };
 
   useEffect(() => {
@@ -109,7 +114,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
     };
     fetchGeneralInfo();
   }, []);
-
 
   return (
     <div data-testid="hospital-detail-card">
@@ -167,7 +171,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               sx={{
                 flex: 2,
                 padding: "0 16px",
-                borderRight: (theme: Theme) => "1px solid " + theme.palette.grey[400]
+                borderRight: (theme: Theme) =>
+                  "1px solid " + theme.palette.grey[400],
               }}
             >
               <Typography variant="subtitle2" color="text.secondary">
@@ -182,11 +187,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                     },
                   }}
                 />{" "}
-                {
-                  [hospital?.city, hospital?.state]
-                    .filter(s => s)
-                    .join(', ')
-                }
+                {[hospital?.city, hospital?.state].filter((s) => s).join(", ")}
               </Typography>
 
               <Typography variant="h6" component="div">
@@ -198,10 +199,10 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
                   WebkitLineClamp: "4",
-                  WebkitBoxOrient: "vertical"
-                }}>
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
                 {hospital?.description}
-
               </EmphasizedText>
               <Stack direction={"row"} gap={1} marginTop={2}>
                 <ActionButton onClick={handleLearnMore}>
@@ -225,7 +226,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 alignItems="center"
                 marginTop={1}
                 sx={{
-                  backgroundColor: (theme: Theme) => theme.palette.background.highlighted,
+                  backgroundColor: (theme: Theme) =>
+                    theme.palette.background.highlighted,
                   borderRadius: "8px",
                   padding: "2px 10px 2px 10px",
                   width: "245px",
@@ -241,13 +243,16 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               </Box>
               <Typography variant="body2" color="text.secondary">
                 ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)}{" "}
-                {" "}
-                raised of $
-                {Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
+                raised of ${Math.round(hospital.matchedRequest?.requested || 0)}{" "}
+                -{" "}
                 <EmphasizedText
                   sx={{
-                    color: (theme: Theme) => hospital?.status === "past" ? theme.palette.hospital.closed : theme.palette.hospital.open
-                  }}>
+                    color: (theme: Theme) =>
+                      hospital?.status === "past"
+                        ? theme.palette.hospital.closed
+                        : theme.palette.hospital.open,
+                  }}
+                >
                   {hospital?.status}
                 </EmphasizedText>
               </Typography>

@@ -1,16 +1,10 @@
 /**
- *  App.tsx
- *
- *  @copyright 2024 Digital Aid Seattle
- *
+ * App.tsx
  */
+
 import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import {
-  ReflexContainer,
-  ReflexElement,
-  ReflexSplitter
-} from 'react-reflex';
+import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 
 import { GFLMap } from "./components/GFLMap";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
@@ -20,41 +14,60 @@ import { HospitalsContext } from "./context/HospitalContext";
 import { hospitalService } from "./services/hospital/hospitalService";
 
 import "maplibre-gl/dist/maplibre-gl.css";
-import 'react-reflex/styles.css';
+import "react-reflex/styles.css";
 import "./App.css";
+
+const FUNDRAISEUP_OVERALL_WIDGET_URL = import.meta.env
+  .VITE_FUNDRAISEUP_OVERALL_WIDGET_URL;
+// const FUNDRAISEUP_HOSPITAL_WIDGET_URL = import.meta.env
+//   .VITE_FUNDRAISEUP_HOSPITAL_WIDGET_URL;
+import { FilterContext } from "./context/FilterContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
   return hospitals?.map((hospital, idx: number) => (
-    <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
+    <HospitalCardDetails key={`h-${idx}`} hospital={hospital} />
   ));
 };
 
 function App() {
+  const { filters } = useContext(FilterContext);
   const { setOriginals } = useContext(HospitalsContext);
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
-  const getCombinedHospital = async () => {
-    hospitalService
-      .findAll()
-      .then((res) => setOriginals(res));
-  };
-
   useEffect(() => {
-    getCombinedHospital();
-
     setWindowHeight(window.innerHeight);
-
     function handleResize() {
       setWindowHeight(window.innerHeight);
     }
     window.addEventListener("resize", handleResize);
+
+    if (
+      !document.querySelector(`script[src="${FUNDRAISEUP_OVERALL_WIDGET_URL}"]`)
+    ) {
+      const script = document.createElement("script");
+      script.src = FUNDRAISEUP_OVERALL_WIDGET_URL;
+      script.async = true;
+      script.onload = () =>
+        console.log("Fundraise Up script loaded successfully");
+      script.onerror = () =>
+        console.error("Failed to load Fundraise Up script");
+      document.head.appendChild(script);
+    }
   }, []);
+
+  useEffect(() => {
+    if (filters) {
+      hospitalService
+        .findAll(filters)
+        .then((res) => setOriginals(res));
+    }
+  }, [filters]);
+
 
   return (
     <>
       <ReflexContainer orientation="vertical">
-
         <ReflexElement>
           <Box sx={{ height: windowHeight, overflowY: "auto" }}>
             <SearchAndSort />
@@ -64,8 +77,8 @@ function App() {
           </Box>
         </ReflexElement>
 
-        <ReflexSplitter >
-          <Box height={windowHeight} width={5} ></Box>
+        <ReflexSplitter>
+          <Box height={windowHeight} width={5}></Box>
         </ReflexSplitter>
 
         <ReflexElement>
@@ -73,7 +86,7 @@ function App() {
             <GFLMap />
           </Box>
         </ReflexElement>
-        
+
       </ReflexContainer>
     </>
   );

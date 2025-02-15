@@ -9,7 +9,7 @@ import { Hospital } from "../../models/hospital";
 import { HospitalFunded } from "../../models/hospitalFunded";
 import { HospitalInfo } from "../../models/hospitalInfo";
 import { HospitalRequest } from "../../models/hospitalRequest";
-import { FilterType, sortDirection } from "../../types/fillterType";
+import { FilterStatus, FilterType, sortDirection } from "../../types/fillterType";
 import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
@@ -20,6 +20,7 @@ class HospitalService {
     matchedFund: HospitalFunded,
     currentDate: Date
   ): Hospital {
+    const DEFAULT_FUNDRAISEUP_CAMPAIGN_ID = "FUNTTHDCELT"; // default fundraiseup ID
     const hospital = {
       id: hi.id,
       name: hi.name,
@@ -36,6 +37,8 @@ class HospitalService {
       hospitalPictures: hi.hospitalPictures,
       matchedRequest: matchedRequest,
       matchedFunded: matchedFund,
+      fundraiseUpCampaignId:
+        hi.fundraiseUpCampaignId || DEFAULT_FUNDRAISEUP_CAMPAIGN_ID,
     } as Hospital;
     hospital.status = this.calcStatus(hospital, currentDate);
     hospital.fundingLevel = this.calcFundingLevel(hospital);
@@ -73,7 +76,7 @@ class HospitalService {
         return true;
       }
       if (filter.location.length === 0) {
-        return filter.status.includes(hospital.status.toLowerCase());
+        return filter.status.includes(hospital.status.toLowerCase() as FilterStatus);
       }
       const lowerLocations = filter.location.map((l) => l.toLowerCase());
       return (
@@ -82,7 +85,7 @@ class HospitalService {
         (lowerLocations.includes(hospital.state?.toLowerCase()) ||
           lowerLocations.includes(hospital.city.toLowerCase()) ||
           lowerLocations.includes(hospital.zip.toLowerCase())) &&
-        filter.status.includes(hospital.status.toLowerCase())
+        filter.status.includes(hospital.status.toLowerCase() as FilterStatus)
       );
     };
   }
@@ -100,7 +103,7 @@ class HospitalService {
     if (hospital.matchedRequest && hospital.matchedFunded) {
       hospital.matchedRequest.requested
         ? (hospital.matchedFunded.fundingCompleted || 0) /
-        hospital.matchedRequest.requested
+          hospital.matchedRequest.requested
         : 0;
     }
     return 0;
@@ -114,9 +117,12 @@ class HospitalService {
     }
   };
 
-  isEqual = (test: Hospital, selectedHospital: Hospital | undefined): boolean => {
-    return selectedHospital !== undefined && test.id === selectedHospital.id
-  }
+  isEqual = (
+    test: Hospital,
+    selectedHospital: Hospital | undefined
+  ): boolean => {
+    return selectedHospital !== undefined && test.id === selectedHospital.id;
+  };
 
   filterHospitals = (hospitals: Hospital[], searchTerm: string) => {
     const terms: string[] = searchTerm
@@ -124,7 +130,7 @@ class HospitalService {
       .split(" ")
       .filter((t) => t);
     return hospitals.filter((h: Hospital) =>
-      terms.length === 0 || terms.find((term) => h.searchTerm.includes(term)) !==undefined
+      terms.length === 0 || terms.find((term) => h.searchTerm.includes(term)) !== undefined
     );
   };
 
