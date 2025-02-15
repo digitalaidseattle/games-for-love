@@ -19,6 +19,7 @@ jobs:
           echo >> .env
           echo VITE_MAPTILER_API_KEY=${{ secrets.MAPTILER_API_KEY }} >> .env
           echo VITE_AIRTABLE_ANON_KEY=${{ secrets.AIRTABLE_ANON_KEY }} >> .env
+          cat .env
           npm install && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
