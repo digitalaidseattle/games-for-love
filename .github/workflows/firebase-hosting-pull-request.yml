@@ -16,8 +16,9 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           touch .env
-          echo VITE_MAPTILER_API_KEY=${{ secrets.MAPTILER_API_KEY }} >> .env
+          echo >> .env
           echo VITE_AIRTABLE_ANON_KEY=${{ secrets.AIRTABLE_ANON_KEY }} >> .env
+          echo >> .env
           npm install && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
