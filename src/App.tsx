@@ -1,22 +1,26 @@
 /**
- *  App.tsx
- *
- *  @copyright 2024 Digital Aid Seattle
- *
+ * App.tsx
  */
-import { Box, Grid } from "@mui/material";
-import "maplibre-gl/dist/maplibre-gl.css";
+
+import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
+import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
+
 import { GFLMap } from "./components/GFLMap";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
 import { PrevHospitalCardDetails } from "./components/PrevHospitalCardDetails";
 
 import { SearchAndSort } from "./components/SearchAndSort";
 
-import "./App.css";
-
 import { HospitalsContext } from "./context/HospitalContext";
 import { hospitalService } from "./services/hospital/hospitalService";
+
+import "maplibre-gl/dist/maplibre-gl.css";
+import "react-reflex/styles.css";
+import "./App.css";
+
+const FUNDRAISEUP_WIDGET_URL = "https://cdn.fundraiseup.com/widget/AWALQQAB";
+import { FilterContext } from "./context/FilterContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -27,72 +31,61 @@ const HospitalList = () => {
 };
 
 function App() {
+  const { filters } = useContext(FilterContext);
   const { setOriginals } = useContext(HospitalsContext);
   const [windowHeight, setWindowHeight] = useState<number>(400);
 
-  const getCombinedHospital = async () => {
-    hospitalService.findAll().then((res) => setOriginals(res));
-  };
-
   useEffect(() => {
-    getCombinedHospital();
-
     setWindowHeight(window.innerHeight);
-
     function handleResize() {
       setWindowHeight(window.innerHeight);
     }
     window.addEventListener("resize", handleResize);
+
+    if (!document.querySelector(`script[src="${FUNDRAISEUP_WIDGET_URL}"]`)) {
+      const script = document.createElement("script");
+      script.src = FUNDRAISEUP_WIDGET_URL;
+      script.async = true;
+      script.onload = () =>
+        console.log("Fundraise Up script loaded successfully");
+      script.onerror = () =>
+        console.error("Failed to load Fundraise Up script");
+      document.head.appendChild(script);
+    }
   }, []);
+
+  useEffect(() => {
+    if (filters) {
+      hospitalService
+        .findAll(filters)
+        .then((res) => setOriginals(res));
+    }
+  }, [filters]);
+
 
   return (
     <>
-      <Grid container spacing={2}>
-        {/* Hospital List Section */}
-        <Grid
-          item
-          xs={12}
-          sm={6} // sm: 600px 이상에서 50% 사용
-          md={5} // md: 900px 이상에서 41.67% 사용
-          lg={4} // lg: 1200px 이상에서 33.33% 사용
-          xl={4} // xl: 1536px 이상에서 33.33% 사용
-        >
-          <Box
-            sx={{
-              height: "100vh", // 화면 높이를 꽉 채움
-              overflowY: "auto", // 스크롤 가능
-              padding: "16px", // 여백 추가
-            }}
-          >
+      <ReflexContainer orientation="vertical">
+        <ReflexElement>
+          <Box sx={{ height: windowHeight, overflowY: "auto" }}>
             <SearchAndSort />
             <Box data-testid="hospital-list">
               <HospitalList />
             </Box>
           </Box>
-        </Grid>
+        </ReflexElement>
 
-        {/* Map Section */}
-        <Grid
-          item
-          xs={12}
-          sm={6} // sm: 600px 이상에서 50% 사용
-          md={7} // md: 900px 이상에서 58.33% 사용
-          lg={8} // lg: 1200px 이상에서 66.67% 사용
-          xl={8} // xl: 1536px 이상에서 66.67% 사용
-        >
-          <Box
-            sx={{
-              height: "100vh", // 화면 높이를 꽉 채움
-              overflow: "hidden", // 넘침 방지
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+        <ReflexSplitter>
+          <Box height={windowHeight} width={5}></Box>
+        </ReflexSplitter>
+
+        <ReflexElement>
+          <Box height={windowHeight} data-testid="gfl-map-box">
             <GFLMap />
           </Box>
-        </Grid>
-      </Grid>
+        </ReflexElement>
+
+      </ReflexContainer>
     </>
   );
 }

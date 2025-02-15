@@ -5,10 +5,12 @@
  *
  */
 import { Popup } from "react-map-gl";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { PopupInfo } from "../models/popupInfo";
 import { HospitalCard } from "./cards/HospitalCard";
+
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./GFLPopup.style.css";
+
 interface GFLPopupProps {
   popupInfo: PopupInfo | null;
   onClose: () => void;
@@ -26,7 +28,6 @@ export const GFLPopup: React.FC<GFLPopupProps> = ({
         closeOnClick={false}
         onClose={onClose}
         anchor="top"
-        className="popup-style"
       >
         <HospitalCard popupInfo={popupInfo} onClose={onClose} />
       </Popup>

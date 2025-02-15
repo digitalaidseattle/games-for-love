@@ -21,6 +21,13 @@ const HospitalPageCarousel = () => {
         width: "100%",
         margin: "40px auto",
         padding: "20px 0",
+        "& .control-dots": {
+          bottom: "-10px",
+        },
+        "& .control-dots .dot": {
+          width: "10px",
+          height: "10px",
+        },
       }}
     >
       <Carousel

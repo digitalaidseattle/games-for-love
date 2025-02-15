@@ -6,11 +6,7 @@ import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext"
 const HospitalPageMain = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
   return (
-    <Grid
-      container
-      spacing={2}
-      sx={{ mt: 2, backgroundColor: "#F0F5FA", padding: "2rem" }}
-    >
+    <Grid container sx={{ mt: 2, backgroundColor: "#F0F5FA", padding: "2rem" }}>
       {/* Name of the hospital */}
       <Grid item xs={12}>
         <Box sx={{ width: "100%", textAlign: "center" }}>

@@ -3,15 +3,30 @@
     left: 15px;
     position: absolute;
     z-index: 2;
-  }
+}
 
 .close-btn-container {
     position: absolute;
-    top: 15px;
+    top: 10px;
     right: 10px;
     z-index: 2;
 }
 
-.close-btn{
+.close-btn {
     padding: 0px !important;
+}
+
+.carousel .control-arrow:hover {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+.carousel .control-prev.control-arrow {
+    top: 20px;
+    left: 20px;
+}
+
+.carousel .control-next.control-arrow {
+    top: 20px;
+    right: 20px;
 }
