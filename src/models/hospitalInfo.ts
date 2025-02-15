@@ -13,4 +13,5 @@ export type HospitalInfo = {
   longitude: number;
   latitude: number;
   hospitalPictures: string[];
+  fundraiseUpCampaignId?: string;
 };

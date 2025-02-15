@@ -29,6 +29,7 @@ import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { hospitalService } from "../services/hospital/hospitalService";
 import ActionButton from "../styles/ActionButton";
 import EmphasizedText from "../styles/EmphasizedText";
+import { DonationContext } from "../context/DonationContext";
 
 export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   hospital,
@@ -49,6 +50,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
 
   const theme = useTheme();
 
+  const { setDonateOverlayOpen } = useContext(DonationContext);
+
   useEffect(() => {
     if (hospital) {
       setBackgroundColor(
@@ -60,6 +63,9 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
         hospitalService.isEqual(hospital, selectedHospital)
           ? theme.palette.hospital.selected
           : hospital.status === "past"
+          ? theme.palette.hospital.closed
+          : theme.palette.hospital.open
+      );
           ? theme.palette.hospital.closed
           : theme.palette.hospital.open
       );
@@ -93,7 +99,18 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const handleDonate = (evt: any) => {
     evt.stopPropagation();
     setDonationHospital(hospital);
+    setDonateOverlayOpen(true);
   };
+
+  useEffect(() => {
+    const fetchGeneralInfo = async () => {
+      const [info] = await generalInfoService.findAll();
+      if (info.corpPartners.length > 0) {
+        setPartnerName(info.corpPartners[0].name || "Unknown Partner");
+      }
+    };
+    fetchGeneralInfo();
+  }, []);
 
   return (
     <Box
