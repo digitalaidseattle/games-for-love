@@ -19,7 +19,7 @@ import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
 import ToolbarButton from "../styles/ToolbarButton";
 import { sortDirection } from "../types/fillterType";
-import { GeneralDonationContext } from "../context/GeneralDonationContext";
+import { DonationContext } from "../context/DonationContext";
 
 export const SearchAndSort = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -28,7 +28,7 @@ export const SearchAndSort = () => {
   const { filters, setFilters } = useContext(FilterContext);
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const { setDonateOverlayOpen } = useContext(GeneralDonationContext);
+  const { setDonateOverlayOpen } = useContext(DonationContext);
 
   const handleDonateClick = () => {
     setDonateOverlayOpen(true);
