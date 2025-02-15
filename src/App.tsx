@@ -8,7 +8,6 @@ import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 
 import { GFLMap } from "./components/GFLMap";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
-import { PrevHospitalCardDetails } from "./components/PrevHospitalCardDetails";
 
 import { SearchAndSort } from "./components/SearchAndSort";
 

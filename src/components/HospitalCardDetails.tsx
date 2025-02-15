@@ -7,18 +7,18 @@
 import {
   Box,
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   Stack,
   Theme,
   Typography,
-  useTheme,
+  useTheme
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
-import { Directions, Room } from "@mui/icons-material";
+import { Room } from "@mui/icons-material";
 import { Carousel } from "react-responsive-carousel";
+import { DonationContext } from "../context/DonationContext";
 import {
   DonationHospitalContext,
   LearnMoreHospitalContext,
@@ -29,7 +29,6 @@ import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { hospitalService } from "../services/hospital/hospitalService";
 import ActionButton from "../styles/ActionButton";
 import EmphasizedText from "../styles/EmphasizedText";
-import { DonationContext } from "../context/DonationContext";
 
 export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   hospital,
