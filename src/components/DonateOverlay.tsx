@@ -13,6 +13,15 @@ if (!FUNDRAISEUP_CAMPAIGN_CODE) {
   );
 }
 
+const FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE = import.meta.env
+  .VITE_FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE;
+
+if (!FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE) {
+  throw new Error(
+    "FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODEE is not set. Application cannot start."
+  );
+}
+
 export const DonateOverlay = () => {
   const { donateOverlayOpen, setDonateOverlayOpen } =
     useContext(DonationContext);
@@ -43,11 +52,28 @@ export const DonateOverlay = () => {
           }}
         />
 
-        <a
-          href={FUNDRAISEUP_CAMPAIGN_CODE}
-          style={{ display: "none" }}
-          id="fundraise-link"
-        ></a>
+        {hospital ? (
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap={2}
+            minHeight={50}
+          >
+            <h2>Donate to {hospital.name}</h2>
+            <a
+              href={FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE}
+              style={{ display: "none" }}
+              id="fundraise-link"
+            ></a>
+          </Box>
+        ) : (
+          <a
+            href={FUNDRAISEUP_CAMPAIGN_CODE}
+            style={{ display: "none" }}
+            id="fundraise-link"
+          ></a>
+        )}
       </Backdrop>
     )
   );
