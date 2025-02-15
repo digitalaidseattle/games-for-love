@@ -32,6 +32,7 @@ import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
 import ActionButton from "../styles/ActionButton";
 import { DialogProps } from "../types/dialogProps";
+import { FilterStatus } from "../types/fillterType";
 
 const RadioOption = (props: { label: string, value: string }) => {
   return (
@@ -115,7 +116,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
     let initialStatus;
     if (
       filters.status.length === 2 ||
-      (!filters.status.includes("active") && !filters.status.includes("past"))
+      (!filters.status.includes(FilterStatus.ACTIVE) && !filters.status.includes(FilterStatus.PAST))
     ) {
       initialStatus = "all";
     } else {
