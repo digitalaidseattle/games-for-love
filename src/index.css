@@ -24,13 +24,35 @@ a:hover {
 
 body {
   margin: 0;
-  display: 'flex' 
+  display: "flex";
 }
 
 /* h1 {
   font-size: 3.2em;
   line-height: 1.1;
 } */
+
+.cardWrapper {
+  width: 100px !important;
+  height: 100px !important;
+}
+
+@media (min-width: 600px) {
+  .cardWrapper {
+    width: 110px !important;
+    height: 110px !important;
+  }
+}
+@media (min-width: 900px) {
+  .cardWrapper {
+    width: 120px !important;
+    height: 120px !important;
+  }
+}
+
+.control-arrow.control-next {
+  display: none;
+}
 
 button {
   border-radius: 8px;
@@ -63,8 +85,6 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
-
-
 
 /* Slick carousel styles */
 .slick-dots {

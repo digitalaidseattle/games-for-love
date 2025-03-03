@@ -9,22 +9,25 @@ import {
   SelectedHospitalContextProvider,
 } from "../context/SelectedHospitalContext.tsx";
 import { DonationContextProvider } from "../context/DonationContext.tsx";
+import { DrawerWidthContextProvider } from "../context/DrawerWidthContext.tsx";
 
 type ProvidersProps = { children: ReactNode };
 
 const Providers = ({ children }: ProvidersProps) => {
   return (
-    <DonationContextProvider>
-      <HospitalsContextProvider>
-        <SelectedHospitalContextProvider>
-          <DonationHospitalContextProvider>
-            <LearnMoreHospitalContextProvider>
-              <FilterContextProvider>{children}</FilterContextProvider>
-            </LearnMoreHospitalContextProvider>
-          </DonationHospitalContextProvider>
-        </SelectedHospitalContextProvider>
-      </HospitalsContextProvider>
-    </DonationContextProvider>
-  );
+    <DrawerWidthContextProvider>
+      <DonationContextProvider>
+        <HospitalsContextProvider>
+          <SelectedHospitalContextProvider>
+            <DonationHospitalContextProvider>
+              <LearnMoreHospitalContextProvider>
+                <FilterContextProvider>{children}</FilterContextProvider>
+              </LearnMoreHospitalContextProvider>
+            </DonationHospitalContextProvider>
+          </SelectedHospitalContextProvider>
+        </HospitalsContextProvider>
+      </DonationContextProvider>
+    </DrawerWidthContextProvider>
+  )
 };
 export default Providers;
