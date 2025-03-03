@@ -6,7 +6,6 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { setWeek } from "date-fns";
 import { ReactNode, createContext, useEffect, useState } from "react";
 
 interface DrawerWidthContextType {
