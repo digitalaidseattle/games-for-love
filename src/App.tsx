@@ -23,6 +23,7 @@ const FUNDRAISEUP_OVERALL_WIDGET_URL = import.meta.env
 // const FUNDRAISEUP_HOSPITAL_WIDGET_URL = import.meta.env
 //   .VITE_FUNDRAISEUP_HOSPITAL_WIDGET_URL;
 import { FilterContext } from "./context/FilterContext";
+import { DrawerWidthContext } from "./context/DrawerWidthContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -32,13 +33,29 @@ const HospitalList = () => {
   ));
 };
 
+const SizeAwareReflexElement = (props: { windowHeight: number, dimensions?: any }) => {
+  const { setLastDrawerWidth } = useContext(DrawerWidthContext);
+  useEffect(() => {
+    setLastDrawerWidth(props.dimensions.width);
+  }, [props]);
+
+  return (
+    <Box  id="drawer"  sx={{ height: props.windowHeight, overflowY: "auto" }}>
+      <SearchAndSort />
+      <Box data-testid="hospital-list">
+        <HospitalList />
+      </Box>
+    </Box>
+  )
+}
+
 function App() {
   const { filters } = useContext(FilterContext);
   const { setOriginals } = useContext(HospitalsContext);
-  const [windowHeight, setWindowHeight] = useState<number>(400);
+  const { drawerWidth } = useContext(DrawerWidthContext);
+  const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
 
   useEffect(() => {
-    setWindowHeight(window.innerHeight);
     function handleResize() {
       setWindowHeight(window.innerHeight);
     }
@@ -70,13 +87,8 @@ function App() {
   return (
     <>
       <ReflexContainer orientation="vertical">
-        <ReflexElement>
-          <Box sx={{ height: windowHeight, overflowY: "auto" }}>
-            <SearchAndSort />
-            <Box data-testid="hospital-list">
-              <HospitalList />
-            </Box>
-          </Box>
+        <ReflexElement  size={drawerWidth} propagateDimensions={true}>
+          <SizeAwareReflexElement windowHeight={windowHeight} />
         </ReflexElement>
 
         <ReflexSplitter>
