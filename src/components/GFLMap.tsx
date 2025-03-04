@@ -5,25 +5,28 @@
  *
  */
 import {
-  FullscreenControl,
   Marker,
   NavigationControl,
-  ScaleControl,
+  ScaleControl
 } from "react-map-gl";
 import Map from "react-map-gl/maplibre";
+
+
 import { PopupInfo } from "../models/popupInfo";
 import { GFLPopup } from "./GFLPopup";
 
 import { Room } from "@mui/icons-material";
 import { Box, Theme } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
+import { DrawerWidthContext } from "../context/DrawerWidthContext";
 import { HospitalsContext } from "../context/HospitalContext";
 import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import { Hospital } from "../models/hospital";
 import { siteService } from "../services/siteUtils";
-import SponsorPanel from "./SponsorPanel";
-import LearnMoreOverlay from "./LearnMoreOverlay";
 import { DonateOverlay } from "./DonateOverlay";
+import FullWidthControl from "./FullWidthControl";
+import LearnMoreOverlay from "./LearnMoreOverlay";
+import SponsorPanel from "./SponsorPanel";
 
 const HospitalMarker = (props: {
   hospital: Hospital;
@@ -54,8 +57,8 @@ const HospitalMarker = (props: {
               props.selected
                 ? theme.palette.hospital.selected
                 : hospital.status === "past"
-                ? theme.palette.hospital.closed
-                : theme.palette.hospital.open,
+                  ? theme.palette.hospital.closed
+                  : theme.palette.hospital.open,
             strokeWidth: "0.2px",
             fontSize: "3rem",
             "& .MuiSvgIcon-root": {
@@ -75,8 +78,7 @@ export const GFLMap = () => {
   const { hospitals } = useContext(HospitalsContext);
   const [viewState, setViewState] = useState(siteService.DEFAULT_VIEW);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const { hospital: selectedHospital, setHospital: setSelectedHospital } =
-    useContext(SelectedHospitalContext);
+  const { hospital: selectedHospital, setHospital: setSelectedHospital } = useContext(SelectedHospitalContext);
 
   useEffect(() => {
     if (selectedHospital) {
@@ -109,21 +111,21 @@ export const GFLMap = () => {
       onMove={(evt) => setViewState(evt.viewState)}
       mapStyle={`${import.meta.env.VITE_MAP_STYLE}?key=${import.meta.env.VITE_MAPTILER_API_KEY}`}
     >
-      <FullscreenControl position="top-left" />
+      <FullWidthControl position="top-left" />
       <NavigationControl position="top-left" />
       <ScaleControl />
-      {hospitals
-        ?.filter((h) => !isHospitalSelected(h))
-        .map((hospital) => {
-          return (
-            <HospitalMarker
-              key={hospital.id}
-              hospital={hospital}
-              selected={false}
-              onClick={handleMarkerSelection}
-            />
-          );
-        })}
+      {hospitals &&
+        hospitals.filter((h) => !isHospitalSelected(h))
+          .map((hospital) => {
+            return (
+              <HospitalMarker
+                key={hospital.id}
+                hospital={hospital}
+                selected={false}
+                onClick={handleMarkerSelection}
+              />
+            );
+          })}
       {selectedHospital && (
         <HospitalMarker
           key={selectedHospital.id}
