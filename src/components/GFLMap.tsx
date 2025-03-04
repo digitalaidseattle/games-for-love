@@ -18,7 +18,6 @@ import { GFLPopup } from "./GFLPopup";
 import { Room } from "@mui/icons-material";
 import { Box, Theme } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
-import { DrawerWidthContext } from "../context/DrawerWidthContext";
 import { HospitalsContext } from "../context/HospitalContext";
 import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import { Hospital } from "../models/hospital";
