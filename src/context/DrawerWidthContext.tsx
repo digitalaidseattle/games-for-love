@@ -8,23 +8,23 @@
  */
 import { ReactNode, createContext, useEffect, useState } from "react";
 
+const START_WIDTH = 800;
+
 interface DrawerWidthContextType {
   drawerWidth: number;
   setLastDrawerWidth: (width: number) => void;
-  toggle: () => void
+  toggle: () => void;
 }
 
 export const DrawerWidthContext = createContext<DrawerWidthContextType>({
-  drawerWidth: 400,
+  drawerWidth: START_WIDTH,
   setLastDrawerWidth: () => { },
-  toggle: () => { }
+  toggle: () => { },
 });
 
 
-export const DrawerWidthContextProvider = (props: {
-  children: ReactNode;
-}) => {
-  const defaultWidth = 800;
+export const DrawerWidthContextProvider = (props: { children: ReactNode }) => {
+  const defaultWidth = START_WIDTH;
   // const [defaultWidth, setDefaultWidth] = useState<number>(800);
   const [drawerWidth, setDrawerWidth] = useState<number>(defaultWidth);
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -34,11 +34,9 @@ export const DrawerWidthContextProvider = (props: {
   }, [isOpen]);
 
   const toggle = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((isOpen) => !isOpen);
   }
-
-  const setLastDrawerWidth = (width: number) => {
-    console.log('setLastDrawerWidth', width, isOpen)
+  const setLastDrawerWidth = (_width: number) => {
     // FIXME: This doesn't work as expected
     // if (isOpen) {
     //   setDefaultWidth(width)
