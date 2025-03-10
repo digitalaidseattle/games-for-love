@@ -35,12 +35,13 @@ const HospitalList = () => {
 
 const SizeAwareReflexElement = (props: { windowHeight: number, dimensions?: any }) => {
   const { setLastDrawerWidth } = useContext(DrawerWidthContext);
+
   useEffect(() => {
     setLastDrawerWidth(props.dimensions.width);
   }, [props]);
 
   return (
-    <Box  id="drawer"  sx={{ height: props.windowHeight, overflowY: "auto" }}>
+    <Box id="drawer" sx={{ height: props.windowHeight, overflowY: "auto" }}>
       <SearchAndSort />
       <Box data-testid="hospital-list">
         <HospitalList />
@@ -83,11 +84,10 @@ function App() {
     }
   }, [filters]);
 
-
   return (
     <>
       <ReflexContainer orientation="vertical">
-        <ReflexElement  size={drawerWidth} propagateDimensions={true}>
+        <ReflexElement size={drawerWidth} propagateDimensions={true}>
           <SizeAwareReflexElement windowHeight={windowHeight} />
         </ReflexElement>
 

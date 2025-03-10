@@ -25,7 +25,8 @@ function SponsorPanel() {
             <Stack
                 sx={{
                     display: 'flex',
-                    justifyContent: 'center', alignItems: 'center',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     margin: '0.5rem',
                 }}>
                 <EmphasizedText>Our corporate sponsors:</EmphasizedText>
