@@ -125,25 +125,17 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
           cursor: "pointer",
           backgroundColor: backgroundColor,
         }}
-        onClick={changeSelectedHospital}
       >
-        <CardActionArea
-          sx={{
+        <div
+          onClick={changeSelectedHospital}
+          style={{
             display: "flex",
-            padding: 2,
+            padding: "16px",
             alignItems: "center",
             justifyContent: "center",
             width: "100%",
             height: "100%",
-            "&:focus": {
-              outline: "none",
-            },
-            "&:focus-visible": {
-              outline: "none",
-            },
-            "& .MuiCardActionArea-focusHighlight": {
-              background: "transparent",
-            },
+            cursor: "pointer",
           }}
         >
           <Stack direction={"row"}>
@@ -205,10 +197,23 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 {hospital?.description}
               </EmphasizedText>
               <Stack direction={"row"} gap={1} marginTop={2}>
-                <ActionButton onClick={handleLearnMore}>
+                <ActionButton
+                  component="span"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLearnMore(e);
+                  }}
+                >
                   Learn more
                 </ActionButton>
-                <ActionButton disabled={!isOpen} onClick={handleDonate}>
+                <ActionButton
+                  component="span"
+                  disabled={!isOpen}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDonate(e);
+                  }}
+                >
                   Donate
                 </ActionButton>
               </Stack>
@@ -272,7 +277,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               </EmphasizedText>
             </CardContent>
           </Stack>
-        </CardActionArea>
+        </div>
       </Card>
     </div>
   );
