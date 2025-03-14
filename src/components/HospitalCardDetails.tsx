@@ -37,6 +37,7 @@ export const HospitalCardDetails: React.FC<{
 
   const handleDonate = (evt: any) => {
     evt.stopPropagation();
+    onDonate();
     if (selectedHospital?.id === hospital.id) {
       setSelectedHospital(undefined);
       setSearchParams({});
@@ -195,7 +196,7 @@ export const HospitalCardDetails: React.FC<{
               <Stack direction={"row"} gap={1} marginTop={2}>
                 <ActionButton
                   component="span"
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.stopPropagation();
                     handleLearnMore(e);
                   }}
@@ -205,7 +206,7 @@ export const HospitalCardDetails: React.FC<{
                 <ActionButton
                   component="span"
                   disabled={!isOpen}
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.stopPropagation();
                     handleDonate(e);
                   }}
@@ -279,5 +280,5 @@ export const HospitalCardDetails: React.FC<{
   );
 };
 function setLearnMoreHospital(hospital: Hospital) {
-  throw new Error("Function not implemented.");
+  console.log("Learn more clicked for:", hospital);
 }
