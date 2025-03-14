@@ -7,7 +7,6 @@
 import {
   Box,
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   Stack,
@@ -19,11 +18,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { Room } from "@mui/icons-material";
 import { Carousel } from "react-responsive-carousel";
-import {
-  DonationHospitalContext,
-  LearnMoreHospitalContext,
-  SelectedHospitalContext,
-} from "../context/SelectedHospitalContext";
+import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import { Hospital } from "../models/hospital";
 import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { hospitalService } from "../services/hospital/hospitalService";
@@ -31,17 +26,26 @@ import ActionButton from "../styles/ActionButton";
 import EmphasizedText from "../styles/EmphasizedText";
 import { DonationContext } from "../context/DonationContext";
 
-export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
-  hospital,
-}) => {
+export const HospitalCardDetails: React.FC<{
+  hospital: Hospital;
+  setSearchParams: any;
+  onDonate: () => void;
+}> = ({ hospital, setSearchParams, onDonate }) => {
   const { hospital: selectedHospital, setHospital: setSelectedHospital } =
     useContext(SelectedHospitalContext);
-  const { setHospital: setDonationHospital } = useContext(
-    DonationHospitalContext
-  );
-  const { setHospital: setLearnMoreHospital } = useContext(
-    LearnMoreHospitalContext
-  );
+  const { setDonateOverlayOpen } = useContext(DonationContext);
+
+  const handleDonate = (evt: any) => {
+    evt.stopPropagation();
+    if (selectedHospital?.id === hospital.id) {
+      setSelectedHospital(undefined);
+      setSearchParams({});
+    } else {
+      setSearchParams({ designation: hospital.id });
+      setSelectedHospital(hospital);
+    }
+    setDonateOverlayOpen(true);
+  };
 
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
@@ -49,8 +53,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const [partnerName, setPartnerName] = useState<string>("Unknown Partner");
 
   const theme = useTheme();
-
-  const { setDonateOverlayOpen } = useContext(DonationContext);
 
   useEffect(() => {
     if (hospital) {
@@ -97,12 +99,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const handleLearnMore = (evt: any) => {
     evt.stopPropagation();
     setLearnMoreHospital(hospital);
-  };
-
-  const handleDonate = (evt: any) => {
-    evt.stopPropagation();
-    setDonationHospital(hospital);
-    setDonateOverlayOpen(true);
   };
 
   useEffect(() => {
@@ -282,3 +278,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
     </div>
   );
 };
+function setLearnMoreHospital(hospital: Hospital) {
+  throw new Error("Function not implemented.");
+}

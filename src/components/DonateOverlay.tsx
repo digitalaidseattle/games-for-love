@@ -1,8 +1,9 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { DonationContext } from "../context/DonationContext";
 import { Backdrop, Box, Theme } from "@mui/material";
 import DialogCloseButton from "../styles/DialogCloseButton";
 import { DonationHospitalContext } from "../context/SelectedHospitalContext";
+import { useSearchParams } from "react-router-dom";
 
 const FUNDRAISEUP_CAMPAIGN_CODE = import.meta.env
   .VITE_FUNDRAISEUP_CAMPAIGN_CODE;
@@ -23,13 +24,27 @@ if (!FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE) {
 }
 
 export const DonateOverlay = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { donateOverlayOpen, setDonateOverlayOpen } =
     useContext(DonationContext);
 
   const { hospital } = useContext(DonationHospitalContext);
 
+  useEffect(() => {
+    if (!donateOverlayOpen) {
+      handleRemoveDesignation();
+    }
+  }, [donateOverlayOpen]);
+
   const handleClose = () => {
     setDonateOverlayOpen(false);
+    handleRemoveDesignation();
+  };
+
+  const handleRemoveDesignation = () => {
+    const updatedParams = new URLSearchParams(searchParams);
+    searchParams.delete("designation");
+    setSearchParams(updatedParams);
   };
 
   return (
@@ -43,6 +58,7 @@ export const DonateOverlay = () => {
           alignItems: "center",
         })}
         open={donateOverlayOpen}
+        aria-hidden={!donateOverlayOpen}
       >
         <DialogCloseButton
           onClick={handleClose}

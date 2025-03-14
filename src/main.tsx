@@ -12,17 +12,20 @@ import { PreviewBanner } from "./components/PreviewBanner.tsx";
 import "./index.css";
 import Providers from "./providers/Providers.tsx";
 import Palette from "./styles/theme.ts";
+import { BrowserRouter } from "react-router-dom";
 
 const themes = Palette();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider theme={themes}>
-      <CssBaseline />
-      <PreviewBanner />
-      <Providers>
-        <App />
-      </Providers>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={themes}>
+        <CssBaseline />
+        <PreviewBanner />
+        <Providers>
+          <App />
+        </Providers>
+      </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
