@@ -34,7 +34,7 @@ function SponsorPanel() {
                     }
                 </Stack>
                 {generalInfo.length > 0 &&
-                    <EmphasizedText>Total Funded {generalInfo[0].totalFunded} / {generalInfo[0].totalOpen} </EmphasizedText>
+                    <EmphasizedText sx={{fontWeight: 'bold', fontSize: 'small'}}>Total Funded {generalInfo[0].totalFunded} / {generalInfo[0].totalOpen} </EmphasizedText>
                 }
             </Stack>
         </Box >
