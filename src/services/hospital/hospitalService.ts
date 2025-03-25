@@ -14,6 +14,7 @@ import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 class HospitalService {
+
   transform(
     hi: HospitalInfo,
     matchedRequest: HospitalRequest,
@@ -103,7 +104,7 @@ class HospitalService {
     if (hospital.matchedRequest && hospital.matchedFunded) {
       hospital.matchedRequest.requested
         ? (hospital.matchedFunded.fundingCompleted || 0) /
-          hospital.matchedRequest.requested
+        hospital.matchedRequest.requested
         : 0;
     }
     return 0;
@@ -194,6 +195,10 @@ class HospitalService {
     }
     return "Donations closed";
   };
+
+  isValid = (hospital: Hospital): boolean => {
+    return hospital.latitude !== undefined && hospital.longitude !== undefined;
+  }
 }
 
 const hospitalService = new HospitalService();
