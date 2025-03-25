@@ -1,17 +1,16 @@
 import { Avatar, Box, Stack, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { CorporatePartner } from '../models/corporatePartner';
+import { GeneralInfo } from '../models/generalInfo';
 import { generalInfoService } from '../services/generalInfo/generalInfoService';
 import EmphasizedText from '../styles/EmphasizedText';
 
 function SponsorPanel() {
-    const [partners, setPartners] = useState<CorporatePartner[]>([]);
+    const [generalInfo, setGeneralInfo] = useState<GeneralInfo[]>([]);
 
     useEffect(() => {
         generalInfoService.findAll()
-            .then(data => setPartners(data[0].corpPartners));
+            .then(data => setGeneralInfo(data));
     }, []);
-
 
     return (
         <Box sx={{
@@ -31,10 +30,13 @@ function SponsorPanel() {
                 }}>
                 <EmphasizedText>Our corporate sponsors:</EmphasizedText>
                 <Stack direction={'row'} gap={2}>
-                    {
-                        partners.map((partner, idx) => <Avatar key={idx} src={partner.logo}>{partner.name}</Avatar>)
+                    {generalInfo.length > 0 &&
+                        generalInfo[0].corpPartners.map((partner, idx) => <Avatar key={idx} src={partner.logo}>{partner.name}</Avatar>)
                     }
                 </Stack>
+                {generalInfo.length > 0 &&
+                    <EmphasizedText sx={{fontWeight: 'bold', fontSize: 'small'}}>Total Funded {generalInfo[0].totalFunded} / {generalInfo[0].totalOpen} </EmphasizedText>
+                }
             </Stack>
         </Box >
 
