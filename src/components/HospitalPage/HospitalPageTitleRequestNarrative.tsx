@@ -1,11 +1,10 @@
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 import { useContext, useEffect, useState } from "react";
-import DonationBarActive from "./DonationBarActive";
-import { generalInfoService } from "../../services/generalInfo/generalInfoService";
-import { GeneralInfo } from "../../models/generalInfo";
+import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 import { CorporatePartner } from "../../models/corporatePartner";
+import DonationBarActive from "./DonationBarActive";
+import { Hospital } from "../../models/hospital";
 
 const DonationsRecievedProgressBar = styled(LinearProgress)({
   height: 40,
@@ -15,17 +14,22 @@ const DonationsRecievedProgressBar = styled(LinearProgress)({
   },
 });
 
-const BrandPartners: React.FC = () => {
+const BrandPartners: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
+  const [corporatePartners, setCorporatePartners] = useState<CorporatePartner[]>([]);
 
-  const [generalInfo, setGeneralInfo] = useState<GeneralInfo>();
   useEffect(() => {
-    generalInfoService.findAll()
-      .then(info => setGeneralInfo(info ? info[0] : undefined));
-  }, []);
+    if (hospital) {
+      if (hospital.matchedRequest) {
+        if (hospital.matchedRequest.corpPartners) {
+          setCorporatePartners(hospital.matchedRequest.corpPartners)
+        }
+      }
+    }
+  }, [hospital]);
 
   const partnerSection = (partner: CorporatePartner) => {
-    return (<>
-      <Grid container spacing={2}>
+    return (
+      <Grid key={partner.name} container spacing={2}>
         <Grid item xs={3}>
           <img
             src={partner.logo} // Replace with actual image
@@ -53,18 +57,17 @@ const BrandPartners: React.FC = () => {
           </Typography>
         </Grid>
       </Grid>
-    </>
     );
   }
 
   return (
     <Box mt={4} sx={{ minHeight: '100px' }}>
-      {generalInfoService.hasCorporateSponsors(generalInfo!) &&
+      {corporatePartners.length > 0 &&
         <>
           <Typography variant="h6" gutterBottom>
             Brand Partners
           </Typography>
-          {generalInfo?.corpPartners.map(partner => partnerSection(partner))}
+          {corporatePartners.map(partner => partnerSection(partner))}
         </>
       }
     </Box>
@@ -136,7 +139,7 @@ const HospitalPageTitleRequestNarrative = () => {
                 </Box>
               )}
 
-              <BrandPartners />
+              <BrandPartners hospital={hospital!}/>
 
             </Grid>
           </Grid>

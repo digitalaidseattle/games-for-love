@@ -13,6 +13,8 @@ import { FilterStatus, FilterType, sortDirection } from "../../types/fillterType
 import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
+import { CorporatePartner } from "../../models/corporatePartner";
+
 class HospitalService {
 
   transform(
@@ -198,6 +200,19 @@ class HospitalService {
 
   isValid = (hospital: Hospital): boolean => {
     return hospital.latitude !== undefined && hospital.longitude !== undefined;
+  }
+
+  getCorporatePartner = (hospital: Hospital): CorporatePartner | undefined => {
+    if (hospital) {
+      if (hospital.matchedRequest) {
+        if (hospital.matchedRequest.corpPartners) {
+          if (hospital.matchedRequest.corpPartners.length > 0) {
+            return hospital.matchedRequest.corpPartners[0];
+          }
+        }
+      }
+    }
+    return undefined;
   }
 }
 
