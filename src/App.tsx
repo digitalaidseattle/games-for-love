@@ -80,7 +80,7 @@ function App() {
     if (filters) {
       hospitalService
         .findAll(filters)
-        .then((res) => setOriginals(res));
+        .then((res) => setOriginals(res.filter(hospital => hospitalService.isValid(hospital))));
     }
   }, [filters]);
 
