@@ -13,6 +13,7 @@ function SponsorPanel() {
     }, []);
 
     return (
+        generalInfoService.hasCorporateSponsors(generalInfo[0]) &&
         <Box sx={{
             position: 'absolute',
             top: 0,
@@ -30,16 +31,13 @@ function SponsorPanel() {
                 }}>
                 <EmphasizedText>Our corporate sponsors:</EmphasizedText>
                 <Stack direction={'row'} gap={2}>
-                    {generalInfo.length > 0 &&
+                    {
                         generalInfo[0].corpPartners.map((partner, idx) => <Avatar key={idx} src={partner.logo}>{partner.name}</Avatar>)
                     }
                 </Stack>
-                {generalInfo.length > 0 &&
-                    <EmphasizedText sx={{fontWeight: 'bold', fontSize: 'small'}}>Total Funded {generalInfo[0].totalFunded} / {generalInfo[0].totalOpen} </EmphasizedText>
-                }
+                <EmphasizedText sx={{ fontWeight: 'bold', fontSize: 'small' }}>Total Funded {generalInfo[0].totalFunded} / {generalInfo[0].totalOpen} </EmphasizedText>
             </Stack>
         </Box >
-
     );
 }
 
