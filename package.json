@@ -22,7 +22,8 @@
     "react-dom": "^18.2.0",
     "react-map-gl": "^7.1.7",
     "react-reflex": "^4.2.7",
-    "react-responsive-carousel": "^3.2.23"
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "^7.3.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.5.0",

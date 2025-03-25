@@ -7,7 +7,6 @@
 import {
   Box,
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   Stack,
@@ -19,11 +18,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { Room } from "@mui/icons-material";
 import { Carousel } from "react-responsive-carousel";
-import {
-  DonationHospitalContext,
-  LearnMoreHospitalContext,
-  SelectedHospitalContext,
-} from "../context/SelectedHospitalContext";
+import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import { Hospital } from "../models/hospital";
 import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { hospitalService } from "../services/hospital/hospitalService";
@@ -31,17 +26,27 @@ import ActionButton from "../styles/ActionButton";
 import EmphasizedText from "../styles/EmphasizedText";
 import { DonationContext } from "../context/DonationContext";
 
-export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
-  hospital,
-}) => {
+export const HospitalCardDetails: React.FC<{
+  hospital: Hospital;
+  setSearchParams: any;
+  onDonate: () => void;
+}> = ({ hospital, setSearchParams, onDonate }) => {
   const { hospital: selectedHospital, setHospital: setSelectedHospital } =
     useContext(SelectedHospitalContext);
-  const { setHospital: setDonationHospital } = useContext(
-    DonationHospitalContext
-  );
-  const { setHospital: setLearnMoreHospital } = useContext(
-    LearnMoreHospitalContext
-  );
+  const { setDonateOverlayOpen } = useContext(DonationContext);
+
+  const handleDonate = (evt: any) => {
+    evt.stopPropagation();
+    onDonate();
+    if (selectedHospital?.id === hospital.id) {
+      setSelectedHospital(undefined);
+      setSearchParams({});
+    } else {
+      setSearchParams({ designation: hospital.id });
+      setSelectedHospital(hospital);
+    }
+    setDonateOverlayOpen(true);
+  };
 
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
@@ -49,8 +54,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const [partnerName, setPartnerName] = useState<string>("Unknown Partner");
 
   const theme = useTheme();
-
-  const { setDonateOverlayOpen } = useContext(DonationContext);
 
   useEffect(() => {
     if (hospital) {
@@ -99,12 +102,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
     setLearnMoreHospital(hospital);
   };
 
-  const handleDonate = (evt: any) => {
-    evt.stopPropagation();
-    setDonationHospital(hospital);
-    setDonateOverlayOpen(true);
-  };
-
   useEffect(() => {
     const fetchGeneralInfo = async () => {
       const [info] = await generalInfoService.findAll();
@@ -125,25 +122,17 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
           cursor: "pointer",
           backgroundColor: backgroundColor,
         }}
-        onClick={changeSelectedHospital}
       >
-        <CardActionArea
-          sx={{
+        <div
+          onClick={changeSelectedHospital}
+          style={{
             display: "flex",
-            padding: 2,
+            padding: "16px",
             alignItems: "center",
             justifyContent: "center",
             width: "100%",
             height: "100%",
-            "&:focus": {
-              outline: "none",
-            },
-            "&:focus-visible": {
-              outline: "none",
-            },
-            "& .MuiCardActionArea-focusHighlight": {
-              background: "transparent",
-            },
+            cursor: "pointer",
           }}
         >
           <Stack direction={"row"}>
@@ -205,10 +194,23 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                 {hospital?.description}
               </EmphasizedText>
               <Stack direction={"row"} gap={1} marginTop={2}>
-                <ActionButton onClick={handleLearnMore}>
+                <ActionButton
+                  component="span"
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.stopPropagation();
+                    handleLearnMore(e);
+                  }}
+                >
                   Learn more
                 </ActionButton>
-                <ActionButton disabled={!isOpen} onClick={handleDonate}>
+                <ActionButton
+                  component="span"
+                  disabled={!isOpen}
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.stopPropagation();
+                    handleDonate(e);
+                  }}
+                >
                   Donate
                 </ActionButton>
               </Stack>
@@ -272,8 +274,11 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               </EmphasizedText>
             </CardContent>
           </Stack>
-        </CardActionArea>
+        </div>
       </Card>
     </div>
   );
 };
+function setLearnMoreHospital(hospital: Hospital) {
+  console.log("Learn more clicked for:", hospital);
+}
