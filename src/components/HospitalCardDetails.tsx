@@ -45,7 +45,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [partnerName, setPartnerName] = useState<string>("Unknown Partner");
+  const [partnerName, setPartnerName] = useState<string>();
 
   const theme = useTheme();
 
@@ -80,8 +80,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   useEffect(() => {
     const fetchGeneralInfo = async () => {
       const [info] = await generalInfoService.findAll();
-      if (info?.corpPartners?.length > 0) {
-        setPartnerName(info.corpPartners[0].name || "Unknown Partner");
+      if (generalInfoService.hasCorporateSponsors(info)) {
+        setPartnerName(info.corpPartners[0].name);
       }
     };
     fetchGeneralInfo();
@@ -97,16 +97,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
     setDonationHospital(hospital);
     setDonateOverlayOpen(true);
   };
-
-  useEffect(() => {
-    const fetchGeneralInfo = async () => {
-      const [info] = await generalInfoService.findAll();
-      if (info.corpPartners.length > 0) {
-        setPartnerName(info.corpPartners[0].name || "Unknown Partner");
-      }
-    };
-    fetchGeneralInfo();
-  }, []);
 
   return (
     <Box
@@ -326,38 +316,40 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               gap: 0.5,
             }}
           > */}
-          <Box
-            display="flex"
-            alignItems="center"
-            marginTop={1}
-            sx={{
-              backgroundColor: (theme: Theme) =>
-                theme.palette.background.highlighted,
-              borderRadius: "8px",
-              padding: "2px 2px 2px 2px",
-              margin: "1px 3px 1px 3px",
-            }}
-          >
-            <Typography
-              variant="body2"
-              marginRight={1}
-              color="textSecondary"
+          {partnerName &&
+            <Box
+              display="flex"
+              alignItems="center"
+              marginTop={1}
               sx={{
-                fontSize: {
-                  xs: "0.65rem",
-                  sm: "0.75rem",
-                  md: "0.75rem",
-                  lg: "0.75rem",
-                  xl: "0.75rem",
-                },
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "noWrap",
+                backgroundColor: (theme: Theme) =>
+                  theme.palette.background.highlighted,
+                borderRadius: "8px",
+                padding: "2px 2px 2px 2px",
+                margin: "1px 3px 1px 3px",
               }}
             >
-              Matched by {partnerName}
-            </Typography>
-          </Box>
+              <Typography
+                variant="body2"
+                marginRight={1}
+                color="textSecondary"
+                sx={{
+                  fontSize: {
+                    xs: "0.65rem",
+                    sm: "0.75rem",
+                    md: "0.75rem",
+                    lg: "0.75rem",
+                    xl: "0.75rem",
+                  },
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "noWrap",
+                }}
+              >
+                Matched by {partnerName}
+              </Typography>
+            </Box>
+          }
           <Typography
             variant="body2"
             color="text.secondary"

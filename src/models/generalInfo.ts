@@ -11,5 +11,7 @@ export type GeneralInfo = {
     status: string;
     totalOpen: number;
     totalFunded: number;
+    fundraiseUpCampaignId: string;
+    fundraiseUpOrganizationId: string;
     corpPartners: CorporatePartner[];
 }

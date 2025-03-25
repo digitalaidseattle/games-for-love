@@ -16,6 +16,8 @@ class GeneralInfoService {
       status: r.fields["Status"],
       totalOpen: r.fields["Total $ Open"],
       totalFunded: r.fields["Total $ Funded"],
+      fundraiseUpCampaignId: r.fields["FU General Fund Campaign ID"],
+      fundraiseUpOrganizationId: r.fields["FU Organization ID"],
       corpPartners: [
         {
           name: r.fields["Corp Partner 1 Name"],
@@ -45,6 +47,10 @@ class GeneralInfoService {
       .then((records) => records.map((r) => this.transform(r)));
   }
 
+  hasCorporateSponsors(generalInfo: GeneralInfo): boolean {
+    return generalInfo && generalInfo.corpPartners && generalInfo.corpPartners.length > 0;
+  }
+
 }
 
 
@@ -58,6 +64,8 @@ class MockGeneralInfoService extends GeneralInfoService {
       status: 'active',
       totalOpen: 120000,
       totalFunded: 10000,
+      fundraiseUpCampaignId: 'CAMPAIGN-ID',
+      fundraiseUpOrganizationId: 'ORGANIZATION-ID',
       corpPartners:
         [{
           name: 'Starbucks',

@@ -67,7 +67,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
     LearnMoreHospitalContext
   );
 
-  const [partnerName, setPartnerName] = useState<string>("Unknown Partner");
+  const [partnerName, setPartnerName] = useState<string>();
 
   const { setDonateOverlayOpen } = useContext(DonationContext);
 
@@ -97,8 +97,8 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
   useEffect(() => {
     const fetchGeneralInfo = async () => {
       const [info] = await generalInfoService.findAll();
-      if (info.corpPartners.length > 0) {
-        setPartnerName(info.corpPartners[0].name || "Unknown Partner");
+      if (generalInfoService.hasCorporateSponsors(info)) {
+        setPartnerName(info.corpPartners[0].name);
       }
     };
     fetchGeneralInfo();
@@ -157,28 +157,30 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
           </>
         )}
       </Box>
-      <Box>
-        <Typography sx={{ fontSize: "10px" }}>
-          <Box
-            component="span"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            sx={{
-              backgroundColor: (theme: Theme) =>
-                theme.palette.background.highlighted,
-              width: "265px",
-              height: "20px",
-              visibility:
-                popupInfo?.hospital.status === "active" ? "visible" : "hidden",
-            }}
-          >
-            Matched by {partnerName}
-            {/* <CustomAvatar src="/path/to/profile1.jpg" />
+      {partnerName &&
+        <Box>
+          <Typography sx={{ fontSize: "10px" }}>
+            <Box
+              component="span"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              sx={{
+                backgroundColor: (theme: Theme) =>
+                  theme.palette.background.highlighted,
+                width: "265px",
+                height: "20px",
+                visibility:
+                  popupInfo?.hospital.status === "active" ? "visible" : "hidden",
+              }}
+            >
+              Matched by {partnerName}
+              {/* <CustomAvatar src="/path/to/profile1.jpg" />
             <CustomAvatar src="/path/to/profile2.jpg" />+ */}
-          </Box>
-        </Typography>
-      </Box>
+            </Box>
+          </Typography>
+        </Box>
+      }
       <CardContent
         sx={{
           padding:
