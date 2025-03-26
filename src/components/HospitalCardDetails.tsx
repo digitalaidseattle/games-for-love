@@ -25,7 +25,6 @@ import {
   SelectedHospitalContext,
 } from "../context/SelectedHospitalContext";
 import { Hospital } from "../models/hospital";
-import { generalInfoService } from "../services/generalInfo/generalInfoService";
 import { hospitalService } from "../services/hospital/hospitalService";
 import ActionButton from "../styles/ActionButton";
 import EmphasizedText from "../styles/EmphasizedText";
@@ -65,9 +64,16 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
             ? theme.palette.hospital.closed
             : theme.palette.hospital.open
       );
-      setIsOpen(hospitalService.isHospitalOpen(hospital));
+
     }
   }, [hospital, selectedHospital]);
+
+  useEffect(() => {
+    setIsOpen(hospitalService.isHospitalOpen(hospital));
+
+    const corporatePartner = hospitalService.getCorporatePartner(hospital);
+    setPartnerName(corporatePartner ? corporatePartner.name : undefined);
+  }, [hospital]);
 
   const changeSelectedHospital = () => {
     if (selectedHospital?.id === hospital.id) {
@@ -76,16 +82,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
       setSelectedHospital(hospital);
     }
   };
-
-  useEffect(() => {
-    const fetchGeneralInfo = async () => {
-      const [info] = await generalInfoService.findAll();
-      if (generalInfoService.hasCorporateSponsors(info)) {
-        setPartnerName(info.corpPartners[0].name);
-      }
-    };
-    fetchGeneralInfo();
-  }, []);
 
   const handleLearnMore = (evt: any) => {
     evt.stopPropagation();

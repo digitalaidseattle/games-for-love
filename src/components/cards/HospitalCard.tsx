@@ -24,15 +24,13 @@ import {
 } from "../../context/SelectedHospitalContext";
 import ActionButton from "../../styles/ActionButton";
 
-import { differenceInDays } from "date-fns";
 import { Carousel } from "react-responsive-carousel";
-import { generalInfoService } from "../../services/generalInfo/generalInfoService";
 import { hospitalService } from "../../services/hospital/hospitalService";
 import EmphasizedText from "../../styles/EmphasizedText";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import "./HospitalCard.style.css";
 import { DonationContext } from "../../context/DonationContext";
+import "./HospitalCard.style.css";
 
 const CustomCancelIconButton = styled(IconButton)({
   opacity: 0.9,
@@ -67,42 +65,21 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
     LearnMoreHospitalContext
   );
 
+  const { setDonateOverlayOpen } = useContext(DonationContext);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [markerColor, setMarkerColor] = useState<any>(theme.palette.hospital.open);
   const [partnerName, setPartnerName] = useState<string>();
 
-  const { setDonateOverlayOpen } = useContext(DonationContext);
-
-  const isOpen = hospitalService.isHospitalOpen(popupInfo?.hospital);
-  const markerColor = isOpen
-    ? theme.palette.hospital.open
-    : theme.palette.hospital.closed;
-
-  const getDonationMessage = () => {
-    if (
-      popupInfo?.hospital.status === "active" &&
-      popupInfo.hospital.matchedRequest &&
-      popupInfo.hospital.matchedRequest.fundingDeadline
-    ) {
-      const currentDate = new Date();
-      const deadlineDate = new Date(
-        popupInfo.hospital.matchedRequest.fundingDeadline
-      );
-      const daysLeft = differenceInDays(deadlineDate, currentDate);
-      return daysLeft > 0
-        ? `${daysLeft} days left to donate!`
-        : "Donations closed";
-    }
-    return "Donations closed";
-  };
-
   useEffect(() => {
-    const fetchGeneralInfo = async () => {
-      const [info] = await generalInfoService.findAll();
-      if (generalInfoService.hasCorporateSponsors(info)) {
-        setPartnerName(info.corpPartners[0].name);
-      }
-    };
-    fetchGeneralInfo();
-  }, []);
+    if (popupInfo) {
+      const open = hospitalService.isHospitalOpen(popupInfo.hospital)
+      setIsOpen(open);
+      setMarkerColor(open ? theme.palette.hospital.open : theme.palette.hospital.closed);
+
+      const corporatePartner = hospitalService.getCorporatePartner(popupInfo.hospital);
+      setPartnerName(corporatePartner ? corporatePartner.name : undefined);
+    }
+  }, [popupInfo]);
 
   return (
     <Card
@@ -256,7 +233,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
               fontWeight: "bold",
             }}
           >
-            {getDonationMessage()}
+            {hospitalService.getDonationMessage(popupInfo?.hospital!)}
           </Typography>
         </Box>
       </CardContent>
