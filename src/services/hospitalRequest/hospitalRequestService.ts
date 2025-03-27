@@ -48,6 +48,9 @@ class HospitalRequestService {
           type: record.fields["Corp Partner 2 Type"]
         }
       ].filter((u) => u.name !== undefined),
+      fuCampaignId: record.fields["FU Campaign ID"] ?? undefined,
+      fuCampaignCode: record.fields["FU Campaign Code"] ?? undefined,
+      active:  record.fields["Public"] ?? true
     } as HospitalRequest;
   }
 
