@@ -22,5 +22,8 @@ export type HospitalRequest = {
   funders: string;
   requestPictures: string[];
   corpPartners: CorporatePartner[];
+  fundraiseUpCampaignId?: string,
+  active: boolean,
+  fundraiseUpCampaignCode?: string
 };
 

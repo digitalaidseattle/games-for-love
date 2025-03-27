@@ -86,6 +86,6 @@ class MockGeneralInfoService extends GeneralInfoService {
   }
 }
 
-// const generalInfoService = new GeneralInfoService();
-const generalInfoService = new MockGeneralInfoService();
+const generalInfoService = new GeneralInfoService();
+// const generalInfoService = new MockGeneralInfoService();
 export { generalInfoService };
