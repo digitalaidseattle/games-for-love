@@ -54,37 +54,37 @@ class GeneralInfoService {
 }
 
 
-import microsoft from "../../../test/microsoft.svg";
-import starbucks from "../../../test/starbucks.svg";
-import apple from "../../../test/apple.svg";
-class MockGeneralInfoService extends GeneralInfoService {
-  async findAll(): Promise<GeneralInfo[]> {
-    return [{
-      id: 'gen1',
-      status: 'active',
-      totalOpen: 120000,
-      totalFunded: 10000,
-      fundraiseUpCampaignId: 'CAMPAIGN-ID',
-      fundraiseUpOrganizationId: 'ORGANIZATION-ID',
-      corpPartners:
-        [{
-          name: 'Starbucks',
-          logo: starbucks,
-          type: 'type1'
-        },
-        {
-          name: 'Microsoft',
-          logo: microsoft,
-          type: 'type2'
-        },
-        {
-          name: 'Apple',
-          logo: apple,
-          type: 'type3'
-        }]
-    }]
-  }
-}
+// import microsoft from "../../../test/microsoft.svg";
+// import starbucks from "../../../test/starbucks.svg";
+// import apple from "../../../test/apple.svg";
+// class MockGeneralInfoService extends GeneralInfoService {
+//   async findAll(): Promise<GeneralInfo[]> {
+//     return [{
+//       id: 'gen1',
+//       status: 'active',
+//       totalOpen: 120000,
+//       totalFunded: 10000,
+//       fundraiseUpCampaignId: 'CAMPAIGN-ID',
+//       fundraiseUpOrganizationId: 'ORGANIZATION-ID',
+//       corpPartners:
+//         [{
+//           name: 'Starbucks',
+//           logo: starbucks,
+//           type: 'type1'
+//         },
+//         {
+//           name: 'Microsoft',
+//           logo: microsoft,
+//           type: 'type2'
+//         },
+//         {
+//           name: 'Apple',
+//           logo: apple,
+//           type: 'type3'
+//         }]
+//     }]
+//   }
+// }
 
 const generalInfoService = new GeneralInfoService();
 // const generalInfoService = new MockGeneralInfoService();
