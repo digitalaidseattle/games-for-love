@@ -6,6 +6,7 @@ import HospitalPageMain from "./HospitalPageMain";
 import HospitalPageSimilarDetailsSection from "./HospitalPageSimilarDetailsSection";
 import HospitalPageStatsSection from "./HospitalPageStatsSection";
 import HospitalPageTitleRequestNarrative from "./HospitalPageTitleRequestNarrative";
+import HospitalPageFooter from "./HospitalPageFooter";
 
 const HospitalDetailsPageModal = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
@@ -16,6 +17,7 @@ const HospitalDetailsPageModal = () => {
       <HospitalPageStatsSection />
       <HospitalPageContent />
       {hospital?.status === "past" && <HospitalPageSimilarDetailsSection />}
+      <HospitalPageFooter />
     </Box>
   );
 };

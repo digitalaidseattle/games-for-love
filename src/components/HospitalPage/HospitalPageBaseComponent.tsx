@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 
 export interface HospitalPageBaseComponentProps {
   image?: string | JSX.Element;
@@ -11,6 +11,10 @@ export interface HospitalPageBaseComponentProps {
     header?: any;
     paragraph?: any;
     shortParagraph?: any;
+    button?: any;
+  };
+  button: {
+    text: string | undefined;
   };
 }
 const HospitalPageBaseComponent = ({
@@ -18,6 +22,7 @@ const HospitalPageBaseComponent = ({
   header,
   paragraph,
   shortParagraph,
+  button = { text: "" },
   styles = {
     container: {},
     imageContainer: {},
@@ -77,6 +82,15 @@ const HospitalPageBaseComponent = ({
             {paragraph}
           </Typography>
         </Grid>
+
+        {/* Donate Now Button */}
+        {button.text && (
+          <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
+            <Button variant="contained" sx={{ ...styles.button }}>
+              {button.text}
+            </Button>
+          </Grid>
+        )}
       </Grid>
     </Box>
   );
