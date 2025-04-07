@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Box, Grid, Typography } from "@mui/material";
-import HospitalPageCarausel from "./HospitalPageCarousel";
+import HospitalPageCarousel from "./HospitalPageCarousel";
 import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 
 const HospitalPageMain = () => {
@@ -22,7 +22,7 @@ const HospitalPageMain = () => {
       {/* Carousel of hospitals - 3 at a time */}
       <Grid item xs={12}>
         <Box sx={{ width: "100%", textAlign: "center" }}>
-          <HospitalPageCarausel />
+          <HospitalPageCarousel />
         </Box>
       </Grid>
     </Grid>

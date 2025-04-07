@@ -13,7 +13,7 @@ export interface HospitalPageBaseComponentProps {
     shortParagraph?: any;
     button?: any;
   };
-  button: {
+  button?: {
     text: string | undefined;
   };
 }

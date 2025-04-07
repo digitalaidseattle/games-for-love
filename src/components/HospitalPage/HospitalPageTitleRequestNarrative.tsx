@@ -15,13 +15,15 @@ const DonationsRecievedProgressBar = styled(LinearProgress)({
 });
 
 const BrandPartners: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
-  const [corporatePartners, setCorporatePartners] = useState<CorporatePartner[]>([]);
+  const [corporatePartners, setCorporatePartners] = useState<
+    CorporatePartner[]
+  >([]);
 
   useEffect(() => {
     if (hospital) {
       if (hospital.matchedRequest) {
         if (hospital.matchedRequest.corpPartners) {
-          setCorporatePartners(hospital.matchedRequest.corpPartners)
+          setCorporatePartners(hospital.matchedRequest.corpPartners);
         }
       }
     }
@@ -51,34 +53,36 @@ const BrandPartners: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
             </Typography>
           </Box>
           <Typography variant="body2" mt={1}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            sed do eiusmod tempor incididunt ut labore et dolore magna
-            aliqua.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </Typography>
         </Grid>
       </Grid>
     );
-  }
+  };
 
   return (
-    <Box mt={4} sx={{ minHeight: '100px' }}>
-      {corporatePartners.length > 0 &&
+    <Box mt={4} sx={{ minHeight: "100px" }}>
+      {corporatePartners.length > 0 && (
         <>
           <Typography variant="h6" gutterBottom>
             Brand Partners
           </Typography>
-          {corporatePartners.map(partner => partnerSection(partner))}
+          {corporatePartners.map((partner) => partnerSection(partner))}
         </>
-      }
+      )}
     </Box>
   );
-}
+};
 const HospitalPageTitleRequestNarrative = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
+  const amountRequested = hospital?.matchedRequest?.requested ?? 0;
+  const amountRaised = hospital?.matchedFunded?.fundingCompleted ?? 0;
+  const percentage = (amountRaised / amountRequested) * 100;
   return (
     <>
       {/* Donations Received Section - active hospital */}
-      {hospital?.status === "past" && (
+      {hospital?.status === "active" && (
         <Grid item>
           <DonationBarActive />
         </Grid>
@@ -91,6 +95,8 @@ const HospitalPageTitleRequestNarrative = () => {
           sx={{
             justifyContent: "center",
             alignItems: "center",
+            paddingTop: "1rem",
+            paddingBottom: "1rem",
           }}
         >
           <Grid
@@ -107,7 +113,7 @@ const HospitalPageTitleRequestNarrative = () => {
               <Typography
                 variant="body1"
                 gutterBottom
-                sx={{ color: "#8A8A8A" }}
+                sx={{ color: "#8A8A8A", paddingBottom: "1rem" }}
               >
                 {hospital?.matchedRequest?.titleRequestNarrative}
               </Typography>
@@ -123,11 +129,16 @@ const HospitalPageTitleRequestNarrative = () => {
           <Grid item xs={12} md={6}>
             <Grid item>
               {/* Donations Received Section - past hospital */}
-              {hospital?.status === "active" && (
+              {hospital?.status === "past" && (
                 <Box mt={2}>
                   <Typography variant="h6" sx={{ fontSize: "20px" }}>
                     Donations Received:
-                    <span>150k raised out of 100k (150%)</span>
+                    <span>
+                      {" "}
+                      {`$${(amountRaised / 1000).toFixed(1)}k raised out of $${(
+                        amountRequested / 1000
+                      ).toFixed(1)}k (${percentage.toFixed(0)}%)`}
+                    </span>
                   </Typography>
 
                   <Box mt={2}>
@@ -139,8 +150,7 @@ const HospitalPageTitleRequestNarrative = () => {
                 </Box>
               )}
 
-              <BrandPartners hospital={hospital!}/>
-
+              <BrandPartners hospital={hospital!} />
             </Grid>
           </Grid>
         </Grid>
