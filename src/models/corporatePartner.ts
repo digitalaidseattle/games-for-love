@@ -8,5 +8,7 @@ export type CorporatePartner = {
     name: string;
     logo: string;
     type: string;
+    description?: string;
+    match?: number;
   }
   
