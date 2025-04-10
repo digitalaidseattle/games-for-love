@@ -40,12 +40,16 @@ class HospitalRequestService {
         {
           name: record.fields["Corp Partner 1 Name"],
           logo: record.fields["Corp Partner 1 Logo"],
-          type: record.fields["Corp Partner 1 Type"]
+          type: record.fields["Corp Partner 1 Type"],
+          description: record.fields["Corp Partner 1 Description"],
+          match: record.fields["Corp Partner 1 Match"]
         },
         {
           name: record.fields["Corp Partner 2 Name"],
           logo: record.fields["Corp Partner 2 Logo"],
-          type: record.fields["Corp Partner 2 Type"]
+          type: record.fields["Corp Partner 2 Type"],
+          description: record.fields["Corp Partner 2 Description"],
+          match: record.fields["Corp Partner 2 Match"]
         }
       ].filter((u) => u.name !== undefined),
       fundraiseUpCampaignId: record.fields["FU Campaign ID"] ?? undefined,
