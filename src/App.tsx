@@ -24,6 +24,7 @@ const FUNDRAISEUP_OVERALL_WIDGET_URL = import.meta.env
 //   .VITE_FUNDRAISEUP_HOSPITAL_WIDGET_URL;
 import { FilterContext } from "./context/FilterContext";
 import { DrawerWidthContext } from "./context/DrawerWidthContext";
+import { DonateOverlay } from "./components/DonateOverlay";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -33,7 +34,10 @@ const HospitalList = () => {
   ));
 };
 
-const SizeAwareReflexElement = (props: { windowHeight: number, dimensions?: any }) => {
+const SizeAwareReflexElement = (props: {
+  windowHeight: number;
+  dimensions?: any;
+}) => {
   const { setLastDrawerWidth } = useContext(DrawerWidthContext);
 
   useEffect(() => {
@@ -47,8 +51,8 @@ const SizeAwareReflexElement = (props: { windowHeight: number, dimensions?: any 
         <HospitalList />
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 function App() {
   const { filters } = useContext(FilterContext);
@@ -80,7 +84,11 @@ function App() {
     if (filters) {
       hospitalService
         .findAll(filters)
-        .then((res) => setOriginals(res.filter(hospital => hospitalService.isValid(hospital))));
+        .then((res) =>
+          setOriginals(
+            res.filter((hospital) => hospitalService.isValid(hospital))
+          )
+        );
     }
   }, [filters]);
 
@@ -100,8 +108,8 @@ function App() {
             <GFLMap />
           </Box>
         </ReflexElement>
-
       </ReflexContainer>
+      <DonateOverlay />
     </>
   );
 }

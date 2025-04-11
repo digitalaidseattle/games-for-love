@@ -22,7 +22,6 @@ import { HospitalsContext } from "../context/HospitalContext";
 import { SelectedHospitalContext } from "../context/SelectedHospitalContext";
 import { Hospital } from "../models/hospital";
 import { siteService } from "../services/siteUtils";
-import { DonateOverlay } from "./DonateOverlay";
 import FullWidthControl from "./FullWidthControl";
 import LearnMoreOverlay from "./LearnMoreOverlay";
 import SponsorPanel from "./SponsorPanel";
@@ -140,7 +139,6 @@ export const GFLMap = () => {
       )}
       <SponsorPanel />
       <LearnMoreOverlay />
-      <DonateOverlay />
     </Map>
   );
 };
