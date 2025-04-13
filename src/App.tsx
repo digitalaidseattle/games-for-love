@@ -18,7 +18,6 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "react-reflex/styles.css";
 import "./App.css";
 
-import { FUNDRAISUP_CONFIG } from "./config/fundraisupConfig";
 import { FilterContext } from "./context/FilterContext";
 import { DrawerWidthContext } from "./context/DrawerWidthContext";
 import { DonateOverlay } from "./components/DonateOverlay";

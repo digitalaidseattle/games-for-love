@@ -1,13 +1,3 @@
-// FundraisUp configuration types
-type HospitalConfig = {
-  elementId: string;
-  designationId: string;
-};
-
-type HospitalConfigs = {
-  [key: string]: HospitalConfig;
-};
-
 // FundraisUp campaign and element configuration
 export const FUNDRAISUP_CONFIG = {
   ORGANIZATION_ID: "AWALQQAB",
@@ -72,22 +62,4 @@ export const cleanupFundraiseUp = () => {
   document
     .querySelectorAll('iframe[src*="fundraiseup.com"]')
     .forEach((iframe) => iframe.remove());
-};
-
-// Helper function to initialize FundraiseUp
-export const initializeFundraiseUp = (
-  onSuccess: () => void,
-  onError: (error: Error) => void
-) => {
-  // Clean up first
-  cleanupFundraiseUp();
-
-  // Create and load script
-  const script = document.createElement("script");
-  script.src = `https://cdn.fundraiseup.com/widget/${FUNDRAISUP_CONFIG.ORGANIZATION_ID}`;
-  script.async = true;
-  script.onload = onSuccess;
-  script.onerror = () =>
-    onError(new Error("Failed to load FundraiseUp script"));
-  document.body.appendChild(script);
 };

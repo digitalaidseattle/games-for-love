@@ -3,22 +3,14 @@ import { DonationContext } from "../context/DonationContext";
 import { Backdrop, Box, Theme } from "@mui/material";
 import DialogCloseButton from "../styles/DialogCloseButton";
 import { DonationHospitalContext } from "../context/SelectedHospitalContext";
-import {
-  FUNDRAISUP_CONFIG,
-  cleanupFundraiseUp,
-  initializeFundraiseUp,
-} from "../config/fundraisupConfig";
+import { FUNDRAISUP_CONFIG, cleanupFundraiseUp } from "../config/fundraisupConfig";
 
 // Add FundraisUp type definition
 declare global {
   interface Window {
     FundraiseUp?: {
       widget: {
-        show: (options: {
-          elementId: string;
-          designationId?: string;
-          campaign?: string;
-        }) => void;
+        show: (options: { elementId: string; designationId?: string; campaign?: string }) => void;
         hide: () => void;
         destroy?: () => void;
       };
@@ -29,8 +21,7 @@ declare global {
 }
 
 export const DonateOverlay = () => {
-  const { donateOverlayOpen, setDonateOverlayOpen } =
-    useContext(DonationContext);
+  const { donateOverlayOpen, setDonateOverlayOpen } = useContext(DonationContext);
   const { hospital, setHospital } = useContext(DonationHospitalContext);
 
   const handleClose = useCallback(() => {
@@ -81,7 +72,6 @@ export const DonateOverlay = () => {
       window.FundraiseUpQ = window.FundraiseUpQ || [];
 
       const widgetConfig = getWidgetConfig();
-      console.log("Widget config:", widgetConfig);
 
       // Add configuration to queue BEFORE loading script
       window.FundraiseUpQ.push(() => {
@@ -146,10 +136,7 @@ export const DonateOverlay = () => {
         >
           {hospital && <h2>Donate to {hospital.name}</h2>}
           {/* FundraiseUp anchor tag */}
-          <a
-            href={`#${getWidgetConfig().elementId}`}
-            style={{ display: "none" }}
-          />
+          <a href={`#${getWidgetConfig().elementId}`} style={{ display: "none" }} />
         </Box>
       </Backdrop>
     )
