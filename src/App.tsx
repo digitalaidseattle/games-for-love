@@ -18,10 +18,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "react-reflex/styles.css";
 import "./App.css";
 
-const FUNDRAISEUP_OVERALL_WIDGET_URL = import.meta.env
-  .VITE_FUNDRAISEUP_OVERALL_WIDGET_URL;
-// const FUNDRAISEUP_HOSPITAL_WIDGET_URL = import.meta.env
-//   .VITE_FUNDRAISEUP_HOSPITAL_WIDGET_URL;
+import { FUNDRAISUP_CONFIG } from "./config/fundraisupConfig";
 import { FilterContext } from "./context/FilterContext";
 import { DrawerWidthContext } from "./context/DrawerWidthContext";
 import { DonateOverlay } from "./components/DonateOverlay";
@@ -65,19 +62,7 @@ function App() {
       setWindowHeight(window.innerHeight);
     }
     window.addEventListener("resize", handleResize);
-
-    if (
-      !document.querySelector(`script[src="${FUNDRAISEUP_OVERALL_WIDGET_URL}"]`)
-    ) {
-      const script = document.createElement("script");
-      script.src = FUNDRAISEUP_OVERALL_WIDGET_URL;
-      script.async = true;
-      script.onload = () =>
-        console.log("Fundraise Up script loaded successfully");
-      script.onerror = () =>
-        console.error("Failed to load Fundraise Up script");
-      document.head.appendChild(script);
-    }
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {

@@ -1,41 +1,127 @@
-import { useContext } from "react";
+import { useContext, useEffect, useCallback } from "react";
 import { DonationContext } from "../context/DonationContext";
 import { Backdrop, Box, Theme } from "@mui/material";
 import DialogCloseButton from "../styles/DialogCloseButton";
 import { DonationHospitalContext } from "../context/SelectedHospitalContext";
+import {
+  FUNDRAISUP_CONFIG,
+  cleanupFundraiseUp,
+  initializeFundraiseUp,
+} from "../config/fundraisupConfig";
 
-const FUNDRAISEUP_CAMPAIGN_CODE = import.meta.env
-  .VITE_FUNDRAISEUP_CAMPAIGN_CODE;
-
-if (!FUNDRAISEUP_CAMPAIGN_CODE) {
-  throw new Error(
-    "FUNDRAISEUP_CAMPAIGN_CODE is not set. Application cannot start."
-  );
-}
-
-const FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE = import.meta.env
-  .VITE_FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE;
-
-if (!FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE) {
-  throw new Error(
-    "FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODEE is not set. Application cannot start."
-  );
+// Add FundraisUp type definition
+declare global {
+  interface Window {
+    FundraiseUp?: {
+      widget: {
+        show: (options: {
+          elementId: string;
+          designationId?: string;
+          campaign?: string;
+        }) => void;
+        hide: () => void;
+        destroy?: () => void;
+      };
+      configure: (options: { token: string }) => void;
+    };
+    FundraiseUpQ?: Array<() => void>;
+  }
 }
 
 export const DonateOverlay = () => {
   const { donateOverlayOpen, setDonateOverlayOpen } =
     useContext(DonationContext);
+  const { hospital, setHospital } = useContext(DonationHospitalContext);
 
-  const { hospital } = useContext(DonationHospitalContext);
+  const handleClose = useCallback(() => {
+    // First cleanup the widget
+    cleanupFundraiseUp();
 
-  const handleClose = () => {
+    // Reset hospital selection
+    setHospital(undefined);
+
+    // Close the overlay
     setDonateOverlayOpen(false);
+  }, [setDonateOverlayOpen, setHospital]);
+
+  const getWidgetConfig = () => {
+    // Default config for general donation
+    const defaultConfig = {
+      elementId: FUNDRAISUP_CONFIG.DEFAULT_ELEMENT_ID,
+      campaign: FUNDRAISUP_CONFIG.CAMPAIGN_ID,
+    };
+
+    // If no hospital selected or if it's General Donation, return default config
+    if (!hospital?.name || hospital.name === "General Donation") {
+      return defaultConfig;
+    }
+
+    // For specific hospitals
+    const normalizedName = hospital.name.trim();
+    const hospitalConfig = Object.entries(FUNDRAISUP_CONFIG.HOSPITALS).find(
+      ([key]) => key.toLowerCase() === normalizedName.toLowerCase()
+    );
+
+    if (hospitalConfig) {
+      const [, config] = hospitalConfig;
+      return {
+        elementId: config.elementId,
+        designationId: config.designationId,
+        campaign: FUNDRAISUP_CONFIG.CAMPAIGN_ID,
+      };
+    }
+
+    // Fallback to default if hospital not found
+    return defaultConfig;
   };
+
+  useEffect(() => {
+    if (donateOverlayOpen) {
+      const showWidget = () => {
+        const widgetConfig = getWidgetConfig();
+        console.log("Widget config:", widgetConfig);
+
+        // Initialize new queue
+        window.FundraiseUpQ = [];
+
+        // Configure first
+        window.FundraiseUpQ.push(() => {
+          console.log("Configuring FundraiseUp");
+          window.FundraiseUp?.configure({
+            token: FUNDRAISUP_CONFIG.ORGANIZATION_ID,
+          });
+        });
+
+        // Then show widget
+        window.FundraiseUpQ.push(() => {
+          console.log("Showing widget");
+          if (window.FundraiseUp?.widget) {
+            window.FundraiseUp.widget.show(widgetConfig);
+          }
+        });
+      };
+
+      initializeFundraiseUp(
+        () => {
+          console.log("Script loaded, initializing widget");
+          showWidget();
+        },
+        (error) => {
+          console.error("Failed to load FundraiseUp script:", error);
+          handleClose();
+        }
+      );
+
+      return () => {
+        cleanupFundraiseUp();
+      };
+    }
+  }, [donateOverlayOpen, hospital, handleClose]);
 
   return (
     donateOverlayOpen && (
       <Backdrop
-        sx={(theme) => ({
+        sx={(theme: Theme) => ({
           zIndex: theme.zIndex.drawer + 1,
           overflowY: "auto",
           display: "flex",
@@ -49,31 +135,21 @@ export const DonateOverlay = () => {
           sx={{
             backgroundColor: (theme: Theme) => theme.palette.grey[700],
             color: "white",
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            zIndex: (theme: Theme) => theme.zIndex.drawer + 2,
           }}
         />
-
-        {hospital ? (
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            gap={2}
-            minHeight={50}
-          >
-            <h2>Donate to {hospital.name}</h2>
-            <a
-              href={FUNDRAISEUP_SELECTED_HOSPITAL_CAMPAIGN_CODE}
-              style={{ display: "none" }}
-              id="fundraise-link"
-            ></a>
-          </Box>
-        ) : (
-          <a
-            href={FUNDRAISEUP_CAMPAIGN_CODE}
-            style={{ display: "none" }}
-            id="fundraise-link"
-          ></a>
-        )}
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          gap={2}
+          minHeight={50}
+        >
+          {hospital && <h2>Donate to {hospital.name}</h2>}
+        </Box>
       </Backdrop>
     )
   );
