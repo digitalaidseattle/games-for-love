@@ -77,40 +77,33 @@ export const DonateOverlay = () => {
 
   useEffect(() => {
     if (donateOverlayOpen) {
-      const showWidget = () => {
-        const widgetConfig = getWidgetConfig();
-        console.log("Widget config:", widgetConfig);
+      // Initialize FundraiseUp queue
+      window.FundraiseUpQ = window.FundraiseUpQ || [];
 
-        // Initialize new queue
-        window.FundraiseUpQ = [];
+      const widgetConfig = getWidgetConfig();
+      console.log("Widget config:", widgetConfig);
 
-        // Configure first
-        window.FundraiseUpQ.push(() => {
-          console.log("Configuring FundraiseUp");
-          window.FundraiseUp?.configure({
-            token: FUNDRAISUP_CONFIG.ORGANIZATION_ID,
-          });
+      // Add configuration to queue BEFORE loading script
+      window.FundraiseUpQ.push(() => {
+        window.FundraiseUp?.configure({
+          token: FUNDRAISUP_CONFIG.ORGANIZATION_ID,
         });
+      });
 
-        // Then show widget
-        window.FundraiseUpQ.push(() => {
-          console.log("Showing widget");
-          if (window.FundraiseUp?.widget) {
-            window.FundraiseUp.widget.show(widgetConfig);
-          }
-        });
+      // Add show widget to queue
+      window.FundraiseUpQ.push(() => {
+        window.FundraiseUp?.widget.show(widgetConfig);
+      });
+
+      // Now load the script
+      const script = document.createElement("script");
+      script.src = `https://cdn.fundraiseup.com/widget/${FUNDRAISUP_CONFIG.ORGANIZATION_ID}`;
+      script.async = true;
+      script.onerror = () => {
+        console.error("Failed to load FundraiseUp script");
+        handleClose();
       };
-
-      initializeFundraiseUp(
-        () => {
-          console.log("Script loaded, initializing widget");
-          showWidget();
-        },
-        (error) => {
-          console.error("Failed to load FundraiseUp script:", error);
-          handleClose();
-        }
-      );
+      document.body.appendChild(script);
 
       return () => {
         cleanupFundraiseUp();
@@ -147,8 +140,16 @@ export const DonateOverlay = () => {
           alignItems="center"
           gap={2}
           minHeight={50}
+          width="100%"
+          maxWidth="800px"
+          padding="20px"
         >
           {hospital && <h2>Donate to {hospital.name}</h2>}
+          {/* FundraiseUp anchor tag */}
+          <a
+            href={`#${getWidgetConfig().elementId}`}
+            style={{ display: "none" }}
+          />
         </Box>
       </Backdrop>
     )
