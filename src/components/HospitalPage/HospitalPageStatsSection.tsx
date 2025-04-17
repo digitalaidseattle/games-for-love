@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 const HospitalPageStatsSection = () => {
   const stats = [
@@ -20,17 +20,13 @@ const HospitalPageStatsSection = () => {
   ];
 
   return (
-    <Box sx={{ padding: 4, textAlign: "center" }}>
-      <Grid
-        container
-        spacing={4}
-        justifyContent="center"
-        alignItems="center"
-        padding={4}
-        sx={{ border: "1px solid black", backgroundColor: "#E9605A" }}
-      >
+    <Box sx={{
+      border: "1px solid black",
+      backgroundColor: "#E9605A",
+    }}>
+      <Stack direction={"row"} justifyContent="space-evenly" padding={4}>
         {stats.map((stat, index) => (
-          <Grid item xs={12} sm={4} key={index}>
+          <Box key={index} sx={{ textAlign: "center" }}>
             {/* Circle with the number */}
             <Box
               sx={{
@@ -64,9 +60,9 @@ const HospitalPageStatsSection = () => {
             >
               {stat.label}
             </Typography>
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Stack>
     </Box>
   );
 };
