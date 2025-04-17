@@ -3,7 +3,6 @@ import { styled } from "@mui/system";
 import { useContext, useEffect, useState } from "react";
 import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 import { CorporatePartner } from "../../models/corporatePartner";
-import DonationBarActive from "./DonationBarActive";
 import { Hospital } from "../../models/hospital";
 
 const DonationsRecievedProgressBar = styled(LinearProgress)({
@@ -80,12 +79,6 @@ const HospitalPageTitleRequestNarrative = () => {
   const percentage = (amountRaised / amountRequested) * 100;
   return (
     <>
-      {/* Donations Received Section - active hospital */}
-      {hospital?.status === "active" && (
-        <Grid item>
-          <DonationBarActive />
-        </Grid>
-      )}
       <Box sx={{ padding: "20px" }}>
         {/* Title Request Narrative & Request Narrative Section */}
         <Grid
