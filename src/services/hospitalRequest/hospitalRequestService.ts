@@ -19,10 +19,7 @@ class HospitalRequestService {
       name: record.fields["Hospital Name (LInked)"],
       requestNarrative: record.fields["Request Narrative"],
       titleRequestNarrative: record.fields["Title Request Narrative"],
-      equipReq:
-        record.fields[
-        "# Equipment Requested (TBD if we show single brands + extras)"
-        ],
+      equipReq: record.fields["Equipment Requested"],
       requested: record.fields["$ Requested"],
       fundingDeadline: record.fields["Funding Deadline"] ? new Date(record.fields["Funding Deadline"] as string) : undefined,
       kids3Y: record.fields["Kids 3Y"],
@@ -54,7 +51,7 @@ class HospitalRequestService {
       ].filter((u) => u.name !== undefined),
       fundraiseUpCampaignId: record.fields["FU Campaign ID"] ?? undefined,
       fundraiseUpCampaignCode: record.fields["FU Campaign Code"] ?? undefined,
-      active:  record.fields["Public"] ?? true
+      active: record.fields["Public"] ?? true
     } as HospitalRequest;
   }
 
