@@ -5,12 +5,13 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
+import { Instagram, LinkedIn, YouTube } from "@mui/icons-material";
 
 const HospitalPageFooter = () => {
   return (
     <React.Fragment>
       <Divider />
-      <Box sx={{ padding: 4 }}>
+      <Box sx={{ padding: 7 }}>
         <Grid container spacing={4}>
           {/* Section 1 */}
           <Grid container xs={12} sm={5} md={5}>
@@ -36,23 +37,14 @@ const HospitalPageFooter = () => {
                 />
               </Link>
               <Link href="#" color="inherit" underline="hover">
-                <FacebookRoundedIcon
-                  fontSize="large"
-                  sx={{ color: "#828282" }}
-                />
+                <LinkedIn fontSize="large" sx={{ color: "#828282" }} />
               </Link>
 
               <Link href="#" color="inherit" underline="hover">
-                <FacebookRoundedIcon
-                  fontSize="large"
-                  sx={{ color: "#828282" }}
-                />
+                <YouTube fontSize="large" sx={{ color: "#828282" }} />
               </Link>
               <Link href="#" color="inherit" underline="hover">
-                <FacebookRoundedIcon
-                  fontSize="large"
-                  sx={{ color: "#828282" }}
-                />
+                <Instagram fontSize="large" sx={{ color: "#828282" }} />
               </Link>
             </Grid>
           </Grid>

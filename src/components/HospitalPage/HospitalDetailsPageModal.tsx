@@ -6,7 +6,10 @@ import HospitalPageMain from "./HospitalPageMain";
 import HospitalPageSimilarDetailsSection from "./HospitalPageSimilarDetailsSection";
 import HospitalPageStatsSection from "./HospitalPageStatsSection";
 import HospitalPageTitleRequestNarrative from "./HospitalPageTitleRequestNarrative";
+import HospitalPageFooter from "./HospitalPageFooter";
+import ActiveHospitalRequestCarousel from "./ActiveHospitalRequestCarousel";
 
+/**This is the starting point of the Hospital Details page */
 const HospitalDetailsPageModal = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
   return (
@@ -16,6 +19,8 @@ const HospitalDetailsPageModal = () => {
       <HospitalPageStatsSection />
       <HospitalPageContent />
       {hospital?.status === "past" && <HospitalPageSimilarDetailsSection />}
+      {hospital?.status === "active" && <ActiveHospitalRequestCarousel />}
+      <HospitalPageFooter />
     </Box>
   );
 };
