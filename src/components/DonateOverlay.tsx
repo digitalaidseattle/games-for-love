@@ -4,6 +4,7 @@ import { Backdrop, Box, Theme } from "@mui/material";
 import DialogCloseButton from "../styles/DialogCloseButton";
 import { DonationHospitalContext } from "../context/SelectedHospitalContext";
 import { FUNDRAISUP_CONFIG, cleanupFundraiseUp } from "../config/fundraisupConfig";
+import { GeneralInfoContext } from "../context/GeneralInfoContext";
 
 // Add FundraisUp type definition
 declare global {
@@ -21,6 +22,7 @@ declare global {
 }
 
 export const DonateOverlay = () => {
+  const { generalInfo } = useContext(GeneralInfoContext);
   const { donateOverlayOpen, setDonateOverlayOpen } = useContext(DonationContext);
   const { hospital, setHospital } = useContext(DonationHospitalContext);
 
@@ -36,34 +38,18 @@ export const DonateOverlay = () => {
   }, [setDonateOverlayOpen, setHospital]);
 
   const getWidgetConfig = () => {
-    // Default config for general donation
-    const defaultConfig = {
-      elementId: FUNDRAISUP_CONFIG.DEFAULT_ELEMENT_ID,
-      campaign: FUNDRAISUP_CONFIG.CAMPAIGN_ID,
-    };
 
-    // If no hospital selected or if it's General Donation, return default config
-    if (!hospital?.name || hospital.name === "General Donation") {
-      return defaultConfig;
-    }
-
-    // For specific hospitals
-    const normalizedName = hospital.name.trim();
-    const hospitalConfig = Object.entries(FUNDRAISUP_CONFIG.HOSPITALS).find(
-      ([key]) => key.toLowerCase() === normalizedName.toLowerCase()
-    );
-
-    if (hospitalConfig) {
-      const [, config] = hospitalConfig;
+    if (!hospital) {
       return {
-        elementId: config.elementId,
-        designationId: config.designationId,
-        campaign: FUNDRAISUP_CONFIG.CAMPAIGN_ID,
+        elementId: FUNDRAISUP_CONFIG.GENERAL_ELEMENT_ID,
+        campaign: generalInfo.fundraiseUpCampaignId
       };
+    } else {
+      return {
+        elementId: FUNDRAISUP_CONFIG.HOSPITAL_ELEMENT_ID,
+        campaign: hospital.matchedRequest?.fundraiseUpCampaignId
+      }
     }
-
-    // Fallback to default if hospital not found
-    return defaultConfig;
   };
 
   useEffect(() => {
@@ -76,7 +62,7 @@ export const DonateOverlay = () => {
       // Add configuration to queue BEFORE loading script
       window.FundraiseUpQ.push(() => {
         window.FundraiseUp?.configure({
-          token: FUNDRAISUP_CONFIG.ORGANIZATION_ID,
+          token: generalInfo.fundraiseUpOrganizationId,
         });
       });
 
@@ -87,6 +73,8 @@ export const DonateOverlay = () => {
 
       // Now load the script
       const script = document.createElement("script");
+      // FIXME: Use the GFLs organization ID; Not working with GFL's campaign ID
+      // script.src = `https://cdn.fundraiseup.com/widget/${generalInfo.fundraiseUpOrganizationId}`;
       script.src = `https://cdn.fundraiseup.com/widget/${FUNDRAISUP_CONFIG.ORGANIZATION_ID}`;
       script.async = true;
       script.onerror = () => {
@@ -130,9 +118,9 @@ export const DonateOverlay = () => {
           alignItems="center"
           gap={2}
           minHeight={50}
-          width="100%"
-          maxWidth="800px"
+          borderRadius= "15px"
           padding="20px"
+          bgcolor={(theme: Theme) => theme.palette.background.paper}
         >
           {hospital && <h2>Donate to {hospital.name}</h2>}
           {/* FundraiseUp anchor tag */}
