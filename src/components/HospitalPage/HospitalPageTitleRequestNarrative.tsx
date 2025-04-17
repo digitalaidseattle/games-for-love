@@ -49,12 +49,11 @@ const BrandPartners: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
           >
             <Typography variant="h6">{partner.name}</Typography>
             <Typography variant="body2" mt={1}>
-              Match Amount: $25,000
+              Match Amount: {partner.match}
             </Typography>
           </Box>
           <Typography variant="body2" mt={1}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            {partner.description}
           </Typography>
         </Grid>
       </Grid>
