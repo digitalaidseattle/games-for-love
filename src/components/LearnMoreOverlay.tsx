@@ -14,10 +14,21 @@ import {
 } from "@mui/material";
 import { useContext } from "react";
 import GamesForLoveLogo from "../assets/games-for-love-logo.png";
-import { LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
+import { DonationHospitalContext, LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
 import HospitalDetailsPageModal from "./HospitalPage/HospitalDetailsPageModal";
+import { DonationContext } from "../context/DonationContext";
 
 const LearnMoreContent = () => {
+  const { setDonateOverlayOpen } = useContext(DonationContext);
+  const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
+  const { setHospital: setDonationHospital } = useContext(DonationHospitalContext);
+
+  function handleDonate(): void {
+    setDonationHospital(undefined);  // undefined for general
+    setDonateOverlayOpen(true);
+    setLearnMoreHospital(undefined);
+  }
+
   return (
     <Container
       maxWidth="xl"
@@ -55,6 +66,7 @@ const LearnMoreContent = () => {
             <Button
               sx={{ color: "#4A24E7", outline: "1px solid #4A24E7" }}
               variant="outlined"
+              onClick={(() => handleDonate())}
             >
               Donate
             </Button>

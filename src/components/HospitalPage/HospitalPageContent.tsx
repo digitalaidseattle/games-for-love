@@ -51,9 +51,6 @@ const HospitalPageContent = () => {
         header="About Our Health Organization"
         shortParagraph={`Our mission at the organization`}
         paragraph={hospital?.description}
-        button={{
-          text: hospital?.status === "active" ? "Donate now" : undefined,
-        }}
         styles={{
           container: { backgroundColor: "#f9f9f9", padding: "5rem" },
           header: {
