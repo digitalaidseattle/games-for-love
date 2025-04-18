@@ -1,9 +1,8 @@
-import { Box, Grid, LinearProgress, Typography } from "@mui/material";
+import { Box, Grid, LinearProgress, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useContext, useEffect, useState } from "react";
 import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 import { CorporatePartner } from "../../models/corporatePartner";
-import DonationBarActive from "./DonationBarActive";
 import { Hospital } from "../../models/hospital";
 
 const DonationsRecievedProgressBar = styled(LinearProgress)({
@@ -15,13 +14,15 @@ const DonationsRecievedProgressBar = styled(LinearProgress)({
 });
 
 const BrandPartners: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
-  const [corporatePartners, setCorporatePartners] = useState<CorporatePartner[]>([]);
+  const [corporatePartners, setCorporatePartners] = useState<
+    CorporatePartner[]
+  >([]);
 
   useEffect(() => {
     if (hospital) {
       if (hospital.matchedRequest) {
         if (hospital.matchedRequest.corpPartners) {
-          setCorporatePartners(hospital.matchedRequest.corpPartners)
+          setCorporatePartners(hospital.matchedRequest.corpPartners);
         }
       }
     }
@@ -56,76 +57,86 @@ const BrandPartners: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
         </Grid>
       </Grid>
     );
-  }
+  };
 
   return (
-    <Box mt={4} sx={{ minHeight: '100px' }}>
-      {corporatePartners.length > 0 &&
+    <Box mt={4} sx={{ minHeight: "100px" }}>
+      {corporatePartners.length > 0 && (
         <>
           <Typography variant="h6" gutterBottom>
             Brand Partners
           </Typography>
-          {corporatePartners.map(partner => partnerSection(partner))}
+          {corporatePartners.map((partner) => partnerSection(partner))}
         </>
-      }
+      )}
     </Box>
   );
-}
+};
 const HospitalPageTitleRequestNarrative = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
+  const amountRequested = hospital?.matchedRequest?.requested ?? 0;
+  const amountRaised = hospital?.matchedFunded?.fundingCompleted ?? 0;
+  const percentage = (amountRaised / amountRequested) * 100;
+  const [columns, setColumns] = useState<number>(2);
+
+  useEffect(() => {
+    if (hospital) {
+      if (hospital.status === "active")
+        if (hospital.matchedRequest) {
+          if (hospital.matchedRequest.corpPartners.length === 0) {
+            setColumns(1);
+          }
+        }
+    }
+  }, [hospital]);
+
   return (
-    <>
-      {/* Donations Received Section - active hospital */}
-      {hospital?.status === "past" && (
-        <Grid item>
-          <DonationBarActive />
-        </Grid>
-      )}
-      <Box sx={{ padding: "20px" }}>
-        {/* Title Request Narrative & Request Narrative Section */}
-        <Grid
-          container
-          spacing={4}
+    <div id='AAAA'>
+      <Grid
+        container
+        spacing={4}
+        sx={{
+          padding: "20px",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Grid item xs={12} md={columns === 1 ? 12 : 6}
           sx={{
+            padding: "20px",
             justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <Grid
-            item
-            xs={12}
-            md={6}
-            sx={{
-              padding: "20px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Grid item>
-              <Typography
-                variant="body1"
-                gutterBottom
-                sx={{ color: "#8A8A8A" }}
-              >
-                {hospital?.matchedRequest?.titleRequestNarrative}
-              </Typography>
-            </Grid>
+          <Stack>
+            <Typography
+              variant="body1"
+              gutterBottom
+              sx={{ color: "#8A8A8A", paddingBottom: "1rem" }}
+            >
+              {hospital?.matchedRequest?.titleRequestNarrative}
+            </Typography>
 
-            <Grid item>
-              <Typography variant="body1" gutterBottom>
-                {hospital?.matchedRequest?.requestNarrative}
-              </Typography>
-            </Grid>
-          </Grid>
+            <Typography variant="body1" gutterBottom>
+              {hospital?.matchedRequest?.requestNarrative}
+            </Typography>
+          </Stack>
+        </Grid>
 
+        {columns === 2 &&
           <Grid item xs={12} md={6}>
-            <Grid item>
+            <Stack>
               {/* Donations Received Section - past hospital */}
-              {hospital?.status === "active" && (
+              {hospital?.status === "past" && (
                 <Box mt={2}>
                   <Typography variant="h6" sx={{ fontSize: "20px" }}>
                     Donations Received:
-                    <span>150k raised out of 100k (150%)</span>
+                    <span>
+                      {" "}
+                      {`$${(amountRaised / 1000).toFixed(1)}k raised out of $${(
+                        amountRequested / 1000
+                      ).toFixed(1)}k (${percentage.toFixed(0)}%)`}
+                    </span>
                   </Typography>
 
                   <Box mt={2}>
@@ -137,13 +148,12 @@ const HospitalPageTitleRequestNarrative = () => {
                 </Box>
               )}
 
-              <BrandPartners hospital={hospital!}/>
-
-            </Grid>
+              <BrandPartners hospital={hospital!} />
+            </Stack>
           </Grid>
-        </Grid>
-      </Box>
-    </>
+        }
+      </Grid>
+    </div>
   );
 };
 

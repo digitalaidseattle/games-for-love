@@ -51,6 +51,9 @@ const HospitalPageContent = () => {
         header="About Our Health Organization"
         shortParagraph={`Our mission at the organization`}
         paragraph={hospital?.description}
+        button={{
+          text: hospital?.status === "active" ? "Donate now" : undefined,
+        }}
         styles={{
           container: { backgroundColor: "#f9f9f9", padding: "5rem" },
           header: {
@@ -59,7 +62,21 @@ const HospitalPageContent = () => {
             fontSize: "2rem",
             fontWeight: "bold",
           },
-          paragraph: { color: "#777", textAlign: "left" },
+          paragraph: {
+            color: "#777",
+            textAlign: "left",
+            paddingBottom: "1rem",
+            paddingTop: "1rem",
+          },
+          button: {
+            backgroundColor: "#4A24E7",
+            color: "#fff",
+            padding: "10px 20px",
+            borderRadius: "5px",
+            width: "50%",
+            cursor: "pointer",
+            textTransform: "none",
+          },
         }}
       />
     </div>
