@@ -1,19 +1,14 @@
 import { Avatar, Box, Stack, Theme } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { GeneralInfo } from '../models/generalInfo';
+import React, { useContext } from 'react';
+import { GeneralInfoContext } from '../context/GeneralInfoContext';
 import { generalInfoService } from '../services/generalInfo/generalInfoService';
 import EmphasizedText from '../styles/EmphasizedText';
 
 function SponsorPanel() {
-    const [generalInfo, setGeneralInfo] = useState<GeneralInfo[]>([]);
-
-    useEffect(() => {
-        generalInfoService.findAll()
-            .then(data => setGeneralInfo(data));
-    }, []);
+    const { generalInfo } = useContext(GeneralInfoContext);
 
     return (
-        generalInfoService.hasCorporateSponsors(generalInfo[0]) &&
+        generalInfoService.hasCorporateSponsors(generalInfo) &&
         <Box sx={{
             position: 'absolute',
             top: 0,
@@ -32,10 +27,10 @@ function SponsorPanel() {
                 <EmphasizedText>Our corporate sponsors:</EmphasizedText>
                 <Stack direction={'row'} gap={2}>
                     {
-                        generalInfo[0].corpPartners.map((partner, idx) => <Avatar key={idx} src={partner.logo}>{partner.name}</Avatar>)
+                        generalInfo.corpPartners.map((partner, idx) => <Avatar key={idx} src={partner.logo}>{partner.name}</Avatar>)
                     }
                 </Stack>
-                <EmphasizedText sx={{ fontWeight: 'bold', fontSize: 'small' }}>Total Funded {generalInfo[0].totalFunded} / {generalInfo[0].totalOpen} </EmphasizedText>
+                <EmphasizedText sx={{ fontWeight: 'bold', fontSize: 'small' }}>Total Funded {generalInfo.totalFunded} / {generalInfo.totalOpen} </EmphasizedText>
             </Stack>
         </Box >
     );
