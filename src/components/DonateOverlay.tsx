@@ -3,7 +3,10 @@ import { DonationContext } from "../context/DonationContext";
 import { Backdrop, Box, Theme } from "@mui/material";
 import DialogCloseButton from "../styles/DialogCloseButton";
 import { DonationHospitalContext } from "../context/SelectedHospitalContext";
-import { FUNDRAISUP_CONFIG, cleanupFundraiseUp } from "../config/fundraisupConfig";
+import {
+  FUNDRAISUP_CONFIG,
+  cleanupFundraiseUp,
+} from "../config/fundraisupConfig";
 import { GeneralInfoContext } from "../context/GeneralInfoContext";
 
 // Add FundraisUp type definition
@@ -11,7 +14,11 @@ declare global {
   interface Window {
     FundraiseUp?: {
       widget: {
-        show: (options: { elementId: string; designationId?: string; campaign?: string }) => void;
+        show: (options: {
+          elementId: string;
+          designationId?: string;
+          campaign?: string;
+        }) => void;
         hide: () => void;
         destroy?: () => void;
       };
@@ -23,7 +30,8 @@ declare global {
 
 export const DonateOverlay = () => {
   const { generalInfo } = useContext(GeneralInfoContext);
-  const { donateOverlayOpen, setDonateOverlayOpen } = useContext(DonationContext);
+  const { donateOverlayOpen, setDonateOverlayOpen } =
+    useContext(DonationContext);
   const { hospital, setHospital } = useContext(DonationHospitalContext);
 
   const handleClose = useCallback(() => {
@@ -38,22 +46,27 @@ export const DonateOverlay = () => {
   }, [setDonateOverlayOpen, setHospital]);
 
   const getWidgetConfig = () => {
-
     if (!hospital) {
       return {
         elementId: FUNDRAISUP_CONFIG.GENERAL_ELEMENT_ID,
-        campaign: generalInfo.fundraiseUpCampaignId
+        campaign: generalInfo.fundraiseUpCampaignId,
       };
     } else {
       return {
         elementId: FUNDRAISUP_CONFIG.HOSPITAL_ELEMENT_ID,
-        campaign: hospital.matchedRequest?.fundraiseUpCampaignId
-      }
+        campaign: hospital.matchedRequest?.fundraiseUpCampaignId,
+      };
     }
   };
 
   useEffect(() => {
     if (donateOverlayOpen) {
+      console.log("Effect triggered with: ", {
+        contextOrgId: generalInfo.fundraiseUpOrganizationId,
+        configOrgId: FUNDRAISUP_CONFIG.ORGANIZATION_ID,
+        generalInfo: generalInfo,
+      });
+
       // Initialize FundraiseUp queue
       window.FundraiseUpQ = window.FundraiseUpQ || [];
 
@@ -75,8 +88,19 @@ export const DonateOverlay = () => {
       const script = document.createElement("script");
       // FIXME: Use the GFLs organization ID; Not working with GFL's campaign ID
       // script.src = `https://cdn.fundraiseup.com/widget/${generalInfo.fundraiseUpOrganizationId}`;
+
+      /** 
+      This AWALQQAB is the organization-specific widget script ID provided by FundraiseUp.
+      It acts as the base engine for rendering all campaigns and donation forms,
+      so it should NOT be replaced with a campaign ID.
+      The actual organization-level configuration is applied separately
+      using the `configure({ token })` method — where we use the GFL's organization token(generalInfo.fundraiseUpOrganizationId).
+      */
+
       script.src = `https://cdn.fundraiseup.com/widget/${FUNDRAISUP_CONFIG.ORGANIZATION_ID}`;
       script.async = true;
+      script.setAttribute("as", "script");
+      script.setAttribute("importance", "high");
       script.onerror = () => {
         console.error("Failed to load FundraiseUp script");
         handleClose();
@@ -87,7 +111,7 @@ export const DonateOverlay = () => {
         cleanupFundraiseUp();
       };
     }
-  }, [donateOverlayOpen, hospital, handleClose]);
+  }, [donateOverlayOpen, hospital, generalInfo, handleClose]);
 
   return (
     donateOverlayOpen && (
@@ -118,13 +142,16 @@ export const DonateOverlay = () => {
           alignItems="center"
           gap={2}
           minHeight={50}
-          borderRadius= "15px"
+          borderRadius="15px"
           padding="20px"
           bgcolor={(theme: Theme) => theme.palette.background.paper}
         >
           {hospital && <h2>Donate to {hospital.name}</h2>}
           {/* FundraiseUp anchor tag */}
-          <a href={`#${getWidgetConfig().elementId}`} style={{ display: "none" }} />
+          <a
+            href={`#${getWidgetConfig().elementId}`}
+            style={{ display: "none" }}
+          />
         </Box>
       </Backdrop>
     )
