@@ -1,8 +1,9 @@
 import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { daysRemaining } from "../../utils/dateUtils";
-import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
-import { useContext } from "react";
+import { DonationHospitalContext, LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
+import { useContext, useEffect, useState } from "react";
+import { DonationContext } from "../../context/DonationContext";
 
 const DonationProgress = styled(LinearProgress)(({ theme }) => ({
   height: 30,
@@ -15,12 +16,33 @@ const DonationProgress = styled(LinearProgress)(({ theme }) => ({
 
 const DonationBarActive = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
-  const amountRequested = hospital?.matchedRequest?.requested ?? 0;
-  const amountRaised = hospital?.matchedFunded?.fundingCompleted ?? 0;
-  const percentage = (amountRaised / amountRequested) * 100;
+  const { setDonateOverlayOpen } = useContext(DonationContext);
+  const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
+  const { setHospital: setDonationHospital } = useContext(DonationHospitalContext);
+  const [percentage, setPercentage] = useState<number>(0);
+  const [amountRaisedText, setAmountRaisedText] = useState<string>("");
+
+  useEffect(() => {
+    if (hospital) {
+      const amountRequested = hospital.matchedRequest?.requested ?? 0;
+      const amountRaised = hospital.matchedFunded?.fundingCompleted ?? 0;
+      const percentage = (amountRaised / amountRequested) * 100;
+
+      setAmountRaisedText(`$${(amountRaised / 1000).toFixed(1)}k raised out of $${(
+        amountRequested / 1000).toFixed(1)}k (${percentage.toFixed(0)}%)`);
+      setPercentage(percentage);
+    }
+  }, [hospital]);
+
+  function handleDonate(): void {
+    setDonationHospital(hospital);
+    setDonateOverlayOpen(true);
+    setLearnMoreHospital(undefined);
+  }
+
   const daysLeft = daysRemaining(
     hospital?.matchedRequest?.fundingDeadline ??
-      new Date().toLocaleTimeString("en-US")
+    new Date().toLocaleTimeString("en-US")
   );
 
   return (
@@ -63,12 +85,9 @@ const DonationBarActive = () => {
               flex: 1,
             }}
           >
-            {`$${(amountRaised / 1000).toFixed(1)}k raised out of $${(
-              amountRequested / 1000
-            ).toFixed(1)}k (${percentage.toFixed(0)}%)`}
+            {amountRaisedText}
           </Typography>
         </Box>
-
         <DonationProgress variant="determinate" value={percentage} />
       </Box>
 
@@ -93,6 +112,7 @@ const DonationBarActive = () => {
           textTransform: "capitalize",
           padding: "0.5rem 2rem",
         }}
+        onClick={() => handleDonate()}
       >
         Donate
       </Button>

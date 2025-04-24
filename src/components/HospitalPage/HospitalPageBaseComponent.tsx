@@ -1,4 +1,7 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
+import { useContext } from "react";
+import { DonationHospitalContext, LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
+import { DonationContext } from "../../context/DonationContext";
 
 export interface HospitalPageBaseComponentProps {
   image?: string | JSX.Element;
@@ -13,16 +16,12 @@ export interface HospitalPageBaseComponentProps {
     shortParagraph?: any;
     button?: any;
   };
-  button?: {
-    text: string | undefined;
-  };
 }
-const HospitalPageBaseComponent = ({
+const HospitalPageBaseComponent: React.FC<HospitalPageBaseComponentProps> = ({
   image,
   header,
   paragraph,
   shortParagraph,
-  button = { text: "" },
   styles = {
     container: {},
     imageContainer: {},
@@ -31,6 +30,17 @@ const HospitalPageBaseComponent = ({
     paragraph: {},
   },
 }: HospitalPageBaseComponentProps) => {
+
+  const { hospital, setHospital } = useContext(LearnMoreHospitalContext);
+  const { setDonateOverlayOpen } = useContext(DonationContext);
+  const { setHospital: setDonationHospital } = useContext(DonationHospitalContext);
+
+  function handleDonate(): void {
+    setDonationHospital(hospital);
+    setDonateOverlayOpen(true);
+    setHospital(undefined);
+  }
+
   return (
     <Box sx={{ padding: 6, ...styles.container }}>
       <Grid container spacing={4} alignItems="center">
@@ -84,13 +94,16 @@ const HospitalPageBaseComponent = ({
         </Grid>
 
         {/* Donate Now Button */}
-        {button.text && (
+        {hospital?.status === 'active' &&
           <Grid item xs={12} md={12} sx={{ textAlign: "center" }}>
-            <Button variant="contained" sx={{ ...styles.button }}>
-              {button.text}
+            <Button 
+            variant="contained" 
+            sx={{ ...styles.button }}
+            onClick={() => handleDonate()}>
+              Donate now
             </Button>
           </Grid>
-        )}
+        }
       </Grid>
     </Box>
   );
