@@ -1,3 +1,10 @@
+/**
+ *  DonateOverlay.tsx
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
+
 import { useContext, useEffect, useCallback } from "react";
 import { DonationContext } from "../context/DonationContext";
 import { Backdrop, Box, Theme } from "@mui/material";
@@ -9,7 +16,6 @@ import {
 } from "../config/fundraisupConfig";
 import { GeneralInfoContext } from "../context/GeneralInfoContext";
 
-// Add FundraisUp type definition
 declare global {
   interface Window {
     FundraiseUp?: {
@@ -35,13 +41,8 @@ export const DonateOverlay = () => {
   const { hospital, setHospital } = useContext(DonationHospitalContext);
 
   const handleClose = useCallback(() => {
-    // First cleanup the widget
     cleanupFundraiseUp();
-
-    // Reset hospital selection
     setHospital(undefined);
-
-    // Close the overlay
     setDonateOverlayOpen(false);
   }, [setDonateOverlayOpen, setHospital]);
 
@@ -67,35 +68,20 @@ export const DonateOverlay = () => {
         generalInfo: generalInfo,
       });
 
-      // Initialize FundraiseUp queue
       window.FundraiseUpQ = window.FundraiseUpQ || [];
-
       const widgetConfig = getWidgetConfig();
 
-      // Add configuration to queue BEFORE loading script
       window.FundraiseUpQ.push(() => {
         window.FundraiseUp?.configure({
           token: generalInfo.fundraiseUpOrganizationId,
         });
       });
 
-      // Add show widget to queue
       window.FundraiseUpQ.push(() => {
         window.FundraiseUp?.widget.show(widgetConfig);
       });
 
-      // Now load the script
       const script = document.createElement("script");
-      // FIXME: Use the GFLs organization ID; Not working with GFL's campaign ID
-      // script.src = `https://cdn.fundraiseup.com/widget/${generalInfo.fundraiseUpOrganizationId}`;
-
-      /** 
-      This AWALQQAB is the organization-specific widget script ID provided by FundraiseUp.
-      It acts as the base engine for rendering all campaigns and donation forms,
-      so it should NOT be replaced with a campaign ID.
-      The actual organization-level configuration is applied separately
-      using the `configure({ token })` method — where we use the GFL's organization token(generalInfo.fundraiseUpOrganizationId).
-      */
 
       script.src = `https://cdn.fundraiseup.com/widget/${FUNDRAISUP_CONFIG.ORGANIZATION_ID}`;
       script.async = true;
@@ -147,7 +133,6 @@ export const DonateOverlay = () => {
           bgcolor={(theme: Theme) => theme.palette.background.paper}
         >
           {hospital && <h2>Donate to {hospital.name}</h2>}
-          {/* FundraiseUp anchor tag */}
           <a
             href={`#${getWidgetConfig().elementId}`}
             style={{ display: "none" }}
