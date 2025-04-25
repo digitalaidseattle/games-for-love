@@ -7,20 +7,27 @@ const HospitalPageStatsSection = () => {
   const [stats, setStats] = useState<any[]>([]);
 
   useEffect(() => {
-    if (hospital && hospital.matchedRequest) {
+    if (hospital && hospital.matchedRequest && hospital.matchedFunded) {
+
+      // From Frank 4/24
+      // 1. Equipment to be Installed =  Hospital_Fundraising[“#Equipment Shipped”] / Hospital_Request[“Equipment Requested”]
+      // 2. Kids Impacted = (Fundraising reached / Fundraising sought) * Hospital_Request[“Kids 3Y”] ) / Hospital_Request[“Kids 3Y”]
+      // 3. Play sessions = (Fundraising reached / Fundraising sought) * Hospital_Request[“Play 3Y”] ) / Hospital_Request[“Play 3Y”]
+
+      const percentage = hospital.matchedFunded.fundingCompleted /hospital.matchedRequest.requested;
       setStats([
         {
-          startNumber: hospital.matchedRequest.play3Y ?? 0,
+          startNumber: percentage * parseInt(hospital.matchedRequest.play3Y),
           endNumber: hospital.matchedRequest.play3Y ?? 0,
           label: "Play sessions in 3 years",
         },
         {
-          startNumber: hospital.matchedRequest.equipReq ?? 0,
+          startNumber: hospital.matchedFunded.equipmentShipped ?? 0,
           endNumber: hospital.matchedRequest.equipReq ?? 0,
           label: "Equipment to be installed",
         },
         {
-          startNumber: hospital.matchedRequest.kids3Y ?? 0,
+          startNumber: percentage * hospital.matchedRequest.kids3Y,
           endNumber: hospital.matchedRequest.kids3Y ?? 0,
           label: "Kids impacted in 3 years",
         },
@@ -51,7 +58,7 @@ const HospitalPageStatsSection = () => {
               }}
             >
               <Typography variant="h5" sx={{ color: "white" }}>
-                {stat.startNumber}{" "}
+                {stat.startNumber.toFixed(0)}
                 <Typography
                   variant="body1"
                   sx={{ color: "#F3C941", fontStyle: "italic" }}
