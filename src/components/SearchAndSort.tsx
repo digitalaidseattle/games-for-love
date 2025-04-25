@@ -31,6 +31,7 @@ export const SearchAndSort = () => {
   const { setDonateOverlayOpen } = useContext(DonationContext);
 
   const handleDonateClick = () => {
+    window.history.replaceState({}, "", window.location.pathname);
     setDonateOverlayOpen(true);
   };
 
