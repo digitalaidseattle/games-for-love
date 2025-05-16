@@ -59,7 +59,21 @@ const HospitalPageContent = () => {
             fontSize: "2rem",
             fontWeight: "bold",
           },
-          paragraph: { color: "#777", textAlign: "left" },
+          paragraph: {
+            color: "#777",
+            textAlign: "left",
+            paddingBottom: "1rem",
+            paddingTop: "1rem",
+          },
+          button: {
+            backgroundColor: "#4A24E7",
+            color: "#fff",
+            padding: "10px 20px",
+            borderRadius: "5px",
+            width: "50%",
+            cursor: "pointer",
+            textTransform: "none",
+          },
         }}
       />
     </div>

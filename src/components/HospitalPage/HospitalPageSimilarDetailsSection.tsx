@@ -1,7 +1,24 @@
-import { Box, Grid, Typography, Button } from "@mui/material";
+/**
+ *  HospitalPageSimilarDetailsSection.tsx
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
+import { Box, Stack, Typography } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import { HospitalsContext } from "../../context/HospitalContext";
+import { Hospital } from "../../models/hospital";
 import HospitalPageInfoCard from "./HospitalPageInfoCard";
 
 const HospitalPageSimilarDetailsSection = () => {
+
+  const { originals } = useContext(HospitalsContext);
+  const [activeHospitals, setActiveHospitals] = useState<Hospital[]>([]);
+
+  useEffect(() => {
+    setActiveHospitals(originals.filter(hosp => hosp.status = 'Active').slice(0, 3))
+  }, [originals]);
+
   return (
     <Box sx={{ padding: 6 }}>
       {/* Header */}
@@ -10,36 +27,17 @@ const HospitalPageSimilarDetailsSection = () => {
       </Typography>
 
       {/* Cards */}
-      <Grid
-        container
-        spacing={4}
-        style={{
-          display: "flex",
-          gap: "16px",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          padding: "16px",
-        }}
-      >
-        <HospitalPageInfoCard
-          image="https://via.placeholder.com/345x180"
-          title="Card Title 1"
-          description="This is the description for Card 1. It provides more details about the content."
-        />
-        <HospitalPageInfoCard
-          image="https://via.placeholder.com/345x180"
-          title="Card Title 2"
-          description="This is the description for Card 2. It provides additional information and context."
-        />
-        <HospitalPageInfoCard
-          image="https://via.placeholder.com/345x180"
-          title="Card Title 3"
-          description="This is the description for Card 3. It showcases more details and insights."
-        />
-      </Grid>
+      <Stack direction={"row"} justifyContent="space-evenly" spacing={8} padding={4}>
+        {activeHospitals.map(hosp =>
+          <HospitalPageInfoCard
+            key={hosp.id}
+            hospital={hosp}
+          />
+        )}
+      </Stack>
 
-      {/* See More Button */}
-      <Box sx={{ textAlign: "center", marginTop: 4 }}>
+      {/* See More Button - removing until we get instructions on behavior */}
+      {/* <Box sx={{ textAlign: "center", marginTop: 4 }}>
         <Button
           variant="contained"
           sx={{
@@ -51,7 +49,7 @@ const HospitalPageSimilarDetailsSection = () => {
         >
           See More
         </Button>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
