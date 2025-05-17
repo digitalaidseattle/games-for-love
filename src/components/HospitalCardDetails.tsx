@@ -29,22 +29,17 @@ import { hospitalService } from "../services/hospital/hospitalService";
 import ActionButton from "../styles/ActionButton";
 import EmphasizedText from "../styles/EmphasizedText";
 
-export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
-  hospital,
-}) => {
-  const { hospital: selectedHospital, setHospital: setSelectedHospital } =
-    useContext(SelectedHospitalContext);
-  const { setHospital: setDonationHospital } = useContext(
-    DonationHospitalContext
-  );
-  const { setHospital: setLearnMoreHospital } = useContext(
-    LearnMoreHospitalContext
-  );
+export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
+  const { hospital: selectedHospital, setHospital: setSelectedHospital } = useContext(SelectedHospitalContext);
+  const { setHospital: setDonationHospital } = useContext(DonationHospitalContext);
+  const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
 
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [partnerName, setPartnerName] = useState<string>();
+  const [status, setStatus] = useState<string>();
+  const [statusColor, setStatusColor] = useState<string>();
 
   const theme = useTheme();
 
@@ -64,13 +59,17 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
             ? theme.palette.hospital.closed
             : theme.palette.hospital.open
       );
-
+      setStatusColor(
+        hospital.status === "past"
+          ? theme.palette.hospital.closed
+          : theme.palette.hospital.open,
+      )
+      setStatus(hospital.status);
     }
   }, [hospital, selectedHospital]);
 
   useEffect(() => {
     setIsOpen(hospitalService.isHospitalOpen(hospital));
-
     const corporatePartner = hospitalService.getCorporatePartner(hospital);
     setPartnerName(corporatePartner ? corporatePartner.name : undefined);
   }, [hospital]);
@@ -365,14 +364,9 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
             ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)} raised
             of ${Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
             <EmphasizedText
-              sx={{
-                color: (theme: Theme) =>
-                  hospital?.status === "past"
-                    ? theme.palette.hospital.closed
-                    : theme.palette.hospital.open,
-              }}
+              sx={{ color: statusColor }}
             >
-              {hospital?.status}
+              {status}
             </EmphasizedText>
           </Typography>
           <Typography variant="body2" color={theme.palette.text.secondary}>
