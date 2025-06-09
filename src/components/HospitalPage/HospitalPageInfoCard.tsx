@@ -37,7 +37,7 @@ const HospitalPageInfoCard = ({ hospital }: Props) => {
   const fundingGoal = matchedRequest?.requested || 0;
   const kidsImpacted = matchedRequest?.kids3Y || 0;
   const fundingNote = matchedRequest?.titleRequestNarrative || "";
-  const partnerName = matchedRequest?.corpPartners?.[0]?.name || "Partner Name";
+  const partnerName = matchedRequest?.corpPartners?.[0]?.name;
   const location = `${hospital.city}, ${hospital.state}`;
   const imageUrl = hospital.hospitalPictures?.[0] || "";
 
@@ -91,18 +91,20 @@ const HospitalPageInfoCard = ({ hospital }: Props) => {
         </Box>
 
         {/* Matched Info */}
-        <Box
-          sx={{
-            backgroundColor: "#FFF9D9",
-            py: 0.5,
-            textAlign: "center",
-            fontSize: 14,
-            fontWeight: 500,
-            color: "#555",
-          }}
-        >
-          Matched by {partnerName}
-        </Box>
+        {partnerName && (
+          <Box
+            sx={{
+              backgroundColor: "#FFF9D9",
+              py: 0.5,
+              textAlign: "center",
+              fontSize: 14,
+              fontWeight: 500,
+              color: "#555",
+            }}
+          >
+            Matched by {partnerName}
+          </Box>
+        )}
 
         {/* Content */}
         <CardContent sx={{ pb: 1.5 }}>

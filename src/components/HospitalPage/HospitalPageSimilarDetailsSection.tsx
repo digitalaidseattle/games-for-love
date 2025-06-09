@@ -35,7 +35,7 @@ const HospitalPageSimilarDetailsSection = () => {
   useEffect(() => {
     // Filter out the current hospital and sort others by distance
     const similarHospitals = originals
-      .filter((h) => h.id !== hospital?.id) // Excluding current
+      .filter((h) => h.status === "Active" && h.id !== hospital?.id) // Excluding current
       .map((h) => ({
         ...h,
         distanceSq: getEuclideanDistanceNoRoot(
