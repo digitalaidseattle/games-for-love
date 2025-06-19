@@ -26,7 +26,7 @@ const HospitalPageSimilarDetailsSection = () => {
     lat2: number,
     lon2: number
   ): number => {
-    return Math.pow(lat1 - lat2, 2) + Math.pow(lon1 - lon2, 2);
+    return (lat1 - lat2) * (lat1 - lat2) + (lon1 - lon2) * (lon1 - lon2);
   };
 
   const currentLat = hospital?.latitude;
