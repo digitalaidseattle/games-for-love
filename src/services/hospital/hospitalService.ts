@@ -9,14 +9,17 @@ import { Hospital } from "../../models/hospital";
 import { HospitalFunded } from "../../models/hospitalFunded";
 import { HospitalInfo } from "../../models/hospitalInfo";
 import { HospitalRequest } from "../../models/hospitalRequest";
-import { FilterStatus, FilterType, sortDirection } from "../../types/fillterType";
+import {
+  FilterStatus,
+  FilterType,
+  sortDirection,
+} from "../../types/fillterType";
 import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 import { CorporatePartner } from "../../models/corporatePartner";
 
 class HospitalService {
-
   transform(
     hi: HospitalInfo,
     matchedRequest: HospitalRequest,
@@ -79,7 +82,9 @@ class HospitalService {
         return true;
       }
       if (filter.location.length === 0) {
-        return filter.status.includes(hospital.status.toLowerCase() as FilterStatus);
+        return filter.status.includes(
+          hospital.status.toLowerCase() as FilterStatus
+        );
       }
       const lowerLocations = filter.location.map((l) => l.toLowerCase());
       return (
@@ -106,7 +111,7 @@ class HospitalService {
     if (hospital.matchedRequest && hospital.matchedFunded) {
       hospital.matchedRequest.requested
         ? (hospital.matchedFunded.fundingCompleted || 0) /
-        hospital.matchedRequest.requested
+          hospital.matchedRequest.requested
         : 0;
     }
     return 0;
@@ -132,8 +137,10 @@ class HospitalService {
       .toLowerCase()
       .split(" ")
       .filter((t) => t);
-    return hospitals.filter((h: Hospital) =>
-      terms.length === 0 || terms.find((term) => h.searchTerm.includes(term)) !== undefined
+    return hospitals.filter(
+      (h: Hospital) =>
+        terms.length === 0 ||
+        terms.find((term) => h.searchTerm.includes(term)) !== undefined
     );
   };
 
@@ -200,7 +207,7 @@ class HospitalService {
 
   isValid = (hospital: Hospital): boolean => {
     return hospital.latitude !== undefined && hospital.longitude !== undefined;
-  }
+  };
 
   getCorporatePartner = (hospital: Hospital): CorporatePartner | undefined => {
     if (hospital) {
@@ -213,7 +220,20 @@ class HospitalService {
       }
     }
     return undefined;
-  }
+  };
+
+  // Below is the euclidean formula to calculate distance between two points
+  // We are omitting the square root to keep the function simple
+  // Since we care about relative distances for sorting purposes
+  // if a<b  then √a < √b so sorting by squared distance or true distance gives the same result
+  getEuclideanDistanceNoRoot = (
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ): number => {
+    return (lat1 - lat2) * (lat1 - lat2) + (lon1 - lon2) * (lon1 - lon2);
+  };
 }
 
 const hospitalService = new HospitalService();
