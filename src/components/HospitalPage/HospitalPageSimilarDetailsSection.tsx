@@ -9,14 +9,36 @@ import { useContext, useEffect, useState } from "react";
 import { HospitalsContext } from "../../context/HospitalContext";
 import { Hospital } from "../../models/hospital";
 import HospitalPageInfoCard from "./HospitalPageInfoCard";
+import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
+import { hospitalService } from "../../services/hospital/hospitalService";
 
 const HospitalPageSimilarDetailsSection = () => {
-
   const { originals } = useContext(HospitalsContext);
+  const { hospital } = useContext(LearnMoreHospitalContext);
   const [activeHospitals, setActiveHospitals] = useState<Hospital[]>([]);
 
+  const currentLat = hospital?.latitude;
+  const currentLon = hospital?.longitude;
+
   useEffect(() => {
-    setActiveHospitals(originals.filter(hosp => hosp.status = 'Active').slice(0, 3))
+    // Filter out the current hospital and sort others by distance
+    const similarHospitals = originals
+      .filter(
+        (h) => h.status.toLowerCase() === "active" && h.id !== hospital?.id
+      ) // Excluding current
+      .map((h) => ({
+        ...h,
+        distanceSq: hospitalService.getEuclideanDistanceNoRoot(
+          currentLat ?? 0,
+          currentLon ?? 0,
+          h.latitude ?? 0,
+          h.longitude ?? 0
+        ),
+      }))
+      .sort((a, b) => a.distanceSq - b.distanceSq) // Closest first
+      .slice(0, 3); // Pick top 3
+
+    setActiveHospitals(similarHospitals);
   }, [originals]);
 
   return (
@@ -27,13 +49,18 @@ const HospitalPageSimilarDetailsSection = () => {
       </Typography>
 
       {/* Cards */}
-      <Stack direction={"row"} justifyContent="space-evenly" spacing={8} padding={4}>
-        {activeHospitals.map(hosp =>
-          <HospitalPageInfoCard
-            key={hosp.id}
-            hospital={hosp}
-          />
-        )}
+      <Stack
+        direction={"row"}
+        justifyContent="space-evenly"
+        spacing={2}
+        padding={4}
+        sx={{
+          width: "calc(100% - 32px)",
+        }}
+      >
+        {activeHospitals.map((hosp) => (
+          <HospitalPageInfoCard key={hosp.id} hospital={hosp} />
+        ))}
       </Stack>
 
       {/* See More Button - removing until we get instructions on behavior */}
