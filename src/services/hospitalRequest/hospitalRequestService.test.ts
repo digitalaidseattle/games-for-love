@@ -18,7 +18,7 @@ describe("HospitalRequestService tests", () => {
           "Opportunities/Requests ID": "REQ12345",
           "Hospital Name (LInked)": "May's Hospital",
           "Request Narrative": "Request for new equipment",
-          "# Equipment Requested (TBD if we show single brands + extras)": 10,
+          "Equipment Requested": 10,
           "$ Requested": 5000,
           "Kids 3Y": 300,
           "Play 3Y": 200,
@@ -54,6 +54,7 @@ describe("HospitalRequestService tests", () => {
         oppReqId: "REQ12345",
         name: "May's Hospital",
         requestNarrative: "Request for new equipment",
+        active: true,
         equipReq: 10,
         requested: 5000,
         kids3Y: 300,
@@ -64,14 +65,21 @@ describe("HospitalRequestService tests", () => {
         corpPartners: [{
           name: "Partner 1",
           logo: "logo1.png",
-          type: "Type 1"
+          type: "Type 1",
+          description: undefined,
+          match: undefined
         },
         {
           name: "Partner 2",
           logo: "logo2.png",
-          type: "Type 2"
+          type: "Type 2",
+          description: undefined,
+          match: undefined
         }],
         fundingDeadline: new Date("2024/12/31"),
+        fundraiseUpCampaignCode: undefined,
+        fundraiseUpCampaignId: undefined,
+        titleRequestNarrative: undefined
       },
     ]);
   });

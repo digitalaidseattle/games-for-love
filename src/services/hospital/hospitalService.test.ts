@@ -30,6 +30,7 @@ describe("HospitalService tests", () => {
                 longitude: 1,
                 latitude: 1,
                 hospitalPictures: ["pic1.com"],
+                fundraiseUpCampaignId: "FUNTTHDCELT",
             } as HospitalInfo,
         ];
         const getHospitalInfoSpy = vi
@@ -68,6 +69,7 @@ describe("HospitalService tests", () => {
                 matchedFunded: undefined,
                 fundingLevel: 0,
                 searchTerm: "wa.seattle.us.may hospital",
+                fundraiseUpCampaignId: "FUNTTHDCELT"
             },
         ]);
     });
