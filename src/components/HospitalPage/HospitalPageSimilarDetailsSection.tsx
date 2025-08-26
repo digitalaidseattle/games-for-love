@@ -10,24 +10,12 @@ import { HospitalsContext } from "../../context/HospitalContext";
 import { Hospital } from "../../models/hospital";
 import HospitalPageInfoCard from "./HospitalPageInfoCard";
 import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
+import { hospitalService } from "../../services/hospital/hospitalService";
 
 const HospitalPageSimilarDetailsSection = () => {
   const { originals } = useContext(HospitalsContext);
   const { hospital } = useContext(LearnMoreHospitalContext);
   const [activeHospitals, setActiveHospitals] = useState<Hospital[]>([]);
-
-  // Below is the euclidean formula to calculate distance between two points
-  // We are omitting the square root to keep the function simple
-  // Since we care about relative distances for sorting purposes
-  // if a<b  then √a < √b so sorting by squared distance or true distance gives the same result
-  const getEuclideanDistanceNoRoot = (
-    lat1: number,
-    lon1: number,
-    lat2: number,
-    lon2: number
-  ): number => {
-    return Math.pow(lat1 - lat2, 2) + Math.pow(lon1 - lon2, 2);
-  };
 
   const currentLat = hospital?.latitude;
   const currentLon = hospital?.longitude;
@@ -35,10 +23,12 @@ const HospitalPageSimilarDetailsSection = () => {
   useEffect(() => {
     // Filter out the current hospital and sort others by distance
     const similarHospitals = originals
-      .filter((h) => h.id !== hospital?.id) // Excluding current
+      .filter(
+        (h) => h.status.toLowerCase() === "active" && h.id !== hospital?.id
+      ) // Excluding current
       .map((h) => ({
         ...h,
-        distanceSq: getEuclideanDistanceNoRoot(
+        distanceSq: hospitalService.getEuclideanDistanceNoRoot(
           currentLat ?? 0,
           currentLon ?? 0,
           h.latitude ?? 0,
