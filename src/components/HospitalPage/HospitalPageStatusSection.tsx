@@ -10,8 +10,6 @@ import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext"
 import { CorporatePartner } from "../../models/corporatePartner";
 import { Hospital } from "../../models/hospital";
 import DonationBar from "./DonationBar";
-import { TEST_PARTNER } from "../../services/generalInfo/generalInfoService";
-
 
 const BrandPartners: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
   const [corporatePartners, setCorporatePartners] = useState<CorporatePartner[]>([]);
@@ -19,8 +17,8 @@ const BrandPartners: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
   useEffect(() => {
     if (hospital) {
       if (hospital.matchedRequest && hospital.matchedRequest.corpPartners) {
-        // setCorporatePartners(hospital.matchedRequest.corpPartners);
-        setCorporatePartners(TEST_PARTNER)
+        setCorporatePartners(hospital.matchedRequest.corpPartners);
+        // setCorporatePartners(TEST_PARTNER)
       }
     }
   }, [hospital]);
