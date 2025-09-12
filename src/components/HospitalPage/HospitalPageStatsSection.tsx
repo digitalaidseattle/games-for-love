@@ -14,42 +14,45 @@ const HospitalPageStatsSection = () => {
       // 2. Kids Impacted = (Fundraising reached / Fundraising sought) * Hospital_Request[“Kids 3Y”] ) / Hospital_Request[“Kids 3Y”]
       // 3. Play sessions = (Fundraising reached / Fundraising sought) * Hospital_Request[“Play 3Y”] ) / Hospital_Request[“Play 3Y”]
 
-      const percentage = hospital.matchedFunded.fundingCompleted /hospital.matchedRequest.requested;
+      const percentage = hospital.matchedFunded.fundingCompleted / hospital.matchedRequest.requested;
       setStats([
         {
           startNumber: percentage * parseInt(hospital.matchedRequest.play3Y),
           endNumber: hospital.matchedRequest.play3Y ?? 0,
-          label: "Play sessions in 3 years",
+          label: "play sessions in 3 years",
+          background: "linear-gradient(135deg,  #FF6B6B,  #7B68EE)"
         },
         {
           startNumber: hospital.matchedFunded.equipmentShipped ?? 0,
           endNumber: hospital.matchedRequest.equipReq ?? 0,
-          label: "Equipment to be installed",
+          label: "equipment installed",
+          background: "linear-gradient(135deg,  #2196F3,  #50E3C2)"
+
         },
         {
           startNumber: percentage * hospital.matchedRequest.kids3Y,
           endNumber: hospital.matchedRequest.kids3Y ?? 0,
-          label: "Kids impacted in 3 years",
+          label: "kids impacted in 3 years",
+          background: "linear-gradient(135deg,  #7ED321,  #F5D76E)"
         },
       ]);
     }
   }, [hospital]);
 
-  return (stats.length > 0 && 
+  return (stats.length > 0 &&
     <Box sx={{
-      border: "1px solid black",
-      backgroundColor: "#E9605A",
+      background: "linear-gradient(180deg,  #FFFFFF,  #D8ECFF)"
     }}>
       <Stack direction={"row"} justifyContent="space-evenly" padding={4}>
         {stats.map((stat, index) => (
           <Box key={index} sx={{ textAlign: "center" }}>
             {/* Circle with the number */}
-            <Box
+            <Stack direction={'column'}
               sx={{
-                width: 120,
+                width: 200,
                 height: 120,
-                borderRadius: "50%",
-                backgroundColor: "#4A24E7",
+                borderRadius: "5px",
+                background: stat.background,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -57,29 +60,25 @@ const HospitalPageStatsSection = () => {
                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <Typography variant="h5" sx={{ color: "white" }}>
+              <Typography variant="h4"
+                sx={{ color: "white" }}>
                 {stat.startNumber.toFixed(0)}
-                <Typography
-                  variant="body1"
-                  sx={{ color: "#F3C941", fontStyle: "italic" }}
-                >
-                  of {stat.endNumber}
-                </Typography>
               </Typography>
-            </Box>
-
-            {/* Label below the circle */}
-            <Typography
-              variant="body1"
-              color="textSecondary"
-              sx={{ marginTop: 2 }}
-            >
-              {stat.label}
-            </Typography>
+              <Typography variant="body1"
+                sx={{ color: "white", fontStyle: "italic" }}
+              >
+                of {stat.endNumber}
+              </Typography>
+              <Typography variant="body1"
+                sx={{ color: "white" }}
+              >
+                {stat.label}
+              </Typography>
+            </Stack>
           </Box>
         ))}
-      </Stack>
-    </Box>
+      </Stack >
+    </Box >
   );
 };
 
