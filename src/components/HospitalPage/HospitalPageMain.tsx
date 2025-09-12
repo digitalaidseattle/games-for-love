@@ -25,7 +25,7 @@ const HospitalPageMain = () => {
     }
   }, [active])
   return (
-    <Stack sx={{ alignItems: "center" }}>
+    <Stack sx={{ alignItems: "center", gap: 2 }}>
       {/* Name of the hospital */}
       <Stack>
         <Typography variant="h4">
