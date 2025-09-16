@@ -23,7 +23,8 @@ const DonationBar: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
 
   useEffect(() => {
     if (hospital) {
-      setActive(hospital.status !== 'Past');
+      console.log(hospital)
+      setActive(hospital.status.toLowerCase() !== 'past');
     }
   }, [hospital]);
 
