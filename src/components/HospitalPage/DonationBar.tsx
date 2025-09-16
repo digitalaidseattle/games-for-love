@@ -65,8 +65,8 @@ const DonationBar: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
             background: "linear-gradient(105deg,  #7ED321,  #50E3C2)"
           }}>
           <EmojiEventsOutlined />
-          <Typography marginTop={'1rem'} fontSize={20} fontWeight={600}>Campaign completed successfully!</Typography>
-          <Typography fontSize={14}>Thank you to all the donors who made this possible</Typography>
+          <Typography textAlign="center" marginTop={'1rem'} fontSize={20} fontWeight={600}>Campaign completed successfully!</Typography>
+          <Typography textAlign="center" fontSize={14}>Thank you to all the donors who made this possible</Typography>
         </Stack>
       }
       <Stack
