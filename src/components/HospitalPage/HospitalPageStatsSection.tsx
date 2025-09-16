@@ -53,11 +53,12 @@ const HospitalPageStatsSection = () => {
 			>
 				<Box
 					sx={{
+						display: { xs: "none", md: "inline-block" },
 						position: "relative",
-						top: "-3em",
-						right: "-62em",
-						transform: "rotate(-12deg)",
+						top: { md: "-6em", lg: "-4em" },
+						right: { md: "-33em", lg: "-56em", xl: "-62em" },
 						width: "24em",
+						transform: "rotate(-12deg)",
 					}}
 				>
 					<img
@@ -65,10 +66,10 @@ const HospitalPageStatsSection = () => {
 						alt="decorative arrow pointing to impact statistics"
 						style={{
 							width: "5.5em",
-							transform: "rotate(12deg)",
 							position: "absolute",
 							left: "-5em",
 							top: "4em",
+							transform: "rotate(12deg)",
 						}}
 					/>
 					<Typography
@@ -85,30 +86,33 @@ const HospitalPageStatsSection = () => {
 				</Box>
 				<Box
 					sx={{
-						height: "30em",
 						display: "flex",
+						height: { xs: "50em", lg: "30em" },
 						alignItems: "center",
 					}}
 				>
 					<Stack
-						direction={"row"}
+						direction={{ xs: "column", lg: "row" }}
 						justifyContent="space-evenly"
-						padding={9}
-						sx={{ width: "100%" }}
+						sx={{
+							width: "100%",
+							height: "100%",
+							padding: { xs: "1em", lg: "7em 3em" },
+						}}
 					>
 						{stats.map((stat, index) => (
 							<Box key={index} sx={{ textAlign: "center" }}>
 								<Stack
 									direction={"column"}
 									sx={{
-										width: "24em",
-										height: "13.5em",
-										borderRadius: "1rem",
-										background: stat.background,
 										display: "flex",
 										justifyContent: "center",
 										alignItems: "center",
+										width: "24em",
+										height: "13.5em",
 										margin: "0 auto",
+										borderRadius: "1rem",
+										background: stat.background,
 										boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
 									}}
 								>
