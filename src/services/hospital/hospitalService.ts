@@ -19,6 +19,64 @@ import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 import { CorporatePartner } from "../../models/corporatePartner";
 
+export const TEST_DONATION_HOSPTIAL = {
+  address: "149 Thomas Dr",
+  city: "Gadsden",
+  country: "USA",
+  description: "Eagle Rock Boys’ Home is a residential facility providing care and support to boys facing behavioral, emotional, or family challenges. Th…",
+  fundingLevel: 0,
+  fundraiseUpCampaignId: "FUNTTHDCELT",
+  hospitalPictures: ["https://v5.airtableusercontent.com/v3/u/45/45/1757…Qxatv/yHdcua6KxO_KaILbkozW7yMdBKwaS_AcKIZxJjN-71A", "https://v5.airtableusercontent.com/v3/u/45/45/1757…7JnJF/gjaPUR-40rh9f-bPRMH9dEZ2aOEIgV0HzDErukRptBg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…7JnJF/gjaPUR-40rh9f-bPRMH9dEZ2aOEIgV0HzDErukRptBg"],
+  id: "recA4OgEi7CeYSNjf-test",
+  latitude: 33.99793855437296,
+  longitude: -86.0695,
+  matchedFunded: {
+    corporateFunding: 'undefined',
+    equipmentShipped: 1,
+    fundedPictures: ["https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…nCzRQ/6BCifc8ftqMR99OLU003gMIQS7SXNrgcSMaa0az7ZIw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…XJwWI/LsLCIGHOcj_AKx6pxvf7e7th1uqgB1B4zZxk0-UaUEw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg"],
+    funders: "224",
+    fundingCompleted: 708.53,
+    fundingDeadline: undefined,
+    hospital: "Eagle Rock Boy's Home",
+    hospitalRequestId: "recplJAZsy4Bnbp4W",
+    id: "rec94ZrE1t7hs2NS4",
+    impactPictures: ["https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…nCzRQ/6BCifc8ftqMR99OLU003gMIQS7SXNrgcSMaa0az7ZIw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…XJwWI/LsLCIGHOcj_AKx6pxvf7e7th1uqgB1B4zZxk0-UaUEw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg"],
+    impactText: "At Eagle Rock Boys' Home, the gaming systems you’ve provided will impact over 50 boys annually, giving them a much-needed outlet fo…",
+    impactTitle: "Gaming Brings Fun and Support to Eagle Rock Boys",
+    orderID: "undefined",
+    shortThankYou: "Thank you for bringing joy and connection to Eagle Rock boys!",
+    thankYouNote: "Thanks to your incredible generosity, the boys at Eagle Rock now have access to gaming consoles that bring joy and connection into thei…",
+    thankYouNoteTitle: "Thank You from Eagle Rock Boys' Home",
+  },
+  matchedRequest: {
+    active: true,
+    collected: 'undefined',
+    corpPartners: [],
+    equipReq: "1",
+    funders: 'funders',
+    fundingDeadline: new Date(),
+    fundraiseUpCampaignCode: undefined,
+    fundraiseUpCampaignId: 'balh',
+    id: "recplJAZsy4Bnbp4W",
+    kids3Y: 3000,
+    name: "recA4OgEi7CeYSNjf",
+    oppReqId: "Eagle Rock Boy's Home_12/31/2023",
+    play3Y: '5000',
+    recordId: "recplJAZsy4Bnbp4W",
+    requestNarrative: "At Eagle Rock Boys' Home, we provide a safe and supportive environment for boys facing emotional and behavioral challenges. Introducin…",
+    requestPictures: [],
+    requested: 1500,
+    titleRequestNarrative: "Gaming Gear to Support Boys at Eagle Rock"
+  },
+  name: "TEST, TEST, TEST, Eagle Rock Boy's Home",
+  searchTerm: "al.gadsden.usa.eagle rock boy's home",
+  state: "AL",
+  status: "actite",
+  type: "Support Facility",
+  year: 2025,
+  zip: "35904"
+}
+
 class HospitalService {
   transform(
     hi: HospitalInfo,
@@ -111,7 +169,7 @@ class HospitalService {
     if (hospital.matchedRequest && hospital.matchedFunded) {
       hospital.matchedRequest.requested
         ? (hospital.matchedFunded.fundingCompleted || 0) /
-          hospital.matchedRequest.requested
+        hospital.matchedRequest.requested
         : 0;
     }
     return 0;
