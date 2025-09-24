@@ -1,86 +1,157 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
+import arrow from "../../assets/handrawn-arrow.png";
 
 const HospitalPageStatsSection = () => {
-  const { hospital } = useContext(LearnMoreHospitalContext);
-  const [stats, setStats] = useState<any[]>([]);
+	const { hospital } = useContext(LearnMoreHospitalContext);
+	const [stats, setStats] = useState<any[]>([]);
+	const IMPACT_MESSAGE = "This is the impact people like you have made";
 
-  useEffect(() => {
-    if (hospital && hospital.matchedRequest && hospital.matchedFunded) {
+	useEffect(() => {
+		if (hospital && hospital.matchedRequest && hospital.matchedFunded) {
+			// From Frank 4/24
+			// 1. Equipment to be Installed =  Hospital_Fundraising[“#Equipment Shipped”] / Hospital_Request[“Equipment Requested”]
+			// 2. Kids Impacted = (Fundraising reached / Fundraising sought) * Hospital_Request[“Kids 3Y”] ) / Hospital_Request[“Kids 3Y”]
+			// 3. Play sessions = (Fundraising reached / Fundraising sought) * Hospital_Request[“Play 3Y”] ) / Hospital_Request[“Play 3Y”]
 
-      // From Frank 4/24
-      // 1. Equipment to be Installed =  Hospital_Fundraising[“#Equipment Shipped”] / Hospital_Request[“Equipment Requested”]
-      // 2. Kids Impacted = (Fundraising reached / Fundraising sought) * Hospital_Request[“Kids 3Y”] ) / Hospital_Request[“Kids 3Y”]
-      // 3. Play sessions = (Fundraising reached / Fundraising sought) * Hospital_Request[“Play 3Y”] ) / Hospital_Request[“Play 3Y”]
+			const percentage =
+				hospital.matchedFunded.fundingCompleted /
+				hospital.matchedRequest.requested;
+			setStats([
+				{
+					startNumber: percentage * parseInt(hospital.matchedRequest.play3Y),
+					endNumber: hospital.matchedRequest.play3Y ?? 0,
+					label: "play sessions in 3 years",
+					background:
+						"linear-gradient(142.35deg, #FF6B6B -16.18%, #7B68EE 132.26%)",
+				},
+				{
+					startNumber: hospital.matchedFunded.equipmentShipped ?? 0,
+					endNumber: hospital.matchedRequest.equipReq ?? 0,
+					label: "equipment installed",
+					background:
+						"linear-gradient(141.64deg, #2196F3 -6.39%, #50E3C2 96.87%)",
+				},
+				{
+					startNumber: percentage * hospital.matchedRequest.kids3Y,
+					endNumber: hospital.matchedRequest.kids3Y ?? 0,
+					label: "kids impacted in 3 years",
+					background:
+						"linear-gradient(156.77deg, #7ED321 -11.18%, #F5D76E 111.48%)",
+				},
+			]);
+		}
+	}, [hospital]);
 
-      const percentage = hospital.matchedFunded.fundingCompleted /hospital.matchedRequest.requested;
-      setStats([
-        {
-          startNumber: percentage * parseInt(hospital.matchedRequest.play3Y),
-          endNumber: hospital.matchedRequest.play3Y ?? 0,
-          label: "Play sessions in 3 years",
-        },
-        {
-          startNumber: hospital.matchedFunded.equipmentShipped ?? 0,
-          endNumber: hospital.matchedRequest.equipReq ?? 0,
-          label: "Equipment to be installed",
-        },
-        {
-          startNumber: percentage * hospital.matchedRequest.kids3Y,
-          endNumber: hospital.matchedRequest.kids3Y ?? 0,
-          label: "Kids impacted in 3 years",
-        },
-      ]);
-    }
-  }, [hospital]);
-
-  return (stats.length > 0 && 
-    <Box sx={{
-      border: "1px solid black",
-      backgroundColor: "#E9605A",
-    }}>
-      <Stack direction={"row"} justifyContent="space-evenly" padding={4}>
-        {stats.map((stat, index) => (
-          <Box key={index} sx={{ textAlign: "center" }}>
-            {/* Circle with the number */}
-            <Box
-              sx={{
-                width: 120,
-                height: 120,
-                borderRadius: "50%",
-                backgroundColor: "#4A24E7",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "0 auto",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <Typography variant="h5" sx={{ color: "white" }}>
-                {stat.startNumber.toFixed(0)}
-                <Typography
-                  variant="body1"
-                  sx={{ color: "#F3C941", fontStyle: "italic" }}
-                >
-                  of {stat.endNumber}
-                </Typography>
-              </Typography>
-            </Box>
-
-            {/* Label below the circle */}
-            <Typography
-              variant="body1"
-              color="textSecondary"
-              sx={{ marginTop: 2 }}
-            >
-              {stat.label}
-            </Typography>
-          </Box>
-        ))}
-      </Stack>
-    </Box>
-  );
+	return (
+		stats.length > 0 && (
+			<Box
+				sx={{
+					background: "linear-gradient(180deg, #FFFFFF 0%, #D8ECFF 100%)",
+				}}
+			>
+				<Box
+					sx={{
+						display: { xs: "none", md: "inline-block" },
+						position: "relative",
+						top: { md: "-6em", lg: "-4em" },
+						right: { md: "-33em", lg: "-56em", xl: "-62em" },
+						width: "24em",
+						transform: "rotate(-12deg)",
+					}}
+				>
+					<img
+						src={arrow}
+						alt="decorative arrow pointing to impact statistics"
+						style={{
+							width: "5.5em",
+							position: "absolute",
+							left: "-5em",
+							top: "4em",
+							transform: "rotate(12deg)",
+						}}
+					/>
+					<Typography
+						variant="h5"
+						sx={{
+							width: "13em",
+							fontFamily: "'Gloria Hallelujah', cursive",
+							textAlign: "center",
+							lineHeight: 2,
+						}}
+					>
+						{IMPACT_MESSAGE}
+					</Typography>
+				</Box>
+				<Box
+					sx={{
+						display: "flex",
+						height: { xs: "50em", lg: "30em" },
+						alignItems: "center",
+					}}
+				>
+					<Stack
+						direction={{ xs: "column", lg: "row" }}
+						justifyContent="space-evenly"
+						sx={{
+							width: "100%",
+							height: "100%",
+							padding: { xs: "1em", lg: "7em 3em" },
+						}}
+					>
+						{stats.map((stat, index) => (
+							<Box key={index} sx={{ textAlign: "center" }}>
+								<Stack
+									direction={"column"}
+									sx={{
+										display: "flex",
+										justifyContent: "center",
+										alignItems: "center",
+										width: "24em",
+										height: "13.5em",
+										margin: "0 auto",
+										borderRadius: "1rem",
+										background: stat.background,
+										boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+									}}
+								>
+									<Typography
+										variant="h3"
+										sx={{ color: "white", fontWeight: 700, lineHeight: 1.05 }}
+									>
+										{stat.startNumber.toFixed(0)}
+									</Typography>
+									<Typography
+										variant="body1"
+										sx={{
+											color: "white",
+											fontSize: "1.3em",
+											fontStyle: "italic",
+											fontWeight: 700,
+										}}
+									>
+										of {stat.endNumber}
+									</Typography>
+									<Typography
+										variant="body1"
+										sx={{
+											color: "white",
+											fontSize: "1.5em",
+											fontWeight: 700,
+											lineHeight: 2.25,
+										}}
+									>
+										{stat.label}
+									</Typography>
+								</Stack>
+							</Box>
+						))}
+					</Stack>
+				</Box>
+			</Box>
+		)
+	);
 };
 
 export default HospitalPageStatsSection;
