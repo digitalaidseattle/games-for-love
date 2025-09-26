@@ -17,35 +17,21 @@ const HospitalPageSimilarDetailsSection = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
   const [activeHospitals, setActiveHospitals] = useState<Hospital[]>([]);
 
-  const currentLat = hospital?.latitude;
-  const currentLon = hospital?.longitude;
-
   useEffect(() => {
-    // Filter out the current hospital and sort others by distance
-    const similarHospitals = originals
-      .filter(
-        (h) => h.status.toLowerCase() === "active" && h.id !== hospital?.id
-      ) // Excluding current
-      .map((h) => ({
-        ...h,
-        distanceSq: hospitalService.getEuclideanDistanceNoRoot(
-          currentLat ?? 0,
-          currentLon ?? 0,
-          h.latitude ?? 0,
-          h.longitude ?? 0
-        ),
-      }))
-      .sort((a, b) => a.distanceSq - b.distanceSq) // Closest first
-      .slice(0, 3); // Pick top 3
-
-    setActiveHospitals(similarHospitals);
+    if (hospital) {
+      setActiveHospitals(hospitalService.getSimilarProjects(hospital, originals));
+    }
   }, [originals]);
 
   return (
-    <Box sx={{ padding: 6 }}>
+    <Box sx={{ padding: 6, backgroundColor: "#92C65E" }}>
       {/* Header */}
-      <Typography variant="h5" sx={{ marginBottom: 4, textAlign: "center" }}>
-        Other Similar Projects:
+      <Typography variant="h4" sx={{
+        marginBottom: 4,
+        textAlign: "left",
+        fontWeight: 600
+      }}>
+        Similar projects:
       </Typography>
 
       {/* Cards */}
@@ -62,21 +48,6 @@ const HospitalPageSimilarDetailsSection = () => {
           <HospitalPageInfoCard key={hosp.id} hospital={hosp} />
         ))}
       </Stack>
-
-      {/* See More Button - removing until we get instructions on behavior */}
-      {/* <Box sx={{ textAlign: "center", marginTop: 4 }}>
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "#4A24E7",
-            width: "50%",
-            padding: "10px 20px",
-            textTransform: "none",
-          }}
-        >
-          See More
-        </Button>
-      </Box> */}
     </Box>
   );
 };

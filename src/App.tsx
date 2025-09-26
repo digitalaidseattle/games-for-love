@@ -71,7 +71,9 @@ function App() {
         .then((res) => {
           const validHospitals = res.filter((hospital) => hospitalService.isValid(hospital));
           if (import.meta.env.MODE === 'development') {
-            validHospitals.push(TEST_DONATION_HOSPTIAL)
+            validHospitals.push(TEST_DONATION_HOSPTIAL);
+            validHospitals.push(TEST_DONATION_HOSPTIAL);
+            validHospitals.push(TEST_DONATION_HOSPTIAL);
           }
           setOriginals(validHospitals)
         });

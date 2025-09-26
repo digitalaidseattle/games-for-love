@@ -35,7 +35,7 @@ export const TEST_DONATION_HOSPTIAL = {
     equipmentShipped: 1,
     fundedPictures: ["https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…nCzRQ/6BCifc8ftqMR99OLU003gMIQS7SXNrgcSMaa0az7ZIw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…XJwWI/LsLCIGHOcj_AKx6pxvf7e7th1uqgB1B4zZxk0-UaUEw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg"],
     funders: "224",
-    fundingCompleted: 708.53,
+    fundingCompleted: 5000,
     fundingDeadline: undefined,
     hospital: "Eagle Rock Boy's Home",
     hospitalRequestId: "recplJAZsy4Bnbp4W",
@@ -65,13 +65,13 @@ export const TEST_DONATION_HOSPTIAL = {
     recordId: "recplJAZsy4Bnbp4W",
     requestNarrative: "At Eagle Rock Boys' Home, we provide a safe and supportive environment for boys facing emotional and behavioral challenges. Introducin…",
     requestPictures: [],
-    requested: 1500,
+    requested: 15000,
     titleRequestNarrative: "Gaming Gear to Support Boys at Eagle Rock"
   },
   name: "TEST, TEST, TEST, Eagle Rock Boy's Home",
   searchTerm: "al.gadsden.usa.eagle rock boy's home",
   state: "AL",
-  status: "actite",
+  status: "active",
   type: "Support Facility",
   year: 2025,
   zip: "35904"
@@ -167,7 +167,7 @@ class HospitalService {
 
   calcFundingLevel(hospital: Hospital): number {
     if (hospital.matchedRequest && hospital.matchedFunded) {
-      hospital.matchedRequest.requested
+      return hospital.matchedRequest.requested
         ? (hospital.matchedFunded.fundingCompleted || 0) /
         hospital.matchedRequest.requested
         : 0;
@@ -292,6 +292,21 @@ class HospitalService {
   ): number => {
     return (lat1 - lat2) * (lat1 - lat2) + (lon1 - lon2) * (lon1 - lon2);
   };
+
+  getSimilarProjects(hospital: Hospital, hospitals: Hospital[]): Hospital[] {
+    return hospitals
+      .filter((h) => h.status.toLowerCase() === "active" && h.id !== hospital?.id) // Excluding current
+      .map((h) => ({
+        ...h,
+        distanceSq: hospitalService.getEuclideanDistanceNoRoot(
+          hospital.latitude ?? 0,
+          hospital.longitude ?? 0,
+          h.latitude ?? 0,
+          h.longitude ?? 0
+        ),
+      }))
+      .sort((a, b) => a.distanceSq - b.distanceSq) // Closest first
+  }
 }
 
 const hospitalService = new HospitalService();

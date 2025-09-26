@@ -1,70 +1,72 @@
+/**
+ *  HospitalPageInfoCard.tsx
+ *
+ *  @copyright 2025 Digital Aid Seattle
+ *
+ */
+import { useContext, useEffect, useState } from "react";
+import RoomIcon from "@mui/icons-material/Room";
 import {
+  Box,
   Card,
   CardActionArea,
-  CardMedia,
   CardContent,
-  Typography,
-  Box,
-  Button,
+  CardMedia,
   Chip,
+  LinearProgress,
+  styled,
+  Typography
 } from "@mui/material";
-import RoomIcon from "@mui/icons-material/Room";
-import { Hospital } from "../../models/hospital";
-import { useContext } from "react";
 import {
-  DonationHospitalContext,
-  LearnMoreHospitalContext,
+  LearnMoreHospitalContext
 } from "../../context/SelectedHospitalContext";
-import { DonationContext } from "../../context/DonationContext";
+import { Hospital } from "../../models/hospital";
+import { hospitalService } from "../../services/hospital/hospitalService";
+
+const DonationProgress = styled(LinearProgress)(({ theme }) => ({
+  height: 30,
+  borderRadius: 20,
+  boxShadow: "none",
+  backgroundColor: "#C3EF96",
+  "& .MuiLinearProgress-bar": {
+    borderRadius: 20,
+    backgroundColor: "#3B7600",
+  },
+}));
 
 type Props = {
   hospital: Hospital;
 };
 
 const HospitalPageInfoCard = ({ hospital }: Props) => {
-  const { setHospital: setLearnMoreHospital } = useContext(
-    LearnMoreHospitalContext
-  );
+  const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
 
-  const { setDonateOverlayOpen } = useContext(DonationContext);
-  const { setHospital: setDonationHospital } = useContext(
-    DonationHospitalContext
-  );
-
-  const { matchedRequest } = hospital;
-  const isActive = matchedRequest?.active;
-  const amountRaised = hospital.fundingLevel || 0;
-  const fundingGoal = matchedRequest?.requested || 0;
-  const kidsImpacted = matchedRequest?.kids3Y || 0;
-  const fundingNote = matchedRequest?.titleRequestNarrative || "";
-  const partnerName = matchedRequest?.corpPartners?.[0]?.name;
   const location = `${hospital.city}, ${hospital.state}`;
   const imageUrl = hospital.hospitalPictures?.[0] || "";
+  const [percentage, setPercentage] = useState<number>(25);
+
+  useEffect(() => {
+    if (hospital) {
+      setPercentage(Math.round(hospitalService.calcFundingLevel(hospital) * 100));
+    }
+  }, [hospital]);
 
   const handleLearnMore = (evt: React.MouseEvent) => {
     evt.stopPropagation();
     setLearnMoreHospital(hospital);
   };
 
-  const handleDonate = (evt: any) => {
-    evt.stopPropagation();
-    setDonationHospital(hospital);
-    setDonateOverlayOpen(true);
-  };
-
-  const daysLeft = matchedRequest?.fundingDeadline
-    ? Math.max(
-        0, // Ensuring daysLeft is non-negative
-        Math.ceil(
-          (new Date(matchedRequest.fundingDeadline).getTime() -
-            new Date().getTime()) /
-            (1000 * 60 * 60 * 24)
-        )
-      )
-    : null;
-
   return (
-    <Card sx={{ width: "100%", borderRadius: 3, boxShadow: 3 }}>
+    <Card sx={{
+      width: "100%",
+      borderRadius: 3,
+      boxShadow: "none",
+      backgroundColor: "#92C65E", // default background
+      transition: "background-color 0.3s ease", // smooth transition
+      "&:hover": {
+        backgroundColor: "#70A040", // hover background
+      },
+    }}>
       <CardActionArea onClick={handleLearnMore}>
         {/* Header Image with Location */}
         <Box position="relative">
@@ -90,89 +92,24 @@ const HospitalPageInfoCard = ({ hospital }: Props) => {
           />
         </Box>
 
-        {/* Matched Info */}
-        {partnerName && (
-          <Box
-            sx={{
-              backgroundColor: "#FFF9D9",
-              py: 0.5,
-              textAlign: "center",
-              fontSize: 14,
-              fontWeight: 500,
-              color: "#555",
-            }}
-          >
-            Matched by {partnerName}
-          </Box>
-        )}
-
         {/* Content */}
-        <CardContent sx={{ pb: 1.5 }}>
-          <Typography variant="h6" gutterBottom>
-            {hospital.name}
-          </Typography>
-
-          <Typography variant="body2" sx={{ mb: 0.5 }}>
-            <strong>{amountRaised}k</strong> raised of{" "}
-            <strong>{fundingGoal}k</strong> –{" "}
-            <span style={{ color: "#43A047" }}>
-              {isActive ? "Actively Funding" : "Inactive"}
-            </span>
-          </Typography>
-
-          <Typography variant="body2" sx={{ mb: 1 }}>
-            {kidsImpacted}+ kids impacted
-          </Typography>
-
-          <Typography
-            variant="body2"
-            sx={{ fontStyle: "italic", color: "#555" }}
-          >
-            {fundingNote}
-          </Typography>
-
-          {/* Buttons */}
-          <Box mt={2} display="flex" gap={2}>
-            <Button
-              onClick={handleLearnMore}
-              variant="contained"
-              sx={{
-                backgroundColor: "#000",
-                color: "#fff",
-                flex: 1,
-                borderRadius: 2,
-                textTransform: "none",
-              }}
-            >
-              Learn more
-            </Button>
-            <Button
-              onClick={handleDonate}
-              variant="contained"
-              sx={{
-                backgroundColor: "#000",
-                color: "#fff",
-                flex: 1,
-                borderRadius: 2,
-                textTransform: "none",
-              }}
-            >
-              Donate
-            </Button>
-          </Box>
-
-          {/* Deadline */}
-          {daysLeft !== null && (
-            <Typography
-              variant="caption"
-              display="block"
-              textAlign="center"
-              mt={2}
-              sx={{ color: "#777", fontWeight: 600 }}
-            >
-              {daysLeft} days left to donate!
+        <CardContent sx={{ p: 1.5, display: "flex", flexDirection: "column", gap: 3 }}>
+          {hospital.matchedRequest && (
+            <Typography fontWeight={600} fontSize={20}>
+              Support "{hospital.matchedRequest.titleRequestNarrative}"
             </Typography>
           )}
+          <Typography fontSize={20}>
+            {hospital.name}
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+            <DonationProgress
+              variant="determinate"
+              value={percentage} />
+            <Typography fontStyle={'italic'}>
+              ${hospital!.matchedFunded?.fundingCompleted! / 1000}k raised ({percentage}%)
+            </Typography>
+          </Box>
         </CardContent>
       </CardActionArea>
     </Card>
