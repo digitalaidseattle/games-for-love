@@ -12,15 +12,15 @@ import { HospitalCardDetails } from "./components/HospitalCardDetails";
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import { HospitalsContext } from "./context/HospitalContext";
-import { hospitalService, TEST_DONATION_HOSPTIAL } from "./services/hospital/hospitalService";
+import { hospitalService } from "./services/hospital/hospitalService";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "react-reflex/styles.css";
 import "./App.css";
 
-import { FilterContext } from "./context/FilterContext";
-import { DrawerWidthContext } from "./context/DrawerWidthContext";
 import { DonateOverlay } from "./components/DonateOverlay";
+import { DrawerWidthContext } from "./context/DrawerWidthContext";
+import { FilterContext } from "./context/FilterContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -70,11 +70,6 @@ function App() {
         .findAll(filters)
         .then((res) => {
           const validHospitals = res.filter((hospital) => hospitalService.isValid(hospital));
-          if (import.meta.env.MODE === 'development') {
-            validHospitals.push(TEST_DONATION_HOSPTIAL);
-            validHospitals.push(TEST_DONATION_HOSPTIAL);
-            validHospitals.push(TEST_DONATION_HOSPTIAL);
-          }
           setOriginals(validHospitals)
         });
     }

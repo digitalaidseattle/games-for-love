@@ -23,7 +23,7 @@ import {
 import { Hospital } from "../../models/hospital";
 import { hospitalService } from "../../services/hospital/hospitalService";
 
-const DonationProgress = styled(LinearProgress)(({ theme }) => ({
+const DonationProgress = styled(LinearProgress)(({ }) => ({
   height: 30,
   borderRadius: 20,
   boxShadow: "none",
@@ -42,14 +42,21 @@ const HospitalPageInfoCard = ({ hospital }: Props) => {
   const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
 
   const location = `${hospital.city}, ${hospital.state}`;
-  const imageUrl = hospital.hospitalPictures?.[0] || "";
   const [percentage, setPercentage] = useState<number>(25);
+  const [imageUrl, setImageUrl] = useState<string>("");
 
   useEffect(() => {
     if (hospital) {
       setPercentage(Math.round(hospitalService.calcFundingLevel(hospital) * 100));
+      setImageUrl(getImageUrl());
     }
   }, [hospital]);
+
+  // REVIEW still using impact pics.  Should we use others?
+  function getImageUrl(): string {
+    const randomImpact = Math.round(Math.random() * (hospital.matchedFunded!.impactPictures.length));
+    return hospital.matchedFunded!.impactPictures![randomImpact] || "";
+  }
 
   const handleLearnMore = (evt: React.MouseEvent) => {
     evt.stopPropagation();
@@ -58,6 +65,7 @@ const HospitalPageInfoCard = ({ hospital }: Props) => {
 
   return (
     <Card sx={{
+      padding: 2,
       width: "100%",
       borderRadius: 3,
       boxShadow: "none",
@@ -72,10 +80,10 @@ const HospitalPageInfoCard = ({ hospital }: Props) => {
         <Box position="relative">
           <CardMedia
             component="img"
-            height="160"
+            height="220"
             image={imageUrl}
             alt={hospital.name}
-            sx={{ borderRadius: "12px 12px 0 0" }}
+            sx={{ borderRadius: "12px" }}
           />
           <Chip
             icon={<RoomIcon />}
@@ -85,9 +93,11 @@ const HospitalPageInfoCard = ({ hospital }: Props) => {
               position: "absolute",
               top: 8,
               left: 8,
-              backgroundColor: "#EAF4EB",
-              color: "#333",
+              opacity: 0.75,
+              backgroundColor: "#000000",
+              color: "#FFFFFF",
               fontWeight: 500,
+              "& .MuiChip-icon": { color: "#92C65E" }
             }}
           />
         </Box>
