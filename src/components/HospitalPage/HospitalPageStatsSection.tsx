@@ -2,10 +2,18 @@ import { Box, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 import arrow from "../../assets/handrawn-arrow.png";
+import HospitalPageBaseComponent from "./HospitalPageBaseComponent";
 
 const HospitalPageStatsSection = () => {
 	const { hospital } = useContext(LearnMoreHospitalContext);
-	const [stats, setStats] = useState<any[]>([]);
+	type Stat = {
+		startNumber: number;
+		endNumber: string | number;
+		label: string;
+		background: string;
+	};
+
+	const [stats, setStats] = useState<Stat[]>([]);
 	const IMPACT_MESSAGE = "This is the impact people like you have made";
 
 	useEffect(() => {
@@ -49,6 +57,7 @@ const HospitalPageStatsSection = () => {
 			<Box
 				sx={{
 					background: "linear-gradient(180deg, #FFFFFF 0%, #D8ECFF 100%)",
+					boxShadow: "0px 4px 4px 0px #0000000D",
 				}}
 			>
 				<Box
@@ -97,7 +106,7 @@ const HospitalPageStatsSection = () => {
 						sx={{
 							width: "100%",
 							height: "100%",
-							padding: { xs: "1em", lg: "7em 3em" },
+							padding: { xs: "1em", lg: "7em 5em" },
 						}}
 					>
 						{stats.map((stat, index) => (
@@ -149,6 +158,18 @@ const HospitalPageStatsSection = () => {
 						))}
 					</Stack>
 				</Box>
+				{/* Impact Section */}
+				{hospital?.status === "past" && hospital?.matchedFunded && (
+					<HospitalPageBaseComponent
+						header={"The Impact of Your Donation"}
+						image={hospital?.matchedFunded?.impactPictures[0]}
+						paragraph={hospital?.matchedFunded?.impactText}
+						styles={{
+							header: { color: "#000" },
+							paragraph: { margin: "0 2.5rem" },
+						}}
+					/>
+				)}
 			</Box>
 		)
 	);
