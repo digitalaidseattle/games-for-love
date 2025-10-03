@@ -12,7 +12,7 @@ import {
   Stack,
   Theme,
   Typography,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -29,10 +29,17 @@ import { hospitalService } from "../services/hospital/hospitalService";
 import ActionButton from "../styles/ActionButton";
 import EmphasizedText from "../styles/EmphasizedText";
 
-export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
-  const { hospital: selectedHospital, setHospital: setSelectedHospital } = useContext(SelectedHospitalContext);
-  const { setHospital: setDonationHospital } = useContext(DonationHospitalContext);
-  const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
+export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
+  hospital,
+}) => {
+  const { hospital: selectedHospital, setHospital: setSelectedHospital } =
+    useContext(SelectedHospitalContext);
+  const { setHospital: setDonationHospital } = useContext(
+    DonationHospitalContext
+  );
+  const { setHospital: setLearnMoreHospital } = useContext(
+    LearnMoreHospitalContext
+  );
 
   const [backgroundColor, setBackgroundColor] = useState<string>();
   const [pinColor, setPinColor] = useState<string>();
@@ -56,14 +63,14 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
         hospitalService.isEqual(hospital, selectedHospital)
           ? theme.palette.hospital.selected
           : hospital.status === "past"
-            ? theme.palette.hospital.closed
-            : theme.palette.hospital.open
+          ? theme.palette.hospital.closed
+          : theme.palette.hospital.open
       );
       setStatusColor(
         hospital.status === "past"
           ? theme.palette.hospital.closed
-          : theme.palette.hospital.open,
-      )
+          : theme.palette.hospital.open
+      );
       setStatus(hospital.status);
     }
   }, [hospital, selectedHospital]);
@@ -97,7 +104,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
     <Box
       data-testid="hospital-detail-card"
       sx={{
-        // width: "100%",
         width: {
           xs: "100%",
           sm: "100%",
@@ -106,10 +112,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
           xl: "100%",
         },
         maxWidth: "100%",
-        marginBottom: "16px",
-        // padding: "8px",
         display: "flex",
-        // overflow: "hidden",
       }}
     >
       <Card
@@ -123,8 +126,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
           "&:hover": {
             transform: "scale(1.02)",
           },
-          // width: "100%",
           overflow: "hidden",
+          padding: "1rem 0",
         }}
         onClick={changeSelectedHospital}
       >
@@ -135,6 +138,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
             maxWidth: "70%",
             height: "100%",
             flexDirection: "row",
+            borderRight: "1px solid #D9D9D9",
           }}
         >
           {/* 이미지 섹션 */}
@@ -142,13 +146,10 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
             sx={{
               flex: 4,
               display: "flex",
-              // width: "50%",
               minWidth: "120px",
               maxWidth: "200px",
-              height: "200px",
               alignItems: "center",
               justifyContent: "center",
-              // backgroundColor: "blue",
             }}
           >
             <Carousel
@@ -167,18 +168,18 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
                       xs: "100%",
                       sm: "3rem",
                       md: "4rem",
-                      lg: "5rem",
+                      lg: "6rem",
                       xl: "100%",
                     },
                     height: {
                       xs: "0rem",
                       sm: "3rem",
                       md: "4rem",
-                      lg: "5rem",
+                      lg: "6rem",
                       xl: "100%",
                     },
                     objectFit: "cover", // 이미지를 박스 크기에 맞게 자름
-                    borderRadius: "8px", // 둥근 모서리 설정
+                    borderRadius: "10px", // 둥근 모서리 설정
                   }}
                   image={url}
                   alt="Hospital Image"
@@ -191,7 +192,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
           <CardContent
             sx={{
               flex: 6,
-              padding: "3px 3px 3px 8px !important",
+              padding: "0 1.5rem 0 0 !important",
               overflow: "hidden",
             }}
           >
@@ -254,11 +255,12 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
                 md: "column",
                 lg: "row",
               }}
-              gap={1}
+              gap={1.5}
               marginTop={2}
             >
               <ActionButton
                 onClick={handleLearnMore}
+                zIndex={5}
                 sx={{
                   fontSize: {
                     xs: "0.6rem",
@@ -275,6 +277,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
               <ActionButton
                 disabled={!isOpen}
                 onClick={handleDonate}
+                zIndex={5}
                 sx={{
                   fontSize: {
                     xs: "0.6rem",
@@ -298,20 +301,10 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
             display: "flex",
             flexDirection: "column",
             maxWidth: "30%",
-            // backgroundColor: "red",
+            textAlign: "center",
           }}
         >
-          {/* <CardContent
-            sx={{
-              flex: 1,
-              display: "flex",
-              width: "100%",
-              padding: "0px 0px 10px 1px !important",
-              flexDirection: "column",
-              gap: 0.5,
-            }}
-          > */}
-          {partnerName &&
+          {partnerName && (
             <Box
               display="flex"
               alignItems="center"
@@ -344,7 +337,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
                 Matched by {partnerName}
               </Typography>
             </Box>
-          }
+          )}
           <Typography
             variant="body2"
             color="text.secondary"
@@ -357,15 +350,12 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
                 xl: "0.75rem",
               },
               overflow: "hidden",
-              // whiteSpace: "nowrap",
               textOverflow: "ellipsis",
             }}
           >
             ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)} raised
             of ${Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
-            <EmphasizedText
-              sx={{ color: statusColor }}
-            >
+            <EmphasizedText sx={{ color: statusColor }}>
               {status}
             </EmphasizedText>
           </Typography>
@@ -382,7 +372,6 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({ hospital
           >
             {hospitalService.getDonationMessage(hospital)}
           </EmphasizedText>
-          {/* </CardContent> */}
         </Box>
       </Card>
     </Box>

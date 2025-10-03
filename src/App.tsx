@@ -12,7 +12,10 @@ import { HospitalCardDetails } from "./components/HospitalCardDetails";
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import { HospitalsContext } from "./context/HospitalContext";
-import { hospitalService, TEST_DONATION_HOSPTIAL } from "./services/hospital/hospitalService";
+import {
+  hospitalService,
+  TEST_DONATION_HOSPTIAL,
+} from "./services/hospital/hospitalService";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "react-reflex/styles.css";
@@ -41,7 +44,14 @@ const SizeAwareReflexElement = (props: {
   }, [props]);
 
   return (
-    <Box id="drawer" sx={{ height: props.windowHeight, overflowY: "auto" }}>
+    <Box
+      id="drawer"
+      sx={{
+        height: props.windowHeight,
+        overflowY: "auto",
+        overflowX: "hidden",
+      }}
+    >
       <SearchAndSort />
       <Box data-testid="hospital-list">
         <HospitalList />
@@ -66,15 +76,15 @@ function App() {
 
   useEffect(() => {
     if (filters) {
-      hospitalService
-        .findAll(filters)
-        .then((res) => {
-          const validHospitals = res.filter((hospital) => hospitalService.isValid(hospital));
-          if (import.meta.env.MODE === 'development') {
-            validHospitals.push(TEST_DONATION_HOSPTIAL)
-          }
-          setOriginals(validHospitals)
-        });
+      hospitalService.findAll(filters).then((res) => {
+        const validHospitals = res.filter((hospital) =>
+          hospitalService.isValid(hospital)
+        );
+        if (import.meta.env.MODE === "development") {
+          validHospitals.push(TEST_DONATION_HOSPTIAL);
+        }
+        setOriginals(validHospitals);
+      });
     }
   }, [filters]);
 
