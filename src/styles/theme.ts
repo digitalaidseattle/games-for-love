@@ -46,6 +46,15 @@ declare module "@mui/material/styles" {
 
 const Palette = () => {
   return createTheme({
+    typography: {
+      fontFamily: [
+        "Inter",
+        "system-ui",
+        "Helvetica",
+        "Arial",
+        "sans-serif",
+      ].join(","),
+    },
     palette: {
       primary: {
         main: PRIMARY_COLOR,
