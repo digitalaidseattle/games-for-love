@@ -10,34 +10,50 @@ import {
   Box,
   Button,
   Container,
-  Toolbar
+  Toolbar,
 } from "@mui/material";
 import { useContext } from "react";
 import GamesForLoveLogo from "../assets/games-for-love-logo.png";
-import { DonationHospitalContext, LearnMoreHospitalContext } from "../context/SelectedHospitalContext";
+import {
+  DonationHospitalContext,
+  LearnMoreHospitalContext,
+} from "../context/SelectedHospitalContext";
 import HospitalDetailsPageModal from "./HospitalPage/HospitalDetailsPageModal";
 import { DonationContext } from "../context/DonationContext";
 
 const LearnMoreContent = () => {
-  const { setDonateOverlayOpen } = useContext(DonationContext);
-  const { setHospital: setLearnMoreHospital } = useContext(LearnMoreHospitalContext);
-  const { setHospital: setDonationHospital } = useContext(DonationHospitalContext);
-
-  function handleDonate(): void {
-    setDonationHospital(undefined);  // undefined for general
-    setDonateOverlayOpen(true);
-    setLearnMoreHospital(undefined);
-  }
-
   return (
     <Container
       maxWidth="xl"
       sx={{
         margin: 0,
         overflow: "auto",
-        height: "100%"
+        height: "100%",
+        padding: "0px !important",
       }}
     >
+      <LearnMoreOverlayNavbar />
+      <HospitalDetailsPageModal />
+    </Container>
+  );
+};
+
+const LearnMoreOverlayNavbar = ({ hidden = true }: { hidden?: boolean }) => {
+  const { setDonateOverlayOpen } = useContext(DonationContext);
+  const { setHospital: setLearnMoreHospital } = useContext(
+    LearnMoreHospitalContext
+  );
+  const { setHospital: setDonationHospital } = useContext(
+    DonationHospitalContext
+  );
+
+  function handleDonate(): void {
+    setDonationHospital(undefined); // undefined for general
+    setDonateOverlayOpen(true);
+    setLearnMoreHospital(undefined);
+  }
+  return (
+    !hidden && (
       <AppBar
         position="static"
         sx={{
@@ -64,17 +80,19 @@ const LearnMoreContent = () => {
           {/* Desktop Navigation Buttons */}
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Button
-              sx={{ color: "#4A24E7", outline: "1px solid #4A24E7" }}
+              sx={{
+                color: "#4A24E7",
+                outline: "1px solid #4A24E7",
+              }}
               variant="outlined"
-              onClick={(() => handleDonate())}
+              onClick={() => handleDonate()}
             >
               Donate
             </Button>
           </Box>
         </Toolbar>
       </AppBar>
-      <HospitalDetailsPageModal />
-    </Container>
+    )
   );
 };
 
@@ -97,16 +115,21 @@ const LearnMoreOverlay = () => {
         onClick={() => handleClose()}
       >
         <Box
-          sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Box
             sx={{
-              width: "80%",
+              width: "75%",
               maxWidth: "1280px",
               marginTop: 2,
-              backgroundColor: 'white',
-              borderRadius: "15px"
+              backgroundColor: "white",
             }}
-            onClick={(e) => e.stopPropagation()}>
+            onClick={(e) => e.stopPropagation()}
+          >
             <LearnMoreContent />
           </Box>
           {/* <DialogCloseButton
@@ -117,7 +140,7 @@ const LearnMoreOverlay = () => {
             }}
           /> */}
         </Box>
-      </Backdrop >
+      </Backdrop>
     )
   );
 };
