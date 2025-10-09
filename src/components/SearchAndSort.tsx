@@ -74,8 +74,9 @@ export const SearchAndSort = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          gap: "8px",
-          margin: "20px 5px 0px 5px ",
+          gap: "1rem",
+          margin: "20px 5px 0px 5px",
+          padding: "1.5rem 1rem",
         }}
       >
         <a href="https://gamesforlove.org">
@@ -137,9 +138,9 @@ export const SearchAndSort = () => {
           )}
         </ToolbarButton>
         <ToolbarButton
-          sx={{
-            outline: "1px solid",
-          }}
+          variant="contained"
+          height="2.7rem"
+          width="8rem"
           onClick={handleDonateClick}
         >
           Donate
