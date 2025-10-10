@@ -11,22 +11,22 @@ import HospitalPageTitleRequestNarrative from "./HospitalPageTitleRequestNarrati
 
 /**This is the starting point of the Hospital Details page */
 const HospitalDetailsPageModal = () => {
-  const { hospital } = useContext(LearnMoreHospitalContext);
-  return (
-    <Box sx={{ padding: "20px" }}>
-      {hospital &&
-        <>
-          <HospitalPageMain />
-          {hospital.status === "active" && <DonationBarActive />}
-          <HospitalPageTitleRequestNarrative />
-          <HospitalPageStatsSection />
-          <HospitalPageContent />
-          {hospital.status === "past" && <HospitalPageSimilarDetailsSection />}
-          {hospital.status === "active" && <ActiveHospitalRequestCarousel />}
-        </>
-      }
-    </Box>
-  );
+	const { hospital } = useContext(LearnMoreHospitalContext);
+	return (
+		<Box>
+			{hospital && (
+				<>
+					<HospitalPageMain />
+					{hospital.status === "active" && <DonationBarActive />}
+					<HospitalPageTitleRequestNarrative />
+					<HospitalPageStatsSection />
+					<HospitalPageContent />
+					{hospital.status === "past" && <HospitalPageSimilarDetailsSection />}
+					{hospital.status === "active" && <ActiveHospitalRequestCarousel />}
+				</>
+			)}
+		</Box>
+	);
 };
 
 export default HospitalDetailsPageModal;

@@ -41,7 +41,14 @@ const SizeAwareReflexElement = (props: {
   }, [props]);
 
   return (
-    <Box id="drawer" sx={{ height: props.windowHeight, overflowY: "auto" }}>
+    <Box
+      id="drawer"
+      sx={{
+        height: props.windowHeight,
+        overflowY: "auto",
+        overflowX: "hidden",
+      }}
+    >
       <SearchAndSort />
       <Box data-testid="hospital-list">
         <HospitalList />
