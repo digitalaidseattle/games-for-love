@@ -5,7 +5,7 @@
  *
  */
 import { useContext } from "react";
-import { CardMedia, Stack, Typography } from "@mui/material";
+import { Box, CardMedia, Stack, Typography } from "@mui/material";
 import { Carousel } from "react-responsive-carousel";
 import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 import image_1 from "../../assets/istockphoto-1141330658-612x612.jpg";
@@ -23,22 +23,26 @@ const HospitalPageTitleRequestNarrative = () => {
         margin: "20px",
       }}
     >
-      <Carousel
-        showStatus={false}
-        showThumbs={false}
-        infiniteLoop
-        emulateTouch
-      >
-        {photos.map((url, idx) => (
-          <CardMedia
-            key={idx}
-            component="img"
-            image={url}
-            className="narrativeWrapper"
-            alt="Hospital Image"
-          />
-        ))}
-      </Carousel>
+      <Box>
+        <Carousel
+          showArrows={true}
+          showThumbs={false}
+          showStatus={true}
+        >
+          {photos.map((url, idx) => (
+            <CardMedia
+              key={idx}
+              component="img"
+              image={url}
+              alt="Hospital Image"
+              sx={{
+                borderRadius: "15px",
+                objectFit: 'cover'
+              }}
+            />
+          ))}
+        </Carousel>
+      </Box>
       <Typography
         fontWeight={600}
       >

@@ -23,7 +23,6 @@ const DonationBar: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
 
   useEffect(() => {
     if (hospital) {
-      console.log(hospital)
       setActive(hospital.status.toLowerCase() !== 'past');
     }
   }, [hospital]);
@@ -111,7 +110,7 @@ const DonationBar: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
           >
             &nbsp;of ${hospital!.matchedRequest?.requested ?? 0} goal
           </Typography>
-          <Typography fontSize={12} fontWeight={600}>${percentage.toFixed(0)}%</Typography>
+          <Typography fontSize={12} fontWeight={600}>{percentage.toFixed(0)}%</Typography>
         </Box>
 
 
@@ -137,7 +136,10 @@ const DonationBar: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
 
         {/* Days Left */}
         <Typography variant="body2" marginTop={'1rem'} fontSize={14}>
-          Expires {format(hospital!.matchedRequest!.fundingDeadline!, "MMMM d")}
+          {active
+           ? `Expires ${format(hospital!.matchedRequest!.fundingDeadline!, "MMMM d")}`
+           : "Donations closed"
+          }
         </Typography>
       </Stack>
     </Stack>
