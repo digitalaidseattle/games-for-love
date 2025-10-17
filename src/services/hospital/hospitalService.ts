@@ -27,20 +27,25 @@ export const TEST_DONATION_HOSPTIAL = {
   fundingLevel: 0,
   fundraiseUpCampaignId: "FUNTTHDCELT",
   hospitalPictures: ["https://v5.airtableusercontent.com/v3/u/45/45/1757…Qxatv/yHdcua6KxO_KaILbkozW7yMdBKwaS_AcKIZxJjN-71A", "https://v5.airtableusercontent.com/v3/u/45/45/1757…7JnJF/gjaPUR-40rh9f-bPRMH9dEZ2aOEIgV0HzDErukRptBg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…7JnJF/gjaPUR-40rh9f-bPRMH9dEZ2aOEIgV0HzDErukRptBg"],
-  id: "recA4OgEi7CeYSNjf-test",
+  id: "recA4OgEi7CeYSNjf-test" + Math.random() * 100,
   latitude: 33.99793855437296,
   longitude: -86.0695,
   matchedFunded: {
     corporateFunding: 'undefined',
     equipmentShipped: 1,
-    fundedPictures: ["https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…nCzRQ/6BCifc8ftqMR99OLU003gMIQS7SXNrgcSMaa0az7ZIw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…XJwWI/LsLCIGHOcj_AKx6pxvf7e7th1uqgB1B4zZxk0-UaUEw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg"],
+    fundedPictures: ["https://v5.airtableusercontent.com/v3/u/45/45/1758945600000/e5lKdKKcrMAWc-IF1D1XBQ/EJ27sRGeaewx0ba2nxHC6VfkGIjVwF51ypOelBZSPLQhSocgm5rjiJtCDXJLIR89k49pKdSDxhTCu9fgi62jyFHCD8tbw0M1BKYhAhOCSenpVw1Q3ECyFI6yUUGDs-JNYhr6BKeLA2thcQmBZt-mnX2_ZnxgjntzCY-G0r7Xa9s/tJIQNFvKUnD05yXwmn3F1W-v6qXgONLfTQYgtiD4s5U", "https://v5.airtableusercontent.com/v3/u/45/45/1757…nCzRQ/6BCifc8ftqMR99OLU003gMIQS7SXNrgcSMaa0az7ZIw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…XJwWI/LsLCIGHOcj_AKx6pxvf7e7th1uqgB1B4zZxk0-UaUEw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg"],
     funders: "224",
-    fundingCompleted: 708.53,
+    fundingCompleted: 5000,
     fundingDeadline: undefined,
     hospital: "Eagle Rock Boy's Home",
     hospitalRequestId: "recplJAZsy4Bnbp4W",
     id: "rec94ZrE1t7hs2NS4",
-    impactPictures: ["https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…nCzRQ/6BCifc8ftqMR99OLU003gMIQS7SXNrgcSMaa0az7ZIw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…XJwWI/LsLCIGHOcj_AKx6pxvf7e7th1uqgB1B4zZxk0-UaUEw", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg", "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg"],
+    impactPictures: [
+      "https://v5.airtableusercontent.com/v3/u/45/45/1759003200000/8a8rVtF4CrbEy0naFsCB7A/CQlTZF3sIb44LEY-vad6dvqtBmzl2qZ12wCNY_Zkh3AD72y5HSRI0QiUBZlJ9t_Wl6cCTTAPArF92uqgykR2SWbSqPfoQCarnGBNZyngKqWV3r_oxBN4uWFdZlJOUd5sENo_x6A04lr88Yd_bJCH94iDQxZgHlUNe7V9PdD7tGQ70kV9tt5mAcVcuczUkFHz/PiDwNrYymxKdrakI0uzX0nyZ-r23mMt1OBRCAkPtr1Y",
+      "https://v5.airtableusercontent.com/v3/u/45/45/1759003200000/oTPFwDEOLuzSFZYRiDj5-Q/asKN2dt3SV8bbuoK-bh4jgk7Pvs2ul1TIPbUiPQW0vb8lOsE0mSo0LpXzk23LaypjH6B9t8T4-gl8U9rHapnPw_u15uBYZmHV-rVVg2d18ymZ0eAOnm3ysRJeI2W60Wt0WyHiGvHC9Ta2AqurozrzzkdNn3ayUgVikwPwleMa7kuekGTLncul8vv-VNSRe9AWi3bApfAxpPWp3cjHHCI71fIP2DvafDYtxKqqZGV-qFSIjTo0pxJQPpm7NC1sQSr/9AwE01_ugLygy-99GQRRv2D2ipw3KLmoQRNfc4z_qMM",
+      "https://v5.airtableusercontent.com/v3/u/45/45/1759003200000/EWBfqDDOoVtR3hlNkKTGXg/Ke52JHHn50h0fAqnnf6PzYXG5PmoGkZUTXYKlouJBYdUeJO1TX9m735olOHxAfopkXnMEpzEc4XMZm_lpaUM9ZfR_8wQY4KapcDe5jGcX5f3a7YDRoD-B3Ifd4B51ArD3cfktYy4XjpdGrDHaXhP4A/svJz_5KYu5BaZz7lkTBv8XlijFdtn1fl-4Ty8TBbfTg",
+      "https://v5.airtableusercontent.com/v3/u/45/45/1757…hbtUE/cnmj8EVwUkoM_vFwUJoUSVe5Q65JJ4twLW49fm1cITg",
+      "https://v5.airtableusercontent.com/v3/u/45/45/1759003200000/HNVZRdKIamD0GZQ36tcJqQ/R-wRU9Kzw526b2k5F_7xPiCbJM1-gNxvNcUCDL5nXtY_iHhjrLVmBSB8DtQKm_6ly7KXX2-VA3tB5QiQMaQXOnUboCmJR0O21fryxobzwDx-S5NvwWIWtjgwpixweRaZfKPyCh8irNNNDB_R9g64IA/lAQzgek0vHPc9PnLujCicpOtZRbES5MM-jlGsP4_byk"],
     impactText: "At Eagle Rock Boys' Home, the gaming systems you’ve provided will impact over 50 boys annually, giving them a much-needed outlet fo…",
     impactTitle: "Gaming Brings Fun and Support to Eagle Rock Boys",
     orderID: "undefined",
@@ -65,13 +70,13 @@ export const TEST_DONATION_HOSPTIAL = {
     recordId: "recplJAZsy4Bnbp4W",
     requestNarrative: "At Eagle Rock Boys' Home, we provide a safe and supportive environment for boys facing emotional and behavioral challenges. Introducin…",
     requestPictures: [],
-    requested: 1500,
+    requested: 15000,
     titleRequestNarrative: "Gaming Gear to Support Boys at Eagle Rock"
   },
-  name: "TEST, TEST, TEST, Eagle Rock Boy's Home",
+  name: "Eagle Rock Boy's Home (TEST)",
   searchTerm: "al.gadsden.usa.eagle rock boy's home",
   state: "AL",
-  status: "actite",
+  status: "active",
   type: "Support Facility",
   year: 2025,
   zip: "35904"
@@ -117,7 +122,7 @@ class HospitalService {
       hospitalRequestService.findAll(),
       hospitalFundedService.findAll(),
     ]).then((resps) => {
-      return resps[0]
+      const hospitals = resps[0]
         .map((hi) => {
           const matchedRequest = resps[1].find(
             (hr) => hr.name[0] === hi.recordId
@@ -131,6 +136,14 @@ class HospitalService {
         })
         .filter(this.filterPredicate(filter!))
         .sort(this.getSortComparator(filter!)) as Hospital[];
+      if (import.meta.env.MODE === 'development') {
+        hospitals.push(TEST_DONATION_HOSPTIAL);
+        hospitals.push(TEST_DONATION_HOSPTIAL);
+        hospitals.push(TEST_DONATION_HOSPTIAL);
+        hospitals.push(TEST_DONATION_HOSPTIAL);
+        hospitals.push(TEST_DONATION_HOSPTIAL);
+      }
+      return hospitals;
     });
   }
 
@@ -167,7 +180,7 @@ class HospitalService {
 
   calcFundingLevel(hospital: Hospital): number {
     if (hospital.matchedRequest && hospital.matchedFunded) {
-      hospital.matchedRequest.requested
+      return hospital.matchedRequest.requested
         ? (hospital.matchedFunded.fundingCompleted || 0) /
         hospital.matchedRequest.requested
         : 0;
@@ -292,6 +305,21 @@ class HospitalService {
   ): number => {
     return (lat1 - lat2) * (lat1 - lat2) + (lon1 - lon2) * (lon1 - lon2);
   };
+
+  getSimilarProjects(hospital: Hospital, hospitals: Hospital[]): Hospital[] {
+    return hospitals
+      .filter((h) => h.status.toLowerCase() === "active" && h.id !== hospital?.id) // Excluding current
+      .map((h) => ({
+        ...h,
+        distanceSq: hospitalService.getEuclideanDistanceNoRoot(
+          hospital.latitude ?? 0,
+          hospital.longitude ?? 0,
+          h.latitude ?? 0,
+          h.longitude ?? 0
+        ),
+      }))
+      .sort((a, b) => a.distanceSq - b.distanceSq) // Closest first
+  }
 }
 
 const hospitalService = new HospitalService();

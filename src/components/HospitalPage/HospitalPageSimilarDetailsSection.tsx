@@ -4,80 +4,80 @@
  *  @copyright 2025 Digital Aid Seattle
  *
  */
-import { Box, Stack, Typography } from "@mui/material";
+import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
+import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { HospitalsContext } from "../../context/HospitalContext";
-import { Hospital } from "../../models/hospital";
-import HospitalPageInfoCard from "./HospitalPageInfoCard";
 import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
+import { Hospital } from "../../models/hospital";
 import { hospitalService } from "../../services/hospital/hospitalService";
+import HospitalPageInfoCard from "./HospitalPageInfoCard";
+
+const VIEWABLE_HOSPITAL_COUNT = 3;
 
 const HospitalPageSimilarDetailsSection = () => {
   const { originals } = useContext(HospitalsContext);
   const { hospital } = useContext(LearnMoreHospitalContext);
-  const [activeHospitals, setActiveHospitals] = useState<Hospital[]>([]);
-
-  const currentLat = hospital?.latitude;
-  const currentLon = hospital?.longitude;
+  const [similarHospitals, setSimilarHospitals] = useState<Hospital[]>([]);
+  const [viewableHospitals, setViewableHospitals] = useState<Hospital[]>([]);
+  const [viewableIndex, setViewableIndex] = useState<number>(0);
 
   useEffect(() => {
-    // Filter out the current hospital and sort others by distance
-    const similarHospitals = originals
-      .filter(
-        (h) => h.status.toLowerCase() === "active" && h.id !== hospital?.id
-      ) // Excluding current
-      .map((h) => ({
-        ...h,
-        distanceSq: hospitalService.getEuclideanDistanceNoRoot(
-          currentLat ?? 0,
-          currentLon ?? 0,
-          h.latitude ?? 0,
-          h.longitude ?? 0
-        ),
-      }))
-      .sort((a, b) => a.distanceSq - b.distanceSq) // Closest first
-      .slice(0, 3); // Pick top 3
-
-    setActiveHospitals(similarHospitals);
+    if (hospital) {
+      setSimilarHospitals(hospitalService.getSimilarProjects(hospital, originals));
+    }
   }, [originals]);
 
-  return (
-    <Box sx={{ padding: 6 }}>
-      {/* Header */}
-      <Typography variant="h5" sx={{ marginBottom: 4, textAlign: "center" }}>
-        Other Similar Projects:
-      </Typography>
+  useEffect(() => {
+    setViewableIndex(0);
+    setViewableHospitals(similarHospitals.slice(viewableIndex, viewableIndex + VIEWABLE_HOSPITAL_COUNT));
+  }, [similarHospitals]);
 
+
+  useEffect(() => {
+    setViewableHospitals(similarHospitals.slice(viewableIndex, viewableIndex + VIEWABLE_HOSPITAL_COUNT));
+  }, [viewableIndex]);
+
+  return (
+    <Box sx={{ padding: 6, backgroundColor: "#92C65E" }}>
+      {/* Header */}
+      <Stack id='asdf'
+        direction={"row"}
+        justifyContent="space-between"
+        marginBottom={4}
+      >
+        <Typography variant="h4" sx={{
+          justifyContent: "flex-start",
+          textAlign: "left",
+          fontWeight: 600
+        }}>
+          Similar projects:
+        </Typography>
+        <Box justifySelf={"flex-end"}>
+          <IconButton
+            disabled={viewableIndex === 0}
+            onClick={() => setViewableIndex(viewableIndex - 1)}>
+            <ArrowCircleLeftOutlinedIcon fontSize='large' />
+          </IconButton>
+          <IconButton
+            disabled={viewableIndex === similarHospitals.length - VIEWABLE_HOSPITAL_COUNT}
+            onClick={() => setViewableIndex(viewableIndex + 1)}>
+            <ArrowCircleRightOutlinedIcon fontSize='large' />
+          </IconButton>
+        </Box>
+      </Stack>
       {/* Cards */}
       <Stack
         direction={"row"}
         justifyContent="space-evenly"
         spacing={2}
-        padding={4}
-        sx={{
-          width: "calc(100% - 32px)",
-        }}
       >
-        {activeHospitals.map((hosp) => (
-          <HospitalPageInfoCard key={hosp.id} hospital={hosp} />
+        {viewableHospitals.map((hosp, idx) => (
+          <HospitalPageInfoCard key={hosp.id + idx} hospital={hosp} />
         ))}
       </Stack>
-
-      {/* See More Button - removing until we get instructions on behavior */}
-      {/* <Box sx={{ textAlign: "center", marginTop: 4 }}>
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "#4A24E7",
-            width: "50%",
-            padding: "10px 20px",
-            textTransform: "none",
-          }}
-        >
-          See More
-        </Button>
-      </Box> */}
-    </Box>
+    </Box >
   );
 };
 
