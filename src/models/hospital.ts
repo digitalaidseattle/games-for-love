@@ -15,8 +15,8 @@ export type Hospital = {
   longitude: number;
   latitude: number;
   hospitalPictures: string[];
-  matchedRequest: HospitalRequest | undefined;
-  matchedFunded: HospitalFunded | undefined;
+  matchedRequest: HospitalRequest;
+  matchedFunded: HospitalFunded;
   status: string;
   fundingLevel: number;
   searchTerm: string;

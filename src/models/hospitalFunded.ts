@@ -12,7 +12,7 @@ export type HospitalFunded = {
   equipmentShipped: number;
   fundingCompleted: number;
   funders: string;
-  corporateFunding: string;
+  corporateFunding?: string;
   thankYouNote: string;
   fundedPictures: string[];
   impactPictures: string[];
