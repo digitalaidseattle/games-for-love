@@ -18,9 +18,9 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "react-reflex/styles.css";
 import "./App.css";
 
-import { FilterContext } from "./context/FilterContext";
-import { DrawerWidthContext } from "./context/DrawerWidthContext";
 import { DonateOverlay } from "./components/DonateOverlay";
+import { DrawerWidthContext } from "./context/DrawerWidthContext";
+import { FilterContext } from "./context/FilterContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -41,7 +41,14 @@ const SizeAwareReflexElement = (props: {
   }, [props]);
 
   return (
-    <Box id="drawer" sx={{ height: props.windowHeight, overflowY: "auto" }}>
+    <Box
+      id="drawer"
+      sx={{
+        height: props.windowHeight,
+        overflowY: "auto",
+        overflowX: "hidden",
+      }}
+    >
       <SearchAndSort />
       <Box data-testid="hospital-list">
         <HospitalList />
@@ -68,11 +75,10 @@ function App() {
     if (filters) {
       hospitalService
         .findAll(filters)
-        .then((res) =>
-          setOriginals(
-            res.filter((hospital) => hospitalService.isValid(hospital))
-          )
-        );
+        .then((res) => {
+          const validHospitals = res.filter((hospital) => hospitalService.isValid(hospital));
+          setOriginals(validHospitals)
+        });
     }
   }, [filters]);
 

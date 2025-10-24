@@ -34,16 +34,15 @@ import ActionButton from "../styles/ActionButton";
 import { DialogProps } from "../types/dialogProps";
 import { FilterStatus } from "../types/fillterType";
 
-const RadioOption = (props: { label: string, value: string }) => {
+const RadioOption = (props: { label: string; value: string }) => {
   return (
     <FormControlLabel
       value={props.value}
-      control={
-        <Radio />
-      }
+      control={<Radio />}
       label={props.label}
-    />);
-}
+    />
+  );
+};
 
 const CustomDialog = styled(Dialog)(() => ({
   "& .MuiDialog-paper": {
@@ -55,19 +54,26 @@ const CustomDialog = styled(Dialog)(() => ({
 }));
 
 const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
-
   const { setOriginals } = useContext(HospitalsContext);
   const { filters, setFilters } = useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
-  const [locationChips, setLocationChips] = useState<string[]>(filters.location);
+  const [locationChips, setLocationChips] = useState<string[]>(
+    filters.location
+  );
   const [status, setStatus] = useState("all");
   const [sortBy, setSortBy] = useState("hospitalName");
 
   useEffect(() => {
     if (filters) {
       setLocationChips(filters.location);
-      setSortBy(filters.sortBy)
-      setStatus(filters.status.length === 2 ? "all" : filters.status.length === 1 ? filters.status[0] : "hospitalName");
+      setSortBy(filters.sortBy);
+      setStatus(
+        filters.status.length === 2
+          ? "all"
+          : filters.status.length === 1
+          ? filters.status[0]
+          : "hospitalName"
+      );
     }
   }, [filters]);
 
@@ -96,14 +102,13 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
     const updated = Object.assign(filters, {
       sortBy: sortBy,
       location: locationChips,
-      status: status === 'all' ? ["active", "past"] : [status]
+      status: status === "all" ? ["active", "past"] : [status],
     });
-    hospitalService.findAll(updated)
-      .then(hospitals => {
-        setOriginals(hospitals)
-        setFilters(updated);
-        handleClose();
-      })
+    hospitalService.findAll(updated).then((hospitals) => {
+      setOriginals(hospitals);
+      setFilters(updated);
+      handleClose();
+    });
   };
 
   const handleClearAll = async () => {
@@ -116,14 +121,15 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
     let initialStatus;
     if (
       filters.status.length === 2 ||
-      (!filters.status.includes(FilterStatus.ACTIVE) && !filters.status.includes(FilterStatus.PAST))
+      (!filters.status.includes(FilterStatus.ACTIVE) &&
+        !filters.status.includes(FilterStatus.PAST))
     ) {
       initialStatus = "all";
     } else {
       initialStatus = filters.status[0];
     }
     setStatus(initialStatus);
-  }, []);
+  }, [filters.status]);
 
   return (
     <CustomDialog
@@ -151,9 +157,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
       </IconButton>
       <DialogContent>
         <Box sx={{ mt: 2, mb: 0.8 }}>
-          <Typography
-            sx={{ fontSize: "20px", fontWeight: "bold" }}
-          >
+          <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
             Location
           </Typography>
           <TextField
@@ -261,19 +265,16 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
       <Divider sx={{ borderBottomWidth: 2.2 }} />
       <DialogActions
         sx={{
-          mt: 3,
-          mb: 2,
           display: "flex",
           justifyContent: "space-between",
-          gap: 10,
+          margin: "1rem",
         }}
       >
         <Button
           fullWidth
           onClick={handleClearAll}
           sx={{
-            width: "20%",
-            margin: "0 10px",
+            width: "25%",
             backgroundColor: "transparent",
             color: "text.primary",
             textTransform: "none",
@@ -300,7 +301,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
         <ActionButton
           onClick={handleApplyFilters}
           sx={{
-            width: "50%",
+            width: "55%",
           }}
         >
           Apply

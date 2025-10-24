@@ -5,99 +5,63 @@
  *
  */
 
-import { useContext, useEffect, useCallback } from "react";
-import { DonationContext } from "../context/DonationContext";
 import { Backdrop, Box, Theme } from "@mui/material";
-import DialogCloseButton from "../styles/DialogCloseButton";
-import { DonationHospitalContext } from "../context/SelectedHospitalContext";
-import {
-  FUNDRAISUP_CONFIG,
-  cleanupFundraiseUp,
-} from "../config/fundraisupConfig";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { loadFundraiseUpWidget, cleanupFundraiseUp, FundraiseUpWidgetConfig } from "../services/fundraiseUp";
+import { DonationContext } from "../context/DonationContext";
 import { GeneralInfoContext } from "../context/GeneralInfoContext";
+import { DonationHospitalContext } from "../context/SelectedHospitalContext";
+import DialogCloseButton from "../styles/DialogCloseButton";
 
-declare global {
-  interface Window {
-    FundraiseUp?: {
-      widget: {
-        show: (options: {
-          elementId: string;
-          designationId?: string;
-          campaign?: string;
-        }) => void;
-        hide: () => void;
-        destroy?: () => void;
-      };
-      configure: (options: { token: string }) => void;
-    };
-    FundraiseUpQ?: Array<() => void>;
-  }
-}
+// FundraisUp campaign and element configuration
+const FUNDRAISEUP_CONFIG = {
+  GENERAL_ELEMENT_ID: "XAAQRAAL",
+  HOSPITAL_ELEMENT_ID: "XEABHHQN",
+} as const;
+
+// DAS configuration for FundraiseUp elements
+// const FUNDRAISEUP_CONFIG = {
+//   GENERAL_ELEMENT_ID: "XWQCRFLJ",
+//   HOSPITAL_ELEMENT_ID: "XHEMMJEY",
+// } as const;
+
 
 export const DonateOverlay = () => {
   const { generalInfo } = useContext(GeneralInfoContext);
-  const { donateOverlayOpen, setDonateOverlayOpen } =
-    useContext(DonationContext);
+  const { donateOverlayOpen, setDonateOverlayOpen } = useContext(DonationContext);
   const { hospital, setHospital } = useContext(DonationHospitalContext);
-
-  const handleClose = useCallback(() => {
-    cleanupFundraiseUp();
-    setHospital(undefined);
-    setDonateOverlayOpen(false);
-  }, [setDonateOverlayOpen, setHospital]);
-
-  const getWidgetConfig = () => {
-    if (!hospital) {
-      return {
-        elementId: FUNDRAISUP_CONFIG.GENERAL_ELEMENT_ID,
-        campaign: generalInfo.fundraiseUpCampaignId,
-      };
-    } else {
-      return {
-        elementId: FUNDRAISUP_CONFIG.HOSPITAL_ELEMENT_ID,
-        campaign: hospital.matchedRequest?.fundraiseUpCampaignId,
-      };
-    }
-  };
+  const [widgetConfig, setWidgetConfig] = useState<FundraiseUpWidgetConfig>();
 
   useEffect(() => {
-    if (donateOverlayOpen) {
-      console.log("Effect triggered with: ", {
-        contextOrgId: generalInfo.fundraiseUpOrganizationId,
-        configOrgId: FUNDRAISUP_CONFIG.ORGANIZATION_ID,
-        generalInfo: generalInfo,
-      });
-
-      window.FundraiseUpQ = window.FundraiseUpQ || [];
-      const widgetConfig = getWidgetConfig();
-
-      window.FundraiseUpQ.push(() => {
-        window.FundraiseUp?.configure({
-          token: generalInfo.fundraiseUpOrganizationId,
+    if (donateOverlayOpen && generalInfo) {
+      if (hospital && hospital.matchedRequest) {
+        setWidgetConfig({
+          elementId: FUNDRAISEUP_CONFIG.HOSPITAL_ELEMENT_ID,
+          campaign: hospital.matchedRequest.fundraiseUpCampaignId
         });
-      });
+      } else {
+        setWidgetConfig({
+          elementId: FUNDRAISEUP_CONFIG.GENERAL_ELEMENT_ID,
+          campaign: generalInfo.fundraiseUpCampaignId
+        });
+      }
+    }
+  }, [donateOverlayOpen, hospital, generalInfo]);
 
-      window.FundraiseUpQ.push(() => {
-        window.FundraiseUp?.widget.show(widgetConfig);
-      });
-
-      const script = document.createElement("script");
-
-      script.src = `https://cdn.fundraiseup.com/widget/${FUNDRAISUP_CONFIG.ORGANIZATION_ID}`;
-      script.async = true;
-      script.setAttribute("as", "script");
-      script.setAttribute("importance", "high");
-      script.onerror = () => {
-        console.error("Failed to load FundraiseUp script");
-        handleClose();
-      };
-      document.body.appendChild(script);
-
+  useEffect(() => {
+    if (widgetConfig) {
+      loadFundraiseUpWidget(generalInfo.fundraiseUpOrganizationId, widgetConfig, handleClose);
       return () => {
         cleanupFundraiseUp();
       };
     }
-  }, [donateOverlayOpen, hospital, generalInfo, handleClose]);
+  }, [widgetConfig]);
+
+  const handleClose: () => void = useCallback(() => {
+    cleanupFundraiseUp();
+    setHospital(undefined);
+    setDonateOverlayOpen(false);
+  }, [setDonateOverlayOpen, setHospital]);
 
   return (
     donateOverlayOpen && (
@@ -134,7 +98,7 @@ export const DonateOverlay = () => {
         >
           {hospital && <h2>Donate to {hospital.name}</h2>}
           <a
-            href={`#${getWidgetConfig().elementId}`}
+            href={`#${widgetConfig ? widgetConfig.elementId : ''}`}
             style={{ display: "none" }}
           />
         </Box>

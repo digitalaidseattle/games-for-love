@@ -6,24 +6,39 @@
  */
 import { Button } from "@mui/material";
 
-const ToolbarButton = (props: any) => {
-    return (
-        <Button
-            variant="outlined"
-            onClick={props.onClick}
-            disabled={props.disabled}
-            sx={Object.assign({
-                outline: "1px",
-                margin: "0px",
-                height: "36px",
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: "12px"               
-            }, props.sx)}
-        >
-            {props.children}
-        </Button>
-    );
+import { ReactNode } from "react";
+
+interface ToolbarButtonProps {
+  variant?: "text" | "outlined" | "contained";
+  onClick?: () => void;
+  disabled?: boolean;
+  height?: string | number;
+  width?: string | number;
+  sx?: object;
+  children?: ReactNode;
 }
 
-export default ToolbarButton
+const ToolbarButton = (props: ToolbarButtonProps) => {
+  return (
+    <Button
+      variant={props.variant ?? "outlined"}
+      onClick={props.onClick}
+      disabled={props.disabled}
+      sx={Object.assign(
+        {
+          margin: "0px",
+          height: props.height ?? "2.5rem",
+          width: props.width,
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "12px",
+        },
+        props.sx
+      )}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+export default ToolbarButton;

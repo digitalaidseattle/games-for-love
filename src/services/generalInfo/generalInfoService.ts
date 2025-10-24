@@ -53,9 +53,24 @@ class GeneralInfoService {
 
 }
 
+import microsoft from "../../../test/microsoft.svg";
+import starbucks from "../../../test/starbucks.svg";
+import { CorporatePartner } from "../../models/corporatePartner";
 
-// import microsoft from "../../../test/microsoft.svg";
-// import starbucks from "../../../test/starbucks.svg";
+export const TEST_PARTNER = [
+  {
+    name: 'Microsoft',
+    logo: microsoft,
+    match: 14000
+  } as CorporatePartner,
+  {
+    name: 'Starbucks',
+    logo: starbucks,
+    match: 18000
+  } as CorporatePartner
+]
+
+
 // import apple from "../../../test/apple.svg";
 // class MockGeneralInfoService extends GeneralInfoService {
 //   async findAll(): Promise<GeneralInfo[]> {

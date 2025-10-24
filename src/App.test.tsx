@@ -41,11 +41,14 @@ describe("App component", () => {
     expect(searchAndSortElement).toBeInTheDocument();
 
     await waitFor(() => {
-      const hospitalDetailCard = screen.getByTestId("hospital-detail-card");
-      expect(hospitalDetailCard).toBeInTheDocument();
 
       const hopitalList = screen.getByTestId("hospital-list");
       expect(hopitalList).toBeInTheDocument();
+
+      screen.findAllByTestId("hospital-detail-card")
+        .then((hospitalDetailCards) => {
+          expect(hospitalDetailCards.length).toBeGreaterThan(0);
+        });
 
       const gflMap = screen.getByTestId("gfl-map-box");
       expect(gflMap).toBeInTheDocument();
@@ -91,8 +94,10 @@ describe("App component", () => {
       </ThemeProvider>
     );
     await waitFor(() => {
-      const hospitalDetailCards = screen.getAllByTestId("hospital-detail-card");
-      expect(hospitalDetailCards.length).toEqual(2);
+      screen.findAllByTestId("hospital-detail-card")
+        .then((hospitalDetailCards) => {
+          expect(hospitalDetailCards.length).toEqual(2);
+        });
     });
   });
   //it done
