@@ -29,7 +29,7 @@ const HospitalPageStatsSection = () => {
         hospital.matchedRequest.requested;
       setStats([
         {
-          startNumber: percentage * parseInt(hospital.matchedRequest.play3Y),
+          startNumber: percentage * hospital.matchedRequest.play3Y,
           endNumber: hospital.matchedRequest.play3Y ?? 0,
           label: "play sessions in 3 years",
           background:
