@@ -143,7 +143,8 @@ class HospitalService {
         hospitals.push(TEST_DONATION_HOSPTIAL);
         hospitals.push(TEST_DONATION_HOSPTIAL);
       }
-      return hospitals;
+      return hospitals
+        .filter(h => this.isValid(h));
     });
   }
 
