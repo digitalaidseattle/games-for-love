@@ -76,7 +76,9 @@ class HospitalService {
         .filter(this.filterPredicate(filter!))
         .sort(this.getSortComparator(filter!)) as Hospital[];
       // Adding mock data here
-      return hospitals.concat(MOCK_HOSPITALS);
+      return hospitals
+        .concat(MOCK_HOSPITALS)
+        .filter(h => this.isValid(h));
     });
   }
 
