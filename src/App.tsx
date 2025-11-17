@@ -2,7 +2,7 @@
  * App.tsx
  */
 
-import { Box } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 
@@ -21,6 +21,7 @@ import "./App.css";
 import { DonateOverlay } from "./components/DonateOverlay";
 import { DrawerWidthContext } from "./context/DrawerWidthContext";
 import { FilterContext } from "./context/FilterContext";
+import { LoadingContext } from "./context/LoadingContext";
 
 const HospitalList = () => {
   const { hospitals } = useContext(HospitalsContext);
@@ -62,6 +63,7 @@ function App() {
   const { setOriginals } = useContext(HospitalsContext);
   const { drawerWidth } = useContext(DrawerWidthContext);
   const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
+  const { loading, setLoading } = useContext(LoadingContext);
 
   useEffect(() => {
     function handleResize() {
@@ -73,17 +75,38 @@ function App() {
 
   useEffect(() => {
     if (filters) {
+      setLoading(true);
       hospitalService
         .findAll(filters)
         .then((res) => {
           const validHospitals = res.filter((hospital) => hospitalService.isValid(hospital));
           setOriginals(validHospitals)
-        });
+        })
+        .finally(() => setLoading(false));
     }
   }, [filters]);
 
   return (
+
     <>
+      {
+        loading &&
+        <Box
+          sx={{
+            position: "fixed",
+            inset: 0, // top:0, right:0, bottom:0, left:0
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+
+            backgroundColor: "rgba(255, 255, 255, 0.5)", // transparent white overlay
+            backdropFilter: "blur(2px)",                 // optional: subtle blur
+            zIndex: 1300,                                // above most content
+          }}
+        >
+          <CircularProgress size={100} />
+        </Box>
+      }
       <ReflexContainer orientation="vertical">
         <ReflexElement size={drawerWidth} propagateDimensions={true}>
           <SizeAwareReflexElement windowHeight={windowHeight} />
