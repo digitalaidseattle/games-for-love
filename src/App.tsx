@@ -75,10 +75,7 @@ function App() {
     if (filters) {
       hospitalService
         .findAll(filters)
-        .then((res) => {
-          const validHospitals = res.filter((hospital) => hospitalService.isValid(hospital));
-          setOriginals(validHospitals)
-        });
+        .then((hosp) => setOriginals(hosp));
     }
   }, [filters]);
 

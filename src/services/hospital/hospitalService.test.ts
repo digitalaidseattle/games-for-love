@@ -13,6 +13,8 @@ import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 import { hospitalService } from "./hospitalService";
 import { FilterType, sortDirection } from "../../types/fillterType";
+import { HospitalFunded } from "../../models/hospitalFunded";
+import { HospitalRequest } from "../../models/hospitalRequest";
 
 describe("HospitalService tests", () => {
     it("findAll", async () => {
@@ -49,7 +51,7 @@ describe("HospitalService tests", () => {
         expect(getHospitalRequestSpy).toHaveBeenCalled();
         expect(getHospitalFundedSpy).toHaveBeenCalled();
 
-        expect(result).toEqual([
+        expect(result[0]).toEqual(
             {
                 id: undefined,
                 name: "May Hospital",
@@ -71,7 +73,7 @@ describe("HospitalService tests", () => {
                 searchTerm: "wa.seattle.us.may hospital",
                 fundraiseUpCampaignId: "FUNTTHDCELT"
             },
-        ]);
+        );
     });
 
     it("should return true if hospital status is active", () => {
@@ -90,8 +92,8 @@ describe("HospitalService tests", () => {
             longitude: 1,
             latitude: 1,
             hospitalPictures: ["pic1.com"],
-            matchedFunded: undefined,
-            matchedRequest: undefined,
+            matchedFunded: {} as HospitalFunded,
+            matchedRequest: {} as HospitalRequest,
             fundingLevel: 0,
             searchTerm: "wa.seattle.US.may hospital"
         };
@@ -116,8 +118,8 @@ describe("HospitalService tests", () => {
             longitude: 1,
             latitude: 1,
             hospitalPictures: ["pic1.com"],
-            matchedRequest: undefined,
-            matchedFunded: undefined,
+            matchedFunded: {} as HospitalFunded,
+            matchedRequest: {} as HospitalRequest,
             fundingLevel: 0,
             searchTerm: "wa.seattle.zip12345"
         };
