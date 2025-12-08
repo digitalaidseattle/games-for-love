@@ -255,6 +255,26 @@ class HospitalService {
       }))
       .sort((a, b) => a.distanceSq - b.distanceSq) // Closest first
   }
+
+  fundingStatusMessage(hospital: Hospital) {
+    const percentage = Math.round(this.calcFundingLevel(hospital) * 100);
+    return `${this.getUSCurrencyString(hospital.matchedFunded?.fundingCompleted! / 1000, 2)}k raised (${percentage}%)`;
+  }
+
+  getFundingCompletedMessage(hospital: Hospital): string {
+    const fundingCompleted = this.getUSCurrencyString(hospital.matchedFunded?.fundingCompleted || 0);
+    const fundingRequested = this.getUSCurrencyString(hospital.matchedRequest?.requested || 0);
+    return `${fundingCompleted} raised of ${fundingRequested} - `
+  }
+
+  getUSCurrencyString(amount: number, decimal?: number): string {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: decimal ?? 0,
+      maximumFractionDigits: decimal ?? 0,
+    }).format(amount);
+  }
 }
 
 const hospitalService = new HospitalService();

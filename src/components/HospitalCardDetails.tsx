@@ -353,8 +353,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               textOverflow: "ellipsis",
             }}
           >
-            ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)} raised
-            of ${Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
+            {hospitalService.getFundingCompletedMessage(hospital)}
             <EmphasizedText sx={{ color: statusColor }}>
               {status}
             </EmphasizedText>
