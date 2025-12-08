@@ -17,30 +17,33 @@ import { DrawerWidthContextProvider } from "../context/DrawerWidthContext.tsx";
 import { GeneralInfoContextProvider } from "../context/GeneralInfoContext.tsx";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Palette from "../styles/theme";
+import { LoadingContextProvider } from "../context/LoadingContext.tsx";
 
 const themes = Palette();
 type ProvidersProps = { children: ReactNode };
 
 const Providers = ({ children }: ProvidersProps) => {
   return (
-    <ThemeProvider theme={themes}>
-      <CssBaseline />
-      <GeneralInfoContextProvider>
-        <DrawerWidthContextProvider>
-          <DonationContextProvider>
-            <HospitalsContextProvider>
-              <SelectedHospitalContextProvider>
-                <DonationHospitalContextProvider>
-                  <LearnMoreHospitalContextProvider>
-                    <FilterContextProvider>{children}</FilterContextProvider>
-                  </LearnMoreHospitalContextProvider>
-                </DonationHospitalContextProvider>
-              </SelectedHospitalContextProvider>
-            </HospitalsContextProvider>
-          </DonationContextProvider>
-        </DrawerWidthContextProvider>
-      </GeneralInfoContextProvider>
-    </ThemeProvider>
+    <LoadingContextProvider>
+      <ThemeProvider theme={themes}>
+        <CssBaseline />
+        <GeneralInfoContextProvider>
+          <DrawerWidthContextProvider>
+            <DonationContextProvider>
+              <HospitalsContextProvider>
+                <SelectedHospitalContextProvider>
+                  <DonationHospitalContextProvider>
+                    <LearnMoreHospitalContextProvider>
+                      <FilterContextProvider>{children}</FilterContextProvider>
+                    </LearnMoreHospitalContextProvider>
+                  </DonationHospitalContextProvider>
+                </SelectedHospitalContextProvider>
+              </HospitalsContextProvider>
+            </DonationContextProvider>
+          </DrawerWidthContextProvider>
+        </GeneralInfoContextProvider>
+      </ThemeProvider>
+    </LoadingContextProvider>
   );
 };
 export default Providers;
