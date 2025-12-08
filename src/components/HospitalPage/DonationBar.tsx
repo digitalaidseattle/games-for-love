@@ -86,7 +86,7 @@ const DonationBar: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
             },
             backgroundColor: "rgba(255, 107, 107, 0.1)",
           }}
-          value={percentage} />
+          value={Math.min(100, percentage)} />
 
         {/* Donation Info */}
         <Box
@@ -137,8 +137,8 @@ const DonationBar: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
         {/* Days Left */}
         <Typography variant="body2" marginTop={'1rem'} fontSize={14}>
           {active
-           ? `Expires ${format(hospital!.matchedRequest!.fundingDeadline!, "MMMM d")}`
-           : "Donations closed"
+            ? `Expires ${format(hospital!.matchedRequest!.fundingDeadline!, "MMMM d")}`
+            : "Donations closed"
           }
         </Typography>
       </Stack>
