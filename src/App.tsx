@@ -1,14 +1,12 @@
 /**
  * App.tsx
  */
-
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 
 import { GFLMap } from "./components/GFLMap";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
-
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import { HospitalsContext } from "./context/HospitalContext";
@@ -22,14 +20,24 @@ import { DonateOverlay } from "./components/DonateOverlay";
 import { DrawerWidthContext } from "./context/DrawerWidthContext";
 import { FilterContext } from "./context/FilterContext";
 
-const HospitalList = () => {
+import * as styles from "./AppStyles";
+
+// Shared list renderer
+const HospitalList = ({ isMobileView }: { isMobileView: boolean }) => {
   const { hospitals } = useContext(HospitalsContext);
-  return hospitals?.map((hospital, idx: number) => (
-    <HospitalCardDetails key={`h-${idx})`} hospital={hospital} />
-    // <PrevHospitalCardDetails key={`h-${idx})`} hospital={hospital} />
-  ));
+
+  return (
+    <>
+      {hospitals?.map((hospital, idx: number) => (
+        <Box key={`h-${idx})`} sx={styles.hospitalCardBox(isMobileView)}>
+          <HospitalCardDetails hospital={hospital} />
+        </Box>
+      ))}
+    </>
+  );
 };
 
+// Laptop drawer element
 const SizeAwareReflexElement = (props: {
   windowHeight: number;
   dimensions?: any;
@@ -37,21 +45,16 @@ const SizeAwareReflexElement = (props: {
   const { setLastDrawerWidth } = useContext(DrawerWidthContext);
 
   useEffect(() => {
-    setLastDrawerWidth(props.dimensions.width);
-  }, [props]);
+    if (props.dimensions?.width) {
+      setLastDrawerWidth(props.dimensions.width);
+    }
+  }, [props.dimensions, setLastDrawerWidth]);
 
   return (
-    <Box
-      id="drawer"
-      sx={{
-        height: props.windowHeight,
-        overflowY: "auto",
-        overflowX: "hidden",
-      }}
-    >
+    <Box id="drawer" sx={styles.drawerBox(props.windowHeight)}>
       <SearchAndSort />
       <Box data-testid="hospital-list">
-        <HospitalList />
+        <HospitalList isMobileView={false} />
       </Box>
     </Box>
   );
@@ -63,6 +66,10 @@ function App() {
   const { drawerWidth } = useContext(DrawerWidthContext);
   const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
 
+  const theme = useTheme();
+  // when screen size is < md change to mobile layout
+  const isMobileView = useMediaQuery(theme.breakpoints.down("md"));
+
   useEffect(() => {
     function handleResize() {
       setWindowHeight(window.innerHeight);
@@ -73,12 +80,44 @@ function App() {
 
   useEffect(() => {
     if (filters) {
-      hospitalService
-        .findAll(filters)
-        .then((hosp) => setOriginals(hosp));
+      hospitalService.findAll(filters).then((hosp) => setOriginals(hosp));
     }
-  }, [filters]);
+  }, [filters, setOriginals]);
 
+  // Mobile Layout
+  if (isMobileView) {
+    return (
+      <>
+        <Box sx={styles.mobileRootBox}>
+          {/* Full-screen map */}
+          <Box sx={styles.mobileMapBox}>
+            <GFLMap />
+          </Box>
+
+          {/* Search and sort tool bar */}
+          <Box sx={styles.mobileToolbarWrapperBox}>
+            <Box sx={styles.mobileToolbarInnerBox}>
+              <SearchAndSort />
+            </Box>
+          </Box>
+
+          {/* Hospital cards */}
+          <Box sx={styles.mobileHospitalOverlayBox}>
+            <Box
+              data-testid="hospital-list"
+              sx={styles.mobileHospitalListBox}
+            >
+              <HospitalList isMobileView={true} />
+            </Box>
+          </Box>
+        </Box>
+
+        <DonateOverlay />
+      </>
+    );
+  }
+
+  // Laptop Broswer Layout 
   return (
     <>
       <ReflexContainer orientation="vertical">

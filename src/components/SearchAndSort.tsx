@@ -8,7 +8,7 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Box, IconButton, InputAdornment, TextField, useTheme, useMediaQuery } from "@mui/material";
 import { ChangeEvent, useContext, useState } from "react";
 import GamesForLoveLogo from "../assets/games-for-love-logo.png";
 
@@ -29,6 +29,10 @@ export const SearchAndSort = () => {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const { setDonateOverlayOpen } = useContext(DonationContext);
+  const theme = useTheme();
+  // need to check isMobile to change many designs on the tool bar, should I create a new toolbar specifically for mobile?
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  
 
   const handleDonateClick = () => {
     window.history.replaceState({}, "", window.location.pathname);
@@ -122,11 +126,18 @@ export const SearchAndSort = () => {
             },
           }}
         />
-        <ToolbarButton onClick={handleOpenFilters}>
+        <ToolbarButton
+          onClick={handleOpenFilters}
+          sx={{
+            backgroundColor: "white"
+          }}>
           <FilterListIcon />
         </ToolbarButton>
         <ToolbarButton
           onClick={handelOrderButton}
+          sx={{
+            backgroundColor: "white"
+          }}
           disabled={
             isDisabled || filters.sortDirection === sortDirection.UNDEFINED
           }

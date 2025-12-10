@@ -13,6 +13,7 @@ import {
   Theme,
   Typography,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -49,6 +50,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
   const [statusColor, setStatusColor] = useState<string>();
 
   const theme = useTheme();
+  const isMobileView = useMediaQuery(theme.breakpoints.down("md"));
 
   const { setDonateOverlayOpen } = useContext(DonationContext);
 
@@ -63,8 +65,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
         hospitalService.isEqual(hospital, selectedHospital)
           ? theme.palette.hospital.selected
           : hospital.status === "past"
-          ? theme.palette.hospital.closed
-          : theme.palette.hospital.open
+            ? theme.palette.hospital.closed
+            : theme.palette.hospital.open
       );
       setStatusColor(
         hospital.status === "past"
@@ -133,12 +135,15 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
       >
         <Box
           sx={{
-            flex: 7,
+            flex: { xs: 1, md: 7 },             // full flex on mobile
             display: "flex",
-            maxWidth: "70%",
+            maxWidth: { xs: "100%", md: "70%" }, // full width on mobile
             height: "100%",
             flexDirection: "row",
-            borderRight: "1px solid #D9D9D9",
+            borderRight: {
+              xs: "none",        // no line on mobile
+              md: "1px solid #D9D9D9", // show line on desktop
+            },
           }}
         >
           {/* 이미지 섹션 */}
@@ -146,8 +151,8 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
             sx={{
               flex: 4,
               display: "flex",
-              minWidth: "120px",
-              maxWidth: "200px",
+              minWidth: { xs: "120px", md: "120px" },
+              maxWidth: { xs: "160px", md: "200px" },
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -165,14 +170,14 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   className="cardWrapper"
                   sx={{
                     width: {
-                      xs: "100%",
+                      xs: "40%",
                       sm: "3rem",
                       md: "4rem",
                       lg: "6rem",
                       xl: "100%",
                     },
                     height: {
-                      xs: "0rem",
+                      xs: "100px",
                       sm: "3rem",
                       md: "4rem",
                       lg: "6rem",
@@ -297,13 +302,14 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
 
         <Box
           sx={{
-            flex: 3,
-            display: "flex",
+            flex: { xs: 0, md: 3 },                 
+            display: { xs: "none", md: "flex" },    // hide entirely on mobile
             flexDirection: "column",
-            maxWidth: "30%",
+            maxWidth: { xs: 0, md: "30%" },         // no width on mobile
             textAlign: "center",
           }}
         >
+
           {partnerName && (
             <Box
               display="flex"
@@ -338,40 +344,44 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
               </Typography>
             </Box>
           )}
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              fontSize: {
-                xs: "0.65rem",
-                sm: "0.75rem",
-                md: "0.75rem",
-                lg: "0.75rem",
-                xl: "0.75rem",
-              },
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)} raised
-            of ${Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
-            <EmphasizedText sx={{ color: statusColor }}>
-              {status}
-            </EmphasizedText>
-          </Typography>
-          <Typography variant="body2" color={theme.palette.text.secondary}>
-            {hospital.year}+ kids impacted
-          </Typography>
-          <EmphasizedText
-            align="center"
-            sx={{
-              marginTop: 5,
-              fontWeight: "bold",
-              color: (theme: Theme) => theme.palette.text.secondary,
-            }}
-          >
-            {hospitalService.getDonationMessage(hospital)}
-          </EmphasizedText>
+          {!isMobileView && (
+            <>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  fontSize: {
+                    xs: "0.65rem",
+                    sm: "0.75rem",
+                    md: "0.75rem",
+                    lg: "0.75rem",
+                    xl: "0.75rem",
+                  },
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                ${Math.round(hospital.matchedFunded?.fundingCompleted || 0)} raised
+                of ${Math.round(hospital.matchedRequest?.requested || 0)} -{" "}
+                <EmphasizedText sx={{ color: statusColor }}>
+                  {status}
+                </EmphasizedText>
+              </Typography>
+              <Typography variant="body2" color={theme.palette.text.secondary}>
+                {hospital.year}+ kids impacted
+              </Typography>
+              <EmphasizedText
+                align="center"
+                sx={{
+                  marginTop: 5,
+                  fontWeight: "bold",
+                  color: (theme: Theme) => theme.palette.text.secondary,
+                }}
+              >
+                {hospitalService.getDonationMessage(hospital)}
+              </EmphasizedText>
+            </>
+          )}
         </Box>
       </Card>
     </Box>
