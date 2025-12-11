@@ -28,7 +28,7 @@ export const SearchAndSort = () => {
   const { filters, setFilters } = useContext(FilterContext);
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const { setDonateOverlayOpen } = useContext(DonationContext);
+  const { setDonateOverlayOpen } = useContext(DonationContext);  
 
   const handleDonateClick = () => {
     window.history.replaceState({}, "", window.location.pathname);
@@ -122,11 +122,18 @@ export const SearchAndSort = () => {
             },
           }}
         />
-        <ToolbarButton onClick={handleOpenFilters}>
+        <ToolbarButton
+          onClick={handleOpenFilters}
+          sx={{
+            backgroundColor: "white"
+          }}>
           <FilterListIcon />
         </ToolbarButton>
         <ToolbarButton
           onClick={handelOrderButton}
+          sx={{
+            backgroundColor: "white"
+          }}
           disabled={
             isDisabled || filters.sortDirection === sortDirection.UNDEFINED
           }
