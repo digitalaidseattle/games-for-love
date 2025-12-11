@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from "react";
 import { format } from "date-fns";
+import { useContext, useEffect, useState } from "react";
 
-import { Box, Divider, Stack, Typography } from "@mui/material";
-import { LocationOnOutlined, EventOutlined } from "@mui/icons-material";
+import { EventOutlined, LocationOnOutlined } from "@mui/icons-material";
+import { Box, Stack, Typography } from "@mui/material";
 import { LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 
 const HospitalPageMain = () => {
@@ -21,9 +21,9 @@ const HospitalPageMain = () => {
       setEndDateText(
         active
           ? `Campaign ends ${format(
-              hospital.matchedRequest!.fundingDeadline!,
-              "MMMM, d, yyyy"
-            )}`
+            hospital.matchedRequest!.fundingDeadline!,
+            "MMMM, d, yyyy"
+          )}`
           : "Campaign closed"
       );
     }
@@ -85,7 +85,6 @@ const HospitalPageMain = () => {
           </Stack>
         </Stack>
       </Stack>
-      <Divider variant="middle" sx={{ marginTop: "3rem" }} />
     </Box>
   );
 };

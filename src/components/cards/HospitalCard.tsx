@@ -172,8 +172,7 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({
         </Typography>
 
         <Typography color="text.secondary" sx={{ fontSize: "10px" }}>
-          ${popupInfo?.hospital.matchedFunded?.fundingCompleted || 0} raised of
-          ${popupInfo?.hospital.matchedRequest?.requested} -{" "}
+          {hospitalService.getFundingCompletedMessage(popupInfo?.hospital!)}
           <EmphasizedText
             sx={{
               color: theme.palette.hospital.open,

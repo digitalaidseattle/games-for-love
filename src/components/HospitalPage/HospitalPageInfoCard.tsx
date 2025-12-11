@@ -136,7 +136,7 @@ const HospitalPageInfoCard = ({ key, hospital }: Props) => {
                 variant="determinate"
                 value={Math.min(100, percentage)} />
               <Typography fontStyle={'italic'} fontSize={10}>
-                ${(hospital!.matchedFunded?.fundingCompleted! / 1000).toFixed(2)}k raised ({percentage}%)
+                {hospitalService.fundingStatusMessage(hospital!)}
               </Typography>
             </Box>
           </Box>
@@ -207,9 +207,9 @@ const HospitalPageInfoCard = ({ key, hospital }: Props) => {
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
               <DonationProgress
                 variant="determinate"
-                value={percentage} />
+                value={Math.min(100, percentage)} />
               <Typography fontStyle={'italic'}>
-                ${hospital!.matchedFunded?.fundingCompleted! / 1000}k raised ({percentage}%)
+                {hospitalService.fundingStatusMessage(hospital!)}
               </Typography>
             </Box>
           </CardContent>
