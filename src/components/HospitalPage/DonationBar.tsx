@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { DonationHospitalContext, LearnMoreHospitalContext } from "../../context/SelectedHospitalContext";
 import { DonationContext } from "../../context/DonationContext";
 import { Hospital } from "../../models/hospital";
+import { hospitalService } from "../../services/hospital/hospitalService";
 
 const DonationBar: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
 
@@ -108,7 +109,7 @@ const DonationBar: React.FC<{ hospital: Hospital }> = ({ hospital }) => {
               flex: 1,
             }}
           >
-            &nbsp;of ${hospital!.matchedRequest?.requested ?? 0} goal
+            &nbsp;of {hospitalService.getUSCurrencyString(hospital!.matchedRequest?.requested ?? 0)} goal
           </Typography>
           <Typography fontSize={12} fontWeight={600}>{percentage.toFixed(0)}%</Typography>
         </Box>
