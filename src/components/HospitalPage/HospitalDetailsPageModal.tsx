@@ -19,19 +19,19 @@ import HospitalPageStatusSection from "./HospitalPageStatusSection";
 const HospitalDetailsPageModal = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
   return (
-    <Box sx={{ padding: "20px" }}>
-      {hospital &&
+    <Box sx={{ padding: { md: "20px" } }}>
+      {hospital && (
         <>
           <HospitalPageMain />
           <Stack>
             <Divider variant="middle" sx={{ margin: 2 }} />
           </Stack>
-          <Stack alignItems={'center'}>
-            <Grid container width={'95%'}>
-              <Grid item xs={7}>
+          <Stack alignItems={"center"}>
+            <Grid container width={"95%"}>
+              <Grid item xs={12} md={7}>
                 <HospitalPageTitleRequestNarrative />
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={12} md={5}>
                 <HospitalPageStatusSection />
               </Grid>
             </Grid>
@@ -41,7 +41,7 @@ const HospitalDetailsPageModal = () => {
           {hospital.status === "past" && <HospitalPageSimilarDetailsSection />}
           {hospital.status === "active" && <ActiveHospitalRequestCarousel />}
         </>
-      }
+      )}
     </Box>
   );
 };

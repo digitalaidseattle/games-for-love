@@ -63,7 +63,7 @@ const HospitalPageStatsSection = () => {
       >
         <Box
           sx={{
-            display: { xs: "none", md: "inline-block" },
+            display: { xs: "inline-block" },
             position: "relative",
             top: { md: "-6em", lg: "-4em" },
             right: { md: "-33em", lg: "-56em", xl: "-62em" },

@@ -68,7 +68,7 @@ const HospitalPageBaseComponent: React.FC<HospitalPageBaseComponentProps> = ({
         container
         spacing={4}
         alignItems="flex-start"
-        padding={5}
+        padding={{ xs: 0, md: 5 }}
         sx={{ ...styles.container }}
       >
         {/* Image Section */}
@@ -77,12 +77,12 @@ const HospitalPageBaseComponent: React.FC<HospitalPageBaseComponentProps> = ({
             <Box
               sx={{
                 width: "100%",
-                height: 400,
+                height: { md: 400 },
                 backgroundColor: "black",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                borderRadius: "15px",
+                borderRadius: { xs: "10px", md: "15px" },
                 overflow: "hidden",
                 ...styles.imageContainer,
               }}
