@@ -103,7 +103,7 @@ const HospitalPageStatsSection = () => {
         >
           <Stack
             direction={{ xs: "column", lg: "row" }}
-            justifyContent="space-evenly"
+            justifyContent="space-around"
             sx={{
               width: "100%",
               height: "100%",
@@ -167,7 +167,7 @@ const HospitalPageStatsSection = () => {
             paragraph={hospital?.matchedFunded?.impactText}
             styles={{
               header: { color: "#000" },
-              paragraph: { margin: "0 2.5rem" },
+              paragraph: { margin: { md: "0 2.5rem" } },
             }}
           />
         )}

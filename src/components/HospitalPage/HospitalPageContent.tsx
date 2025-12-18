@@ -17,7 +17,7 @@ const HospitalPageContent = () => {
         button
         styles={{
           container: {
-            padding: "1rem 5rem",
+            padding: { md: "1rem 5rem" },
           },
           header: {
             color: "#000",

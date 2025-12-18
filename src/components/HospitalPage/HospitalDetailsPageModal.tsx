@@ -19,15 +19,15 @@ import HospitalPageStatusSection from "./HospitalPageStatusSection";
 const HospitalDetailsPageModal = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
   return (
-    <Box sx={{ padding: { md: "20px" } }}>
+    <Box>
       {hospital && (
         <>
           <HospitalPageMain />
           <Stack>
             <Divider variant="middle" sx={{ margin: 2 }} />
           </Stack>
-          <Stack alignItems={"center"}>
-            <Grid container width={"95%"}>
+          <Stack alignItems={"center"} paddingX={{ xs: "1rem", md: "6rem" }}>
+            <Grid container spacing={{ md: 3 }}>
               <Grid item xs={12} md={7}>
                 <HospitalPageTitleRequestNarrative />
               </Grid>
