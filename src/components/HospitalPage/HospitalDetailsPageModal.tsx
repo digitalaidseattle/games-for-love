@@ -24,7 +24,10 @@ const HospitalDetailsPageModal = () => {
         <>
           <HospitalPageMain />
           <Stack>
-            <Divider variant="middle" sx={{ margin: 2 }} />
+            <Divider
+              variant="middle"
+              sx={{ margin: 2, display: { xs: "none", md: "block" } }}
+            />
           </Stack>
           <Stack alignItems={"center"} paddingX={{ xs: "1rem", md: "6rem" }}>
             <Grid container spacing={{ md: 3 }}>
