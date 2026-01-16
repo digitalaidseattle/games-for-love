@@ -21,9 +21,9 @@ const HospitalPageMain = () => {
       setEndDateText(
         active
           ? `Campaign ends ${format(
-            hospital.matchedRequest!.fundingDeadline!,
-            "MMMM, d, yyyy"
-          )}`
+              hospital.matchedRequest!.fundingDeadline!,
+              "MMMM, d, yyyy"
+            )}`
           : "Campaign closed"
       );
     }
@@ -33,7 +33,7 @@ const HospitalPageMain = () => {
     <Box sx={{ margin: "6rem 3rem 2rem 3rem" }}>
       <Stack sx={{ alignItems: "center", gap: 3 }}>
         {/* Name of the hospital */}
-        <Stack>
+        <Stack sx={{ textAlign: "center" }}>
           <Typography variant="h4" sx={{ fontSize: "2.5rem", fontWeight: 700 }}>
             Fundraiser for{" "}
             <Box component="span" sx={{ textTransform: "uppercase" }}>
@@ -42,9 +42,9 @@ const HospitalPageMain = () => {
           </Typography>
         </Stack>
         <Stack
-          direction={"row"}
+          direction={{ xs: "column", md: "row" }}
           sx={{
-            gap: "2rem",
+            gap: { xs: "1rem", md: "2rem" },
             alignItems: "center",
             fontWeight: 600,
           }}
