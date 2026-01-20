@@ -121,7 +121,7 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
         sx={{
           display: "flex",
           flexDirection: { xs: "row", sm: "row" },
-          alignItems: "center",
+          alignItems: { xs: "stretch", md: "center" },
           cursor: "pointer",
           backgroundColor: backgroundColor,
           transition: "transform 0.3s ease-in-out",
@@ -170,14 +170,12 @@ export const HospitalCardDetails: React.FC<{ hospital: Hospital }> = ({
                   className="cardWrapper"
                   sx={{
                     width: {
-                      xs: "40%",
                       sm: "3rem",
                       md: "4rem",
                       lg: "6rem",
                       xl: "100%",
                     },
                     height: {
-                      xs: "100px",
                       sm: "3rem",
                       md: "4rem",
                       lg: "6rem",
