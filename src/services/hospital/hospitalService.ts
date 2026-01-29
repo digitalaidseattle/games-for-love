@@ -85,13 +85,13 @@ class HospitalService {
   filterPredicate(filter: FilterType) {
     return (hospital: Hospital) => {
       if (!filter) return true;
-  
+
       const matchesStatus = filter.status.includes(
         hospital.status.toLowerCase() as FilterStatus
       );
-  
+
       if (!filter.location || filter.location.length === 0) return matchesStatus;
-  
+
       const locationGroups = filter.location
         .map((chip) =>
           chip
@@ -101,16 +101,25 @@ class HospitalService {
             .filter(Boolean)
         )
         .filter((chipTokens) => chipTokens.length > 0);
-  
+
+      const tokenMatchesHospital = (hospital: Hospital, token: string) => {
+        const t = token.toLowerCase();
+        const isStateCode = /^[a-z]{2}$/.test(t);
+
+        if (isStateCode) return (hospital.state ?? "").toLowerCase() === t;
+
+        return (hospital.searchTerm ?? "").includes(t);
+      };
+      
       const matchesLocation =
         locationGroups.length === 0 ||
-        locationGroups.some((chipTokens) =>
-          chipTokens.every((t) => hospital.searchTerm?.includes(t))
+        locationGroups.some((tokens) =>
+          tokens.every((t) => tokenMatchesHospital(hospital, t))
         );
-  
+
       return matchesStatus && matchesLocation;
     };
-  }  
+  }
 
   calcStatus(hospital: Hospital, currentDate: Date): string {
     if (hospital.matchedRequest && hospital.matchedRequest.fundingDeadline) {
