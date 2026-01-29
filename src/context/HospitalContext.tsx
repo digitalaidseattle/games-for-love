@@ -6,7 +6,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 import { Hospital } from "../models/hospital";
 
 interface HospitalsContextType {

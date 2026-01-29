@@ -29,7 +29,7 @@ const HospitalList = ({ isMobileView }: { isMobileView: boolean }) => {
   
   return (
     <>
-      {hospitals?.map((hospital, idx: number) => (
+      {hospitals?.map((hospital) => (
         <Box key={hospital.id} sx={styles.hospitalCardBox(isMobileView)}>
           <HospitalCardDetails hospital={hospital} />
         </Box>
