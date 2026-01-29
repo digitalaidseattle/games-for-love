@@ -26,6 +26,11 @@ export const mobileRootBox: SxProps<Theme> = {
 export const mobileMapBox: SxProps<Theme> = {
   position: "absolute",
   inset: 0,
+
+  // Hide map controls on mobile
+  "& .maplibregl-ctrl": {
+    display: "none",
+  },
 };
 
 export const mobileToolbarWrapperBox: SxProps<Theme> = {

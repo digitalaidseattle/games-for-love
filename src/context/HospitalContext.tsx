@@ -6,7 +6,7 @@
  *  @copyright 2024 Digital Aid Seattle
  *
  */
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 import { Hospital } from "../models/hospital";
 
 interface HospitalsContextType {
@@ -29,9 +29,6 @@ export const HospitalsContextProvider = (props: { children: ReactNode }) => {
   const [originals, setOriginals] = useState<Hospital[]>([]);
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
 
-  useEffect(() => {
-    setHospitals(originals);
-  }, [originals]);
 
   return (
     <HospitalsContext.Provider

@@ -50,7 +50,7 @@ class HospitalService {
     } as Hospital;
     hospital.status = this.calcStatus(hospital, currentDate);
     hospital.fundingLevel = this.calcFundingLevel(hospital);
-    hospital.searchTerm = `${hospital.state?.toLowerCase()}.${hospital.city?.toLowerCase()}.${hospital.country?.toLowerCase()}.${hospital.name?.toLowerCase()}`;
+    hospital.searchTerm = `${hospital.state?.toLowerCase()}.${hospital.city?.toLowerCase()}.${hospital.zip?.toLowerCase()}.${hospital.country?.toLowerCase()}.${hospital.name?.toLowerCase()}`;
     return hospital;
   }
 
@@ -84,23 +84,40 @@ class HospitalService {
 
   filterPredicate(filter: FilterType) {
     return (hospital: Hospital) => {
-      if (!filter) {
-        return true;
-      }
-      if (filter.location.length === 0) {
-        return filter.status.includes(
-          hospital.status.toLowerCase() as FilterStatus
-        );
-      }
-      const lowerLocations = filter.location.map((l) => l.toLowerCase());
-      return (
-        // this would allow partial (e.g. sea will find for Seattle Hospitals)
-        // lowerLocations.find(l => hospital.searchTerm.includes(l)) &&
-        (lowerLocations.includes(hospital.state?.toLowerCase()) ||
-          lowerLocations.includes(hospital.city.toLowerCase()) ||
-          lowerLocations.includes(hospital.zip.toLowerCase())) &&
-        filter.status.includes(hospital.status.toLowerCase() as FilterStatus)
+      if (!filter) return true;
+
+      const matchesStatus = filter.status.includes(
+        hospital.status.toLowerCase() as FilterStatus
       );
+
+      if (!filter.location || filter.location.length === 0) return matchesStatus;
+
+      const locationGroups = filter.location
+        .map((chip) =>
+          chip
+            .toLowerCase()
+            .split(/[\s,]+/)
+            .map((t) => t.trim())
+            .filter(Boolean)
+        )
+        .filter((chipTokens) => chipTokens.length > 0);
+
+      const tokenMatchesHospital = (hospital: Hospital, token: string) => {
+        const t = token.toLowerCase();
+        const isStateCode = /^[a-z]{2}$/.test(t);
+
+        if (isStateCode) return (hospital.state ?? "").toLowerCase() === t;
+
+        return (hospital.searchTerm ?? "").includes(t);
+      };
+      
+      const matchesLocation =
+        locationGroups.length === 0 ||
+        locationGroups.some((tokens) =>
+          tokens.every((t) => tokenMatchesHospital(hospital, t))
+        );
+
+      return matchesStatus && matchesLocation;
     };
   }
 
