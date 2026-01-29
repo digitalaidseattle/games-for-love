@@ -29,9 +29,6 @@ export const HospitalsContextProvider = (props: { children: ReactNode }) => {
   const [originals, setOriginals] = useState<Hospital[]>([]);
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
 
-  useEffect(() => {
-    setHospitals(originals);
-  }, [originals]);
 
   return (
     <HospitalsContext.Provider

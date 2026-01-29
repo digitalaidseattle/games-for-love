@@ -26,11 +26,11 @@ import * as styles from "./AppStyles";
 // Shared list renderer
 const HospitalList = ({ isMobileView }: { isMobileView: boolean }) => {
   const { hospitals } = useContext(HospitalsContext);
-
+  
   return (
     <>
       {hospitals?.map((hospital, idx: number) => (
-        <Box key={`h-${idx})`} sx={styles.hospitalCardBox(isMobileView)}>
+        <Box key={hospital.id} sx={styles.hospitalCardBox(isMobileView)}>
           <HospitalCardDetails hospital={hospital} />
         </Box>
       ))}
@@ -67,11 +67,33 @@ function App() {
   const { drawerWidth } = useContext(DrawerWidthContext);
   const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
   const { loading, setLoading } = useContext(LoadingContext);
+  const { originals, setHospitals } = useContext(HospitalsContext);
 
   const theme = useTheme();
   // when screen size is < md change to mobile layout
   const isMobileView = useMediaQuery(theme.breakpoints.down("md"));
 
+  useEffect(() => {
+    setLoading(true);
+    hospitalService
+      .findAll() 
+      .then((res) => {
+        const validHospitals = res.filter(hospitalService.isValid);
+        setOriginals(validHospitals);
+      })
+      .finally(() => setLoading(false));
+  }, [setOriginals]);
+  
+  useEffect(() => {
+    if (!filters) {
+      setHospitals(originals);
+      return;
+    }
+    const filtered = originals.filter(hospitalService.filterPredicate(filters));
+
+    setHospitals(filtered);
+  }, [filters, originals, setHospitals]);
+  
   useEffect(() => {
     function handleResize() {
       setWindowHeight(window.innerHeight);
@@ -80,18 +102,6 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    if (filters) {
-      setLoading(true);
-      hospitalService
-        .findAll(filters)
-        .then((res) => {
-          const validHospitals = res.filter((hospital) => hospitalService.isValid(hospital));
-          setOriginals(validHospitals)
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [filters, setOriginals]);
 
   // Mobile Layout
   if (isMobileView) {
