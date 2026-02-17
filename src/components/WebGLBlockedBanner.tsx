@@ -140,7 +140,10 @@ export function WebGLBlockedBanner({
               <Button
                 onClick={() => window.location.reload()}
                 variant="contained"
-                sx={[styles.webglPrimaryBtn, { mt: 2 }]}
+                sx={(theme) => ({
+                  ...styles.webglPrimaryBtn(theme),
+                  mt: 2,
+                })}                
               >
                 Retry
               </Button>

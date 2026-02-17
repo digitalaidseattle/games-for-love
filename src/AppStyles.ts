@@ -164,7 +164,7 @@ export const webglEmphasisDark: SxProps<Theme> = {
   color: "rgba(0,0,0,0.85)",
 };
 
-export const webglPrimaryBtn: SxProps<Theme> = (theme: Theme) => ({
+export const webglPrimaryBtn = (theme: Theme) => ({
   borderRadius: 2,
   textTransform: "none",
   fontWeight: 800,
