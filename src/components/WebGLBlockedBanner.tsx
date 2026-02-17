@@ -35,7 +35,7 @@ export function WebGLBlockedBanner({
     <Box sx={styles.webglBannerContainer}>
       <Stack spacing={2} sx={{ width: "100%" }}>
 
-        {/* Map unavailable card */}
+        {/* Map is unavailable card */}
         <Card sx={styles.webglCardBlack} elevation={0}>
           <CardHeader
             avatar={
