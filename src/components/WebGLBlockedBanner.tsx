@@ -83,7 +83,7 @@ export function WebGLBlockedBanner({
           <Card sx={styles.webglCardGrey} elevation={0}>
             <CardHeader
               avatar={
-                <Box sx={styles.webglIconDotRed}>
+                <Box sx={styles.webglIconDot}>
                   <ErrorOutlineRoundedIcon sx={styles.webglIconOnDot} />
                 </Box>
               }

@@ -110,15 +110,19 @@ export const webglCardGrey: SxProps<Theme> = {
   pointerEvents: "auto", 
 };
 
-export const webglIconDotRed: SxProps<Theme> = {
-  width: 20,              
+export const webglIconDot: SxProps<Theme> = {
+  width: 20,
   height: 20,
   borderRadius: "50%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  bgcolor: "#E5484D",
   flexShrink: 0,
+};
+
+export const webglIconDotRed: SxProps<Theme> = {
+  ...webglIconDot,
+  bgcolor: "#E5484D",
 };
 
 export const webglIconOnDot: SxProps<Theme> = {
