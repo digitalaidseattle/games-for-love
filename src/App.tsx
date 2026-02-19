@@ -26,7 +26,7 @@ import * as styles from "./AppStyles";
 // Shared list renderer
 const HospitalList = ({ isMobileView }: { isMobileView: boolean }) => {
   const { hospitals } = useContext(HospitalsContext);
-  
+
   return (
     <>
       {hospitals?.map((hospital) => (
@@ -76,14 +76,14 @@ function App() {
   useEffect(() => {
     setLoading(true);
     hospitalService
-      .findAll() 
+      .findAll()
       .then((res) => {
         const validHospitals = res.filter(hospitalService.isValid);
         setOriginals(validHospitals);
       })
       .finally(() => setLoading(false));
   }, [setOriginals]);
-  
+
   useEffect(() => {
     if (!filters) {
       setHospitals(originals);
@@ -91,9 +91,17 @@ function App() {
     }
     const filtered = originals.filter(hospitalService.filterPredicate(filters));
 
-    setHospitals(filtered);
+    // Apply sorting according to filters so manual toggles are preserved
+    if (filters.sortDirection) {
+      const sorted = [...filtered].sort(
+        hospitalService.getSortComparator(filters),
+      );
+      setHospitals(sorted);
+    } else {
+      setHospitals(filtered);
+    }
   }, [filters, originals, setHospitals]);
-  
+
   useEffect(() => {
     function handleResize() {
       setWindowHeight(window.innerHeight);
@@ -101,7 +109,6 @@ function App() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
 
   // Mobile Layout
   if (isMobileView) {
@@ -122,10 +129,7 @@ function App() {
 
           {/* Hospital cards */}
           <Box sx={styles.mobileHospitalOverlayBox}>
-            <Box
-              data-testid="hospital-list"
-              sx={styles.mobileHospitalListBox}
-            >
+            <Box data-testid="hospital-list" sx={styles.mobileHospitalListBox}>
               <HospitalList isMobileView={true} />
             </Box>
           </Box>
@@ -136,12 +140,10 @@ function App() {
     );
   }
 
-  // Laptop Broswer Layout 
+  // Laptop Broswer Layout
   return (
-
     <>
-      {
-        loading &&
+      {loading && (
         <Box
           sx={{
             position: "fixed",
@@ -151,13 +153,13 @@ function App() {
             alignItems: "center",
 
             backgroundColor: "rgba(255, 255, 255, 0.5)", // transparent white overlay
-            backdropFilter: "blur(2px)",                 // optional: subtle blur
-            zIndex: 1300,                                // above most content
+            backdropFilter: "blur(2px)", // optional: subtle blur
+            zIndex: 1300, // above most content
           }}
         >
           <CircularProgress size={100} />
         </Box>
-      }
+      )}
       <ReflexContainer orientation="vertical">
         <ReflexElement size={drawerWidth} propagateDimensions={true}>
           <SizeAwareReflexElement windowHeight={windowHeight} />
