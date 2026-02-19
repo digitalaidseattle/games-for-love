@@ -281,12 +281,14 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
                 onClick={toggleSortDir}
                 aria-label="toggle sort direction"
                 sx={{
-                  minWidth: 44,
-                  minHeight: 44,
-                  padding: 1,
+                  height: "2.5rem",
+                  minWidth: "2.5rem",
+                  borderRadius: "12px",
+                  padding: 0,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  flexShrink: 0,
                 }}
               >
                 {sortDir === "desc" ? (
