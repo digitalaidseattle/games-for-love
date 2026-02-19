@@ -24,6 +24,8 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
@@ -56,6 +58,8 @@ const CustomDialog = styled(Dialog)(() => ({
 }));
 
 const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { setOriginals } = useContext(HospitalsContext);
   const { filters, setFilters } = useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
@@ -271,25 +275,27 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
                 <RadioOption value="hospitalName" label="Hospital name" />
               </RadioGroup>
             </FormControl>
-            <Button
-              variant="outlined"
-              onClick={toggleSortDir}
-              aria-label="toggle sort direction"
-              sx={{
-                minWidth: 44,
-                minHeight: 44,
-                padding: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {sortDir === "desc" ? (
-                <ArrowDownwardIcon fontSize="medium" />
-              ) : (
-                <ArrowUpwardIcon fontSize="medium" />
-              )}
-            </Button>
+            {isMobile && (
+              <Button
+                variant="outlined"
+                onClick={toggleSortDir}
+                aria-label="toggle sort direction"
+                sx={{
+                  minWidth: 44,
+                  minHeight: 44,
+                  padding: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {sortDir === "desc" ? (
+                  <ArrowDownwardIcon fontSize="medium" />
+                ) : (
+                  <ArrowUpwardIcon fontSize="medium" />
+                )}
+              </Button>
+            )}
           </Box>
         </Box>
       </DialogContent>
