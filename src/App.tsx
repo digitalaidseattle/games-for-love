@@ -21,6 +21,9 @@ import { DrawerWidthContext } from "./context/DrawerWidthContext";
 import { FilterContext } from "./context/FilterContext";
 import { LoadingContext } from "./context/LoadingContext";
 
+import { WebGLBlockedBanner } from "./components/WebGLBlockedBanner";
+import { checkWebGLSupport } from "./utils/webglSupport";
+
 import * as styles from "./AppStyles";
 
 // Shared list renderer
@@ -68,10 +71,16 @@ function App() {
   const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
   const { loading, setLoading } = useContext(LoadingContext);
   const { originals, setHospitals } = useContext(HospitalsContext);
+  const [webglOk, setWebglOk] = useState(true);
 
   const theme = useTheme();
   // when screen size is < md change to mobile layout
   const isMobileView = useMediaQuery(theme.breakpoints.down("md"));
+
+  useEffect(() => {
+    const result = checkWebGLSupport();
+    setWebglOk(result.ok);
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -110,7 +119,7 @@ function App() {
         <Box sx={styles.mobileRootBox}>
           {/* Full-screen map */}
           <Box sx={styles.mobileMapBox}>
-            <GFLMap />
+            {webglOk ? <GFLMap /> : <WebGLBlockedBanner isMobileView={isMobileView}/>}
           </Box>
 
           {/* Search and sort tool bar */}
@@ -149,7 +158,6 @@ function App() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-
             backgroundColor: "rgba(255, 255, 255, 0.5)", // transparent white overlay
             backdropFilter: "blur(2px)",                 // optional: subtle blur
             zIndex: 1300,                                // above most content
@@ -168,8 +176,8 @@ function App() {
         </ReflexSplitter>
 
         <ReflexElement>
-          <Box height={windowHeight} data-testid="gfl-map-box">
-            <GFLMap />
+          <Box height={windowHeight} data-testid="gfl-map-box" sx={{ position: "relative" }}>
+            {webglOk ? <GFLMap /> : <WebGLBlockedBanner isMobileView={isMobileView}/>}
           </Box>
         </ReflexElement>
       </ReflexContainer>
