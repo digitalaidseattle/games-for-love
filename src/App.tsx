@@ -2,11 +2,12 @@
  * App.tsx
  */
 import { Box, useMediaQuery, useTheme, CircularProgress } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 
 import { GFLMap } from "./components/GFLMap";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
+import { SelectedHospitalContext } from "./context/SelectedHospitalContext";
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import { HospitalsContext } from "./context/HospitalContext";
@@ -29,11 +30,28 @@ import * as styles from "./AppStyles";
 // Shared list renderer
 const HospitalList = ({ isMobileView }: { isMobileView: boolean }) => {
   const { hospitals } = useContext(HospitalsContext);
-  
+  const { hospital: selectedHospital, setHospital: setSelectedHospital } = useContext(SelectedHospitalContext);
+
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  useEffect(() => {
+    if (!selectedHospital) return;
+
+    const e = cardRefs.current[selectedHospital.id];
+    if (!e) return;
+
+    e.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [selectedHospital]);
+
   return (
     <>
       {hospitals?.map((hospital) => (
-        <Box key={hospital.id} sx={styles.hospitalCardBox(isMobileView)}>
+        <Box
+          key={hospital.id}
+          ref={(node) => { cardRefs.current[hospital.id] = node;}}
+          sx={{ ...styles.hospitalCardBox(isMobileView),}}
+          onClick={() => setSelectedHospital(hospital)}
+        >
           <HospitalCardDetails hospital={hospital} />
         </Box>
       ))}
@@ -85,14 +103,14 @@ function App() {
   useEffect(() => {
     setLoading(true);
     hospitalService
-      .findAll() 
+      .findAll()
       .then((res) => {
         const validHospitals = res.filter(hospitalService.isValid);
         setOriginals(validHospitals);
       })
       .finally(() => setLoading(false));
   }, [setOriginals]);
-  
+
   useEffect(() => {
     if (!filters) {
       setHospitals(originals);
@@ -102,7 +120,7 @@ function App() {
 
     setHospitals(filtered);
   }, [filters, originals, setHospitals]);
-  
+
   useEffect(() => {
     function handleResize() {
       setWindowHeight(window.innerHeight);
@@ -119,7 +137,7 @@ function App() {
         <Box sx={styles.mobileRootBox}>
           {/* Full-screen map */}
           <Box sx={styles.mobileMapBox}>
-            {webglOk ? <GFLMap /> : <WebGLBlockedBanner isMobileView={isMobileView}/>}
+            {webglOk ? <GFLMap /> : <WebGLBlockedBanner isMobileView={isMobileView} />}
           </Box>
 
           {/* Search and sort tool bar */}
@@ -177,7 +195,7 @@ function App() {
 
         <ReflexElement>
           <Box height={windowHeight} data-testid="gfl-map-box" sx={{ position: "relative" }}>
-            {webglOk ? <GFLMap /> : <WebGLBlockedBanner isMobileView={isMobileView}/>}
+            {webglOk ? <GFLMap /> : <WebGLBlockedBanner isMobileView={isMobileView} />}
           </Box>
         </ReflexElement>
       </ReflexContainer>
