@@ -32,7 +32,7 @@ const HospitalList = ({ isMobileView }: { isMobileView: boolean }) => {
   const { hospitals } = useContext(HospitalsContext);
   const { hospital: selectedHospital, setHospital: setSelectedHospital } = useContext(SelectedHospitalContext);
 
-  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const cardRefs = useRef<Record<string, HTMLElement | null>>({});
 
   useEffect(() => {
     if (!selectedHospital) return;
@@ -48,8 +48,11 @@ const HospitalList = ({ isMobileView }: { isMobileView: boolean }) => {
       {hospitals?.map((hospital) => (
         <Box
           key={hospital.id}
-          ref={(node) => { cardRefs.current[hospital.id] = node;}}
-          sx={{ ...styles.hospitalCardBox(isMobileView),}}
+          component="div"
+          ref={(node: HTMLElement | null) => {
+            cardRefs.current[hospital.id] = node;
+          }}
+          sx={styles.hospitalCardBox(isMobileView)}
           onClick={() => setSelectedHospital(hospital)}
         >
           <HospitalCardDetails hospital={hospital} />
