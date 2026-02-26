@@ -140,7 +140,7 @@ function App() {
         <Box sx={styles.mobileRootBox}>
           {/* Full-screen map */}
           <Box sx={styles.mobileMapBox}>
-            {webglOk ? <GFLMap /> : <WebGLBlockedBanner isMobileView={isMobileView} />}
+            {webglOk ? <GFLMap isMobileView={isMobileView}/> : <WebGLBlockedBanner isMobileView={isMobileView} />}
           </Box>
 
           {/* Search and sort tool bar */}
@@ -198,7 +198,7 @@ function App() {
 
         <ReflexElement>
           <Box height={windowHeight} data-testid="gfl-map-box" sx={{ position: "relative" }}>
-            {webglOk ? <GFLMap /> : <WebGLBlockedBanner isMobileView={isMobileView} />}
+            {webglOk ? <GFLMap isMobileView={isMobileView}/> : <WebGLBlockedBanner isMobileView={isMobileView} />}
           </Box>
         </ReflexElement>
       </ReflexContainer>
