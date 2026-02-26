@@ -24,9 +24,13 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { FilterContext } from "../context/FilterContext";
 import { HospitalsContext } from "../context/HospitalContext";
 import { hospitalService } from "../services/hospital/hospitalService";
@@ -54,14 +58,17 @@ const CustomDialog = styled(Dialog)(() => ({
 }));
 
 const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { setOriginals } = useContext(HospitalsContext);
   const { filters, setFilters } = useContext(FilterContext);
   const [locationValue, setLocationValue] = useState<string>("");
   const [locationChips, setLocationChips] = useState<string[]>(
-    filters.location
+    filters.location,
   );
   const [status, setStatus] = useState("all");
   const [sortBy, setSortBy] = useState("hospitalName");
+  const [sortDir, setSortDir] = useState("desc");
 
   useEffect(() => {
     if (filters) {
@@ -71,9 +78,10 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
         filters.status.length === 2
           ? "all"
           : filters.status.length === 1
-          ? filters.status[0]
-          : "hospitalName"
+            ? filters.status[0]
+            : "hospitalName",
       );
+      setSortDir(filters.sortDirection || "desc");
     }
   }, [filters]);
 
@@ -86,7 +94,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
 
   const handleDeleteChip = (chipToDelete: string) => {
     setLocationChips((prevChips) =>
-      prevChips.filter((chip) => chip !== chipToDelete)
+      prevChips.filter((chip) => chip !== chipToDelete),
     );
   };
 
@@ -98,9 +106,14 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
     setSortBy(e.target.value);
   };
 
+  const toggleSortDir = () => {
+    setSortDir((prev) => (prev === "desc" ? "asc" : "desc"));
+  };
+
   const handleApplyFilters = async () => {
     const updated = Object.assign(filters, {
       sortBy: sortBy,
+      sortDirection: sortDir,
       location: locationChips,
       status: status === "all" ? ["active", "past"] : [status],
     });
@@ -113,6 +126,7 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
 
   const handleClearAll = async () => {
     setSortBy("fundingDeadline");
+    setSortDir("desc");
     setLocationChips([]);
     setStatus("all");
   };
@@ -236,30 +250,55 @@ const FilterDialog: React.FC<DialogProps> = ({ open, handleClose }) => {
             </RadioGroup>
           </FormControl>
 
-          <FormControl>
-            <FormLabel
-              component="legend"
-              sx={{
-                fontSize: "20px",
-                color: "text.primary",
-                fontWeight: "bold",
-                "&.Mui-focused": {
+          <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+            <FormControl sx={{ flex: 1 }}>
+              <FormLabel
+                component="legend"
+                sx={{
+                  fontSize: "20px",
                   color: "text.primary",
-                },
-              }}
-            >
-              Sort by
-            </FormLabel>
-            <RadioGroup
-              value={sortBy}
-              onChange={handleSortByChange}
-              aria-label="status"
-            >
-              <RadioOption value="fundingDeadline" label="Funding deadline" />
-              <RadioOption value="fundingLevel" label="Funding level" />
-              <RadioOption value="hospitalName" label="Hospital name" />
-            </RadioGroup>
-          </FormControl>
+                  fontWeight: "bold",
+                  "&.Mui-focused": {
+                    color: "text.primary",
+                  },
+                }}
+              >
+                Sort by
+              </FormLabel>
+              <RadioGroup
+                value={sortBy}
+                onChange={handleSortByChange}
+                aria-label="status"
+              >
+                <RadioOption value="fundingDeadline" label="Funding deadline" />
+                <RadioOption value="fundingLevel" label="Funding level" />
+                <RadioOption value="hospitalName" label="Hospital name" />
+              </RadioGroup>
+            </FormControl>
+            {isMobile && (
+              <Button
+                variant="outlined"
+                onClick={toggleSortDir}
+                aria-label="toggle sort direction"
+                sx={{
+                  height: "2.5rem",
+                  minWidth: "2.5rem",
+                  borderRadius: "12px",
+                  padding: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                {sortDir === "desc" ? (
+                  <ArrowDownwardIcon fontSize="medium" />
+                ) : (
+                  <ArrowUpwardIcon fontSize="medium" />
+                )}
+              </Button>
+            )}
+          </Box>
         </Box>
       </DialogContent>
       <Divider sx={{ borderBottomWidth: 2.2 }} />
