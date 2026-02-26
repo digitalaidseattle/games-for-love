@@ -18,6 +18,7 @@ import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 import { CorporatePartner } from "../../models/corporatePartner";
+import { parseDate } from "../../utils/dateUtils";
 import MOCK_HOSPITALS from "../../../test/mockHospitals.json";
 
 class HospitalService {
@@ -166,46 +167,6 @@ class HospitalService {
   };
 
   fundingDeadlineComparator = (a: Hospital, b: Hospital): number => {
-    const parseDate = (value?: unknown): Date | undefined => {
-      if (value == null) return undefined;
-      if (value instanceof Date)
-        return isNaN(value.getTime()) ? undefined : value;
-
-      if (typeof value === "object") {
-        const obj = value as Record<string, unknown>;
-
-        // Firestore-like Timestamp with toDate()
-        if (typeof obj.toDate === "function") {
-          try {
-            const d = (obj.toDate as () => Date)();
-            return d instanceof Date && !isNaN(d.getTime()) ? d : undefined;
-          } catch {
-            return undefined;
-          }
-        }
-
-        // Firestore-like plain object { seconds, nanoseconds }
-        if (typeof obj.seconds === "number") {
-          const seconds = obj.seconds as number;
-          const nanoseconds =
-            typeof obj.nanoseconds === "number"
-              ? (obj.nanoseconds as number)
-              : 0;
-          const ms = seconds * 1000 + Math.round(nanoseconds / 1e6);
-          const d = new Date(ms);
-          return isNaN(d.getTime()) ? undefined : d;
-        }
-      }
-
-      // String or number representation
-      if (typeof value === "string" || typeof value === "number") {
-        const d = new Date(value as string | number);
-        return isNaN(d.getTime()) ? undefined : d;
-      }
-
-      return undefined;
-    };
-
     const parsedA = parseDate(a.matchedRequest?.fundingDeadline);
     const parsedB = parseDate(b.matchedRequest?.fundingDeadline);
 
