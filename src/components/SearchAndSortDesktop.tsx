@@ -24,7 +24,6 @@ import { desktopStyles } from "./SearchAndSortStyles";
 
 export const SearchAndSortDesktop = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
 
   const { originals, hospitals, setHospitals } = useContext(HospitalsContext);
   const { filters, setFilters } = useContext(FilterContext);
@@ -41,7 +40,6 @@ export const SearchAndSortDesktop = () => {
   const changeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
     setHospitals(hospitalService.filterHospitals(originals, v));
-    setIsDisabled(v !== "");
   };
 
   const handelOrderButton = () => {
@@ -52,7 +50,9 @@ export const SearchAndSortDesktop = () => {
           ? sortDirection.ASCENDING
           : sortDirection.DESCENDING,
     };
-    setHospitals(hospitals.sort(hospitalService.getSortComparator(updated)).slice());
+    setHospitals(
+      hospitals.sort(hospitalService.getSortComparator(updated)).slice(),
+    );
     setFilters(updated);
   };
 
@@ -60,7 +60,12 @@ export const SearchAndSortDesktop = () => {
     <>
       <Box data-testid="search-and-sort-box" sx={desktopStyles.root}>
         <a href="https://gamesforlove.org">
-          <img src={GamesForLoveLogo} alt="Games For Love Logo" width={96} height={40} />
+          <img
+            src={GamesForLoveLogo}
+            alt="Games For Love Logo"
+            width={96}
+            height={40}
+          />
         </a>
 
         <TextField
@@ -78,19 +83,34 @@ export const SearchAndSortDesktop = () => {
           sx={desktopStyles.searchField}
         />
 
-        <ToolbarButton onClick={handleOpenFilters} sx={desktopStyles.iconButtonBase}>
+        <ToolbarButton
+          onClick={handleOpenFilters}
+          sx={desktopStyles.iconButtonBase}
+        >
           <FilterListIcon />
         </ToolbarButton>
 
         <ToolbarButton
           onClick={handelOrderButton}
           sx={desktopStyles.iconButtonBase}
-          disabled={isDisabled || filters.sortDirection === sortDirection.UNDEFINED}
+          disabled={
+            hospitals.length === 0 ||
+            filters.sortDirection === sortDirection.UNDEFINED
+          }
         >
-          {filters.sortDirection === sortDirection.DESCENDING ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
+          {filters.sortDirection === sortDirection.DESCENDING ? (
+            <ArrowDownwardIcon />
+          ) : (
+            <ArrowUpwardIcon />
+          )}
         </ToolbarButton>
 
-        <ToolbarButton variant="contained" height="2.7rem" width="8rem" onClick={handleDonateClick}>
+        <ToolbarButton
+          variant="contained"
+          height="2.7rem"
+          width="8rem"
+          onClick={handleDonateClick}
+        >
           Donate
         </ToolbarButton>
       </Box>
