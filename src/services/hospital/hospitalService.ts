@@ -18,15 +18,15 @@ import { hospitalFundedService } from "../hospitalFunded/hospitalFundedService";
 import { hospitalInfoService } from "../hospitalInfo/hospitalInfoService";
 import { hospitalRequestService } from "../hospitalRequest/hospitalRequestService";
 import { CorporatePartner } from "../../models/corporatePartner";
-import MOCK_HOSPITALS from '../../../test/mockHospitals.json';
-
+import { parseDate } from "../../utils/dateUtils";
+import MOCK_HOSPITALS from "../../../test/mockHospitals.json";
 
 class HospitalService {
   transform(
     hi: HospitalInfo,
     matchedRequest: HospitalRequest,
     matchedFund: HospitalFunded,
-    currentDate: Date
+    currentDate: Date,
   ): Hospital {
     const DEFAULT_FUNDRAISEUP_CAMPAIGN_ID = "FUNTTHDCELT"; // default fundraiseup ID
     const hospital = {
@@ -64,21 +64,19 @@ class HospitalService {
       const hospitals = resps[0]
         .map((hi) => {
           const matchedRequest = resps[1].find(
-            (hr) => hr.name[0] === hi.recordId
+            (hr) => hr.name[0] === hi.recordId,
           );
           const matchedFund = resps[2].find(
             (hf) =>
               hf.hospitalRequestId ===
-              (matchedRequest ? matchedRequest.recordId : undefined)
+              (matchedRequest ? matchedRequest.recordId : undefined),
           );
           return this.transform(hi, matchedRequest!, matchedFund!, currentDate);
         })
         .filter(this.filterPredicate(filter!))
         .sort(this.getSortComparator(filter!)) as Hospital[];
       // Adding mock data here
-      return hospitals
-        .concat(MOCK_HOSPITALS)
-        .filter(h => this.isValid(h));
+      return hospitals.concat(MOCK_HOSPITALS).filter((h) => this.isValid(h));
     });
   }
 
@@ -87,10 +85,11 @@ class HospitalService {
       if (!filter) return true;
 
       const matchesStatus = filter.status.includes(
-        hospital.status.toLowerCase() as FilterStatus
+        hospital.status.toLowerCase() as FilterStatus,
       );
 
-      if (!filter.location || filter.location.length === 0) return matchesStatus;
+      if (!filter.location || filter.location.length === 0)
+        return matchesStatus;
 
       const locationGroups = filter.location
         .map((chip) =>
@@ -98,7 +97,7 @@ class HospitalService {
             .toLowerCase()
             .split(/[\s,]+/)
             .map((t) => t.trim())
-            .filter(Boolean)
+            .filter(Boolean),
         )
         .filter((chipTokens) => chipTokens.length > 0);
 
@@ -110,11 +109,11 @@ class HospitalService {
 
         return (hospital.searchTerm ?? "").includes(t);
       };
-      
+
       const matchesLocation =
         locationGroups.length === 0 ||
         locationGroups.some((tokens) =>
-          tokens.every((t) => tokenMatchesHospital(hospital, t))
+          tokens.every((t) => tokenMatchesHospital(hospital, t)),
         );
 
       return matchesStatus && matchesLocation;
@@ -134,7 +133,7 @@ class HospitalService {
     if (hospital.matchedRequest && hospital.matchedFunded) {
       return hospital.matchedRequest.requested
         ? (hospital.matchedFunded.fundingCompleted || 0) /
-        hospital.matchedRequest.requested
+            hospital.matchedRequest.requested
         : 0;
     }
     return 0;
@@ -150,7 +149,7 @@ class HospitalService {
 
   isEqual = (
     test: Hospital,
-    selectedHospital: Hospital | undefined
+    selectedHospital: Hospital | undefined,
   ): boolean => {
     return selectedHospital !== undefined && test.id === selectedHospital.id;
   };
@@ -163,24 +162,18 @@ class HospitalService {
     return hospitals.filter(
       (h: Hospital) =>
         terms.length === 0 ||
-        terms.find((term) => h.searchTerm.includes(term)) !== undefined
+        terms.find((term) => h.searchTerm.includes(term)) !== undefined,
     );
   };
 
   fundingDeadlineComparator = (a: Hospital, b: Hospital): number => {
-    const dateA = a.matchedRequest
-      ? a.matchedRequest.fundingDeadline as Date
-      : undefined;
-    const dateB = b.matchedRequest
-      ? b.matchedRequest.fundingDeadline as Date
-      : undefined;
-    if (!dateA) {
-      return -1;
-    }
-    if (!dateB) {
-      return 1;
-    }
-    return dateA.getTime() - dateB.getTime();
+    const parsedA = parseDate(a.matchedRequest?.fundingDeadline);
+    const parsedB = parseDate(b.matchedRequest?.fundingDeadline);
+
+    if (!parsedA && !parsedB) return 0;
+    if (!parsedA) return -1;
+    if (!parsedB) return 1;
+    return parsedA.getTime() - parsedB.getTime();
   };
 
   hospitalNameComparator = (a: Hospital, b: Hospital): number => {
@@ -207,9 +200,14 @@ class HospitalService {
     if (!filter) {
       return () => 0;
     }
-    return (a: Hospital, b: Hospital) =>
-      (filter.sortDirection === sortDirection.DESCENDING ? -1 : 1) *
-      this.lookupComparator(filter.sortBy)(a, b);
+    const primaryComparator = this.lookupComparator(filter.sortBy);
+    const direction =
+      filter.sortDirection === sortDirection.DESCENDING ? -1 : 1;
+    return (a: Hospital, b: Hospital) => {
+      const primaryResult = primaryComparator(a, b);
+      if (primaryResult !== 0) return direction * primaryResult;
+      return direction * this.hospitalNameComparator(a, b);
+    };
   };
 
   getDonationMessage = (hospital: Hospital) => {
@@ -253,24 +251,26 @@ class HospitalService {
     lat1: number,
     lon1: number,
     lat2: number,
-    lon2: number
+    lon2: number,
   ): number => {
     return (lat1 - lat2) * (lat1 - lat2) + (lon1 - lon2) * (lon1 - lon2);
   };
 
   getSimilarProjects(hospital: Hospital, hospitals: Hospital[]): Hospital[] {
     return hospitals
-      .filter((h) => h.status.toLowerCase() === "active" && h.id !== hospital?.id) // Excluding current
+      .filter(
+        (h) => h.status.toLowerCase() === "active" && h.id !== hospital?.id,
+      ) // Excluding current
       .map((h) => ({
         ...h,
         distanceSq: hospitalService.getEuclideanDistanceNoRoot(
           hospital.latitude ?? 0,
           hospital.longitude ?? 0,
           h.latitude ?? 0,
-          h.longitude ?? 0
+          h.longitude ?? 0,
         ),
       }))
-      .sort((a, b) => a.distanceSq - b.distanceSq) // Closest first
+      .sort((a, b) => a.distanceSq - b.distanceSq); // Closest first
   }
 
   fundingStatusMessage(hospital: Hospital) {
@@ -279,15 +279,19 @@ class HospitalService {
   }
 
   getFundingCompletedMessage(hospital: Hospital): string {
-    const fundingCompleted = this.getUSCurrencyString(hospital.matchedFunded?.fundingCompleted || 0);
-    const fundingRequested = this.getUSCurrencyString(hospital.matchedRequest?.requested || 0);
-    return `${fundingCompleted} raised of ${fundingRequested} - `
+    const fundingCompleted = this.getUSCurrencyString(
+      hospital.matchedFunded?.fundingCompleted || 0,
+    );
+    const fundingRequested = this.getUSCurrencyString(
+      hospital.matchedRequest?.requested || 0,
+    );
+    return `${fundingCompleted} raised of ${fundingRequested} - `;
   }
 
   getUSCurrencyString(amount: number, decimal?: number): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: decimal ?? 0,
       maximumFractionDigits: decimal ?? 0,
     }).format(amount);
