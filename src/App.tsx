@@ -2,11 +2,12 @@
  * App.tsx
  */
 import { Box, useMediaQuery, useTheme, CircularProgress } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { ReflexContainer, ReflexElement, ReflexSplitter } from "react-reflex";
 
 import { GFLMap } from "./components/GFLMap";
 import { HospitalCardDetails } from "./components/HospitalCardDetails";
+import { SelectedHospitalContext } from "./context/SelectedHospitalContext";
 import { SearchAndSort } from "./components/SearchAndSort";
 
 import { HospitalsContext } from "./context/HospitalContext";
@@ -29,11 +30,31 @@ import * as styles from "./AppStyles";
 // Shared list renderer
 const HospitalList = ({ isMobileView }: { isMobileView: boolean }) => {
   const { hospitals } = useContext(HospitalsContext);
+  const { hospital: selectedHospital, setHospital: setSelectedHospital } = useContext(SelectedHospitalContext);
+
+  const cardRefs = useRef<Record<string, HTMLElement | null>>({});
+
+  useEffect(() => {
+    if (!selectedHospital) return;
+
+    const e = cardRefs.current[selectedHospital.id];
+    if (!e) return;
+
+    e.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [selectedHospital]);
 
   return (
     <>
       {hospitals?.map((hospital) => (
-        <Box key={hospital.id} sx={styles.hospitalCardBox(isMobileView)}>
+        <Box
+          key={hospital.id}
+          component="div"
+          ref={(node: HTMLElement | null) => {
+            cardRefs.current[hospital.id] = node;
+          }}
+          sx={styles.hospitalCardBox(isMobileView)}
+          onClick={() => setSelectedHospital(hospital)}
+        >
           <HospitalCardDetails hospital={hospital} />
         </Box>
       ))}
@@ -126,7 +147,7 @@ function App() {
         <Box sx={styles.mobileRootBox}>
           {/* Full-screen map */}
           <Box sx={styles.mobileMapBox}>
-            {webglOk ? <GFLMap /> : <WebGLBlockedBanner isMobileView={isMobileView}/>}
+            {webglOk ? <GFLMap isMobileView={isMobileView}/> : <WebGLBlockedBanner isMobileView={isMobileView} />}
           </Box>
 
           {/* Search and sort tool bar */}
@@ -179,7 +200,7 @@ function App() {
 
         <ReflexElement>
           <Box height={windowHeight} data-testid="gfl-map-box" sx={{ position: "relative" }}>
-            {webglOk ? <GFLMap /> : <WebGLBlockedBanner isMobileView={isMobileView}/>}
+            {webglOk ? <GFLMap isMobileView={isMobileView}/> : <WebGLBlockedBanner isMobileView={isMobileView} />}
           </Box>
         </ReflexElement>
       </ReflexContainer>
