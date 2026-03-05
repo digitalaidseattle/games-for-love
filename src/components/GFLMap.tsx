@@ -70,7 +70,7 @@ const HospitalMarker = (props: {
   );
 };
 
-export const GFLMap = () => {
+export const GFLMap = ({ isMobileView }: { isMobileView: boolean }) => {
   // TODO figure out why useRef<MapRef> does not compile
   const markerRef = useRef<any>();
   const { hospitals } = useContext(HospitalsContext);
@@ -87,11 +87,15 @@ export const GFLMap = () => {
       // Review: Should changing selectedHospital close the popup
       if (selectedHospital.id !== popupInfo?.hospital.id) {
         setPopupInfo(null);
+        // Always close popup on mobile
+        if (isMobileView || selectedHospital.id !== popupInfo?.hospital.id) {
+          setPopupInfo(null);
+        }
       }
     } else {
       setPopupInfo(null);
     }
-  }, [selectedHospital]);
+  }, [selectedHospital, isMobileView]);
 
   const isHospitalSelected = (hospital: Hospital): boolean => {
     return selectedHospital ? hospital.id === selectedHospital.id : false;
@@ -99,7 +103,11 @@ export const GFLMap = () => {
 
   const handleMarkerSelection = (h: Hospital) => {
     setSelectedHospital(h);
-    setPopupInfo({ hospital: h });
+    if (!isMobileView) {
+      setPopupInfo({ hospital: h });
+    } else {
+      setPopupInfo(null);
+    }
   };
 
   return (
@@ -132,7 +140,7 @@ export const GFLMap = () => {
           onClick={handleMarkerSelection}
         />
       )}
-      {popupInfo && (
+       {!isMobileView && popupInfo && (
         <Box sx={{ display: "flex" }}>
           <GFLPopup popupInfo={popupInfo} onClose={() => setPopupInfo(null)} />
         </Box>

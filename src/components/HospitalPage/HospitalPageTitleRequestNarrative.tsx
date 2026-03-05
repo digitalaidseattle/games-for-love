@@ -14,21 +14,18 @@ import image_3 from "../../assets/istockphoto-1515280024-612x612.jpg";
 
 const HospitalPageTitleRequestNarrative = () => {
   const { hospital } = useContext(LearnMoreHospitalContext);
-  const photos = [image_1, image_2, image_3]
+  const photos = [image_1, image_2, image_3];
 
   return (
     <Stack
       gap={2}
+      direction={{ xs: "column" }}
       sx={{
         margin: "20px",
       }}
     >
       <Box>
-        <Carousel
-          showArrows={true}
-          showThumbs={false}
-          showStatus={true}
-        >
+        <Carousel showArrows={true} showThumbs={false} showStatus={true}>
           {photos.map((url, idx) => (
             <CardMedia
               key={idx}
@@ -37,17 +34,13 @@ const HospitalPageTitleRequestNarrative = () => {
               alt="Hospital Image"
               sx={{
                 borderRadius: "15px",
-                objectFit: 'cover'
+                objectFit: "cover",
               }}
             />
           ))}
         </Carousel>
       </Box>
-      <Typography
-        fontWeight={600}
-      >
-        Our request
-      </Typography>
+      <Typography fontWeight={600}>Our request</Typography>
       <Typography
         variant="body1"
         sx={{ color: "#8A8A8A", paddingBottom: "1rem" }}
@@ -55,7 +48,7 @@ const HospitalPageTitleRequestNarrative = () => {
         {hospital?.matchedRequest?.titleRequestNarrative}
       </Typography>
 
-      <Typography variant="body1" >
+      <Typography variant="body1">
         {hospital?.matchedRequest?.requestNarrative}
       </Typography>
     </Stack>

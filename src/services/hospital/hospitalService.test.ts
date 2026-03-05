@@ -199,7 +199,6 @@ describe("HospitalService tests", () => {
         expect([hospitalA, hospitalB].sort(hospitalService.getSortComparator({ sortBy: "hospitalName", sortDirection: sortDirection.ASCENDING } as FilterType))).toEqual([hospitalB, hospitalA]);
     });
 
-
     it("filtering", () => {
         const hospitalA: Hospital = {
             id: "Hopsital_1",
@@ -221,6 +220,36 @@ describe("HospitalService tests", () => {
         expect(hospitalService.filterHospitals([hospitalA, hospitalB], "jeff")).toEqual([hospitalB]);
         expect(hospitalService.filterHospitals([hospitalA, hospitalB], "jeff kor")).toEqual([hospitalA, hospitalB]);
         expect(hospitalService.filterHospitals([hospitalA, hospitalB], "may kor")).toEqual([hospitalA]);
+    });
+
+    it("fundingStatusMessage", () => {
+        const hospital = {
+            matchedFunded: {
+                fundingCompleted: 7100
+            },
+            matchedRequest: {
+                requested: 10000
+            }
+        } as Hospital;
+        expect(hospitalService.fundingStatusMessage(hospital)).toEqual("$7.10k raised (71%)");
+    });
+
+    it("getFundingCompletedMessage", () => {
+        const hospital = {
+            matchedFunded: {
+                fundingCompleted: 7100
+            },
+            matchedRequest: {
+                requested: 10000
+            }
+        } as Hospital;
+        expect(hospitalService.getFundingCompletedMessage(hospital)).toEqual("$7,100 raised of $10,000 - ");
+    });
+
+    it("getUSCurrencyString", () => {
+        expect(hospitalService.getUSCurrencyString(1200, 2)).toEqual("$1,200.00");
+        expect(hospitalService.getUSCurrencyString(1200)).toEqual("$1,200");
+        expect(hospitalService.getUSCurrencyString(0)).toEqual("$0");
     });
 
 });

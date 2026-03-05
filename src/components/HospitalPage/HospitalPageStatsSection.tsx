@@ -63,28 +63,19 @@ const HospitalPageStatsSection = () => {
       >
         <Box
           sx={{
-            display: { xs: "none", md: "inline-block" },
+            display: { xs: "block", md: "inline-block" },
+            margin: { xs: "0 auto", md: 0 },
             position: "relative",
             top: { md: "-6em", lg: "-4em" },
             right: { md: "-33em", lg: "-56em", xl: "-62em" },
             width: "24em",
-            transform: "rotate(-12deg)",
+            transform: { xs: "rotate(355deg)", md: "rotate(-12deg)" },
           }}
         >
-          <img
-            src={arrow}
-            alt="decorative arrow pointing to impact statistics"
-            style={{
-              width: "5.5em",
-              position: "absolute",
-              left: "-5em",
-              top: "4em",
-              transform: "rotate(12deg)",
-            }}
-          />
           <Typography
             variant="h5"
             sx={{
+              margin: { xs: "1.5rem 0", md: "0" },
               width: "13em",
               fontFamily: "'Gloria Hallelujah', cursive",
               textAlign: "center",
@@ -93,6 +84,18 @@ const HospitalPageStatsSection = () => {
           >
             {IMPACT_MESSAGE}
           </Typography>
+          <Box
+            component="img"
+            src={arrow}
+            alt="decorative arrow pointing to impact statistics"
+            sx={{
+              width: "5.5em",
+              position: { xs: "relative", md: "absolute" },
+              left: { xs: "3.5rem", md: "-5em" },
+              top: { md: "4em" },
+              transform: { xs: "rotate(335deg)", md: "rotate(12deg)" },
+            }}
+          />
         </Box>
         <Box
           sx={{
@@ -103,7 +106,7 @@ const HospitalPageStatsSection = () => {
         >
           <Stack
             direction={{ xs: "column", lg: "row" }}
-            justifyContent="space-evenly"
+            justifyContent="space-around"
             sx={{
               width: "100%",
               height: "100%",
@@ -167,7 +170,7 @@ const HospitalPageStatsSection = () => {
             paragraph={hospital?.matchedFunded?.impactText}
             styles={{
               header: { color: "#000" },
-              paragraph: { margin: "0 2.5rem" },
+              paragraph: { margin: { md: "0 2.5rem" } },
             }}
           />
         )}

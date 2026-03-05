@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography, SxProps, Theme } from "@mui/material";
 import { useContext } from "react";
 import {
   DonationHospitalContext,
@@ -13,12 +13,12 @@ export interface HospitalPageBaseComponentProps {
   shortParagraph?: string;
   button?: boolean;
   styles?: {
-    container?: React.CSSProperties;
-    imageContainer?: React.CSSProperties;
-    header?: React.CSSProperties;
-    paragraph?: React.CSSProperties;
-    shortParagraph?: React.CSSProperties;
-    button?: React.CSSProperties;
+    container?: SxProps<Theme>;
+    imageContainer?: SxProps<Theme>;
+    header?: SxProps<Theme>;
+    paragraph?: SxProps<Theme>;
+    shortParagraph?: SxProps<Theme>;
+    button?: SxProps<Theme>;
   };
 }
 const HospitalPageBaseComponent: React.FC<HospitalPageBaseComponentProps> = ({
@@ -53,7 +53,7 @@ const HospitalPageBaseComponent: React.FC<HospitalPageBaseComponentProps> = ({
       <Typography
         variant="h4"
         sx={{
-          fontSize: { xs: "2rem", lg: "3rem" },
+          fontSize: { xs: "2.5rem", lg: "3rem" },
           fontWeight: 700,
           textAlign: "center",
           mb: 3,
@@ -68,7 +68,7 @@ const HospitalPageBaseComponent: React.FC<HospitalPageBaseComponentProps> = ({
         container
         spacing={4}
         alignItems="flex-start"
-        padding={5}
+        padding={{ xs: 0, md: 5 }}
         sx={{ ...styles.container }}
       >
         {/* Image Section */}
@@ -77,12 +77,12 @@ const HospitalPageBaseComponent: React.FC<HospitalPageBaseComponentProps> = ({
             <Box
               sx={{
                 width: "100%",
-                height: 400,
+                height: { md: 400 },
                 backgroundColor: "black",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                borderRadius: "15px",
+                borderRadius: { xs: "10px", md: "15px" },
                 overflow: "hidden",
                 ...styles.imageContainer,
               }}

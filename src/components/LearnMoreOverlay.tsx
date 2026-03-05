@@ -123,9 +123,9 @@ const LearnMoreOverlay = () => {
         >
           <Box
             sx={{
-              width: "75%",
-              maxWidth: "1280px",
-              marginTop: 2,
+              width: { xs: "100%", md: "75%" },
+              maxWidth: { xs: "100%", md: "1280px" },
+              marginTop: { xs: 0, md: 2 },
               backgroundColor: "white",
             }}
             onClick={(e) => e.stopPropagation()}
